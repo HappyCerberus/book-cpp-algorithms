@@ -1,0 +1,46 @@
+\usepackage{sidenotes}
+\usepackage{multirow}
+
+% Command to consistently format side-panel with C++ versions that introduced different variants of the algorithm.
+\newcommand{\cppversions}[5]{
+\begin{margintable}
+\footnotesize
+\begin{tabular}{|m{\dimexpr.5\marginparwidth-2\tabcolsep-1pt}|m{\dimexpr.5\marginparwidth-2\tabcolsep-1pt}|}
+\rowcolor{black!80} \multicolumn{2}{c}{\textcolor{white}{#1}} \\
+introduced & #2 \\
+\hline
+constexpr & #3 \\
+\hline
+parallel & #4 \\
+\hline
+rangified & #5 \\
+\hline
+\end{tabular}
+\end{margintable}
+}
+
+\newcommand{\constraints}[4]{
+\begin{center}
+\begin{tabular}{|m{\dimexpr.22\textwidth-2\tabcolsep}|m{\dimexpr.30\textwidth-2\tabcolsep}|m{\dimexpr.45\textwidth-2\tabcolsep}|}
+\hline
+\rowcolor{black!80} \multicolumn{3}{l}{\textcolor{white}{constraints}} \\
+\hline
+domain & \multicolumn{2}{l|}{#1} \\
+
+
+\ifx\hfuzz#2\hfuzz\else
+\hline
+parallel domain & \multicolumn{2}{l|}{#2} \\
+\fi
+
+\ifx\hfuzz#3#4\hfuzz\else
+\hline
+\multirow{2}{.15\textwidth}{invocable} & \cellcolor{black!80} \textcolor{white}{default} & \cellcolor{black!80} \textcolor{white}{custom} \\
+\cline{2-3}
+& #3 & #4 \\
+\fi
+
+\hline
+\end{tabular}
+\end{center}
+}

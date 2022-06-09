@@ -1,13 +1,7 @@
-\usepackage{fontspec}
 
-%\setsansfont{SourceSansPro}[
-%    Path=./static/fonts/sourcesans/,
-%    Extension = .ttf,
-%    UprightFont=*-Regular,
-%    BoldFont=*-Bold,
-%    ItalicFont=*-Italic,
-%    BoldItalicFont=*-BoldItalic
-%    ]
+
+\usepackage{microtype}
+\usepackage{fontspec}
 
 \setromanfont{Brygada1918}[
     Path=./static/fonts/brygada/,
@@ -39,4 +33,8 @@
     BoldItalicFont=*-BoldItalic
     ]
     
-\setmainfont{Asap}
+\renewcommand{\familydefault}{\sfdefault}
+
+% Manually adjusted C++
+%\newcommand{\CC}{C\nolinebreak[4]\hspace{-.1em}\raisebox{.25ex}{\small ++}\hspace{.1em}}
+\newcommand{\CC}{C\nolinebreak[4]\hspace{-.1em}\sbox0{$1$}\sbox2{\small++}\raise\dimexpr(\ht0-\ht2)/2\relax\box2\hspace{.1em}}

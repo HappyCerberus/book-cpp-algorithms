@@ -1,5 +1,11 @@
-\documentclass{book}
-\input{packages/fontspec}
+\documentclass[11pt,svgnames,table,a4paper]{book}
+
+\input{packages/fonts}
+\input{packages/color_blocks}
+\input{packages/code_blocks}
+%\input{packages/code_in_box}
+\input{packages/glossary_and_index}
+\input{packages/local}
 
 \title{The 114 C++ standard algorithms}
 
@@ -10,9 +16,14 @@
 
 \maketitle
 
+\input{chapters/00_glossary}
 \input{chapters/01_preface}
 \input{chapters/02_introduction}
 \input{chapters/03_algorithms}
 \input{chapters/04_making_your_own}
+\input{chapters/05_parallel_algorithms}
+\input{chapters/06_cpp20_ranges}
+%\input{chapters/07_glossary}
+\input{chapters/08_index}
 
 \end{document}

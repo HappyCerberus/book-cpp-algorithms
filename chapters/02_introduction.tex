@@ -1,1 +1,289 @@
 \chapter{Introduction}
+
+You could critique the \CC standard library for its lack of functionality. However, when it comes to data and number crunching, the \CC standard library provides a versatile toolkit of algorithms. Therefore, if you are a C++ developer, you owe yourself to know what facilities are available.
+
+\section{Iterators: the interoperability layer}
+
+At the core that lies between C++ data structures and algorithms are iterators. Iterators abstract away the details of how a particular data structure is traversed while capturing the behavioural limitations that a data structure imposes.
+
+For example, an array (e.g. \emph{\index{std::vector}}) allows random access, meaning that we can move from one element to another in constant time. On the other hand, a linked list (e.g. std::list) only allows us to move to the next and previous elements in constant time, and moving the distance of n takes n operations (linear complexity).
+
+\subsection{Iterator categories}
+
+C++ recognizes the following categories of iterators:
+
+\begin{itemize}
+    \item \gls{input iterator}: advance, read, one pass
+    \item \gls{forward iterator}: advance, read
+    \item \gls{bidirectional iterator}: forward iterator + move back
+    \item \gls{random access iterator}: bidirectional iterator + advance \& move back by any integer, calculate distance between two iterators
+    \item \gls{contiguous iterator}: random access + the storage of elements is contiguous
+    \item \gls{output iterator}: advance, write, one pass
+\end{itemize}
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> vec{1,2,3,4,5,6};
+auto it = vec.begin();
+it += 5; // *it == 6
+\end{cppcode}
+\noindent\small\texttt{std::vector} provides a continuous access iterator (since C++20), random access iterator (before C++20).
+\end{box-note}
+
+\begin{box-note}
+\begin{cppcode}
+std::list<int> lst{1,2,3,4,5,6};
+auto it = lst.begin();
+// it += 5; Doesn't compile
+std::advance(it, 5); // linear advance, *it == 6
+\end{cppcode}
+\noindent\small\texttt{std::list} only provides a bidirectional iterator.
+\end{box-note}
+
+This categorization allows algorithms to specify the type of iterator they require, either explicitly (using C++20 concepts) or implicitly by using operations supported by a specific kind of iterator.
+
+For example, \emph{\index{std::sort}} requires random access iterators because it needs to calculate the distance of two iterators efficiently. Therefore the following code will not compile (std::list provides bidirectional iterators):
+
+\begin{box-note}
+\begin{cppcode}
+std::list<int> data = { 9, 1, 8, 2, 7, 3};
+std::sort(data.begin(), data.end()); // will not compile
+\end{cppcode}
+\end{box-note}
+
+\section{Ranges}
+
+While C++20 formalized the concept of a range, the notion of a range was present in C++ since the beginning. Each container is expected to provide access to two iterators, begin and end. The semantic here is [begin,end), that is, begin is an iterator to the first element, end is an iterator one past the last element.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> v{1,2,3,4,5,6};
+for (auto it = v.begin(); it != v.end(); it++) {
+    std::cout << *it << "\n";
+}
+\end{cppcode}
+\end{box-note}
+
+Ranges can be classified using the same categories of iterators. In this series, we will be using the range nomenclature over iterators (e.g. input range, forward range, bidirectional range, etc.).
+
+\section{A bit of history}
+
+From the previous sections, you might already suspect that C++20 represents a significant milestone in the history of algorithms. And it does with the introduction of ranges and lazy views. In addition, however, several C++ standards introduced significant changes that affected standard algorithms.
+
+\begin{itemize}
+    \item C++11 introduced lambdas
+    \item C++17 introduced parallel algorithms
+    \item C++20 introduced ranges and lazy views
+    \item C++23 is expected to introduce support for user implemented views and potentially graph algorithms
+\end{itemize}
+
+\section{for\_each, for\_each\_n}
+
+Enough of theory. Let’s talk specific algorithms, and we will start with the simplest of all, for\_each and for\_each\_n.
+
+\cppversions{\texttt{for\_each}}{\CC98}{\CC20}{\CC17}{\CC20}
+\constraints{\texttt{input\_range}}{}{N/A}{\texttt{unary\_invocable}}
+
+Since C++11 introduced a range loop, for\_each became a less relevant algorithm. However, there are still a couple of situations where for\_each offers a lot of functionality.
+
+The parallel version is probably the most straightforward parallel facility in C++. If all you need is to run an expensive operation on each element in isolation, a parallel for\_each is the perfect solution:
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data = get_data();
+std::for_each(std::execution::par_unseq, 
+    data.begin(), data.end(),
+    [](int e) { /* some expensive computation */ });
+\end{cppcode}
+\end{box-note}
+
+Note that if the operations are not entirely isolated, you will need additional synchronization inside the lambda.
+
+The range version can offer more concise code if all you need is to project an element and then dispatch the result to another function. Here, we have the same code expressed using for\_each and a range loop:
+
+\begin{box-note}
+\begin{cppcode}
+struct Elem {
+    double value() { return 10.2; }
+};
+
+void some_function(double);
+
+int main() {
+    std::vector<Elem> data(10, Elem{});
+    
+    std::ranges::for_each(data, some_function, &Elem::value);
+
+    for(auto& e: data) {
+        some_function(e.value());
+    }
+}
+\end{cppcode}
+\end{box-note}
+
+In the range version (line 10), the first parameter is the range, the second parameter is the function we want to call for each element, and the third is the projection. In this case, we use a member pointer. I have a separate article on C++20 ranges if you want to dig into the details.
+
+\cppversions{\texttt{for\_each\_n}}{\CC17}{\CC20}{\CC17}{\CC20}
+\constraints{
+    \texttt{(input\_iterator, iter\_difference)}}{
+    \texttt{(forward\_iterator, iter\_difference)}}{
+    N/A}{
+    \texttt{unary\_invocable}}
+
+While for\_each operates on the entire range, the interval [begin, end), for\_each\_n operates on the range [first, first+n). Importantly, because the algorithm doesn’t even have access to the end iterator of the source range, it does no out-of-bounds checking, and it is the responsibility of the caller to ensure that the [first,first+n) range is valid.
+
+For demonstration, let’s look at a piece of code that evaluates a qualification round in a tournament. We want to invite the top players to the main tournament and then post the final score online, paginated by 100 entries:
+
+\begin{box-note}
+\begin{cppcode}
+struct Player {
+    std::string display_name;
+    std::string contact_email;
+    uint32_t score;
+};
+
+std::vector<Player> get_ranking();
+void send_invitation_to_main_tournament(const Player& player);
+void store_final_score(uint32_t page, const std::string& name, uint32_t score);
+
+inline constexpr const ssize_t MAIN_TOURNAMENT_SEATS = 10;
+inline constexpr const ssize_t PAGE_SCORE_SIZE = 100;
+
+int main() {
+    std::vector<Player> final_ranking = get_ranking();
+    std::ranges::sort(final_ranking, std::greater<>(), 
+                      &Player::score);
+
+    std::for_each_n(std::execution::par_unseq, 
+        final_ranking.begin(), 
+        std::min(MAIN_TOURNAMENT_SEATS, final_ranking.size()),
+        send_invitation_to_main_tournament);
+    
+    auto it = final_ranking.begin();
+    uint32_t page = 0;
+    while (it != final_ranking.end()) {
+        ssize_t cnt = std::min(PAGE_SCORE_SIZE, final_ranking.end()-it);
+        std::for_each_n(it, cnt, [page](const Player& p) {
+            store_final_score(page, p.display_name, p.score);
+        });
+        page++;
+        it += cnt;
+    }
+}
+\end{cppcode}
+\end{box-note}
+
+Sending invitations can be done in parallel (line 18), but we must avoid going out of bounds (std::min on line 19). For pagination, we go in chunks of PAGE\_SCORE\_SIZE, and for each chunk, invoke for\_each\_n (line 26).
+
+\section{swap, swap\_ranges, iter\_swap}
+
+The second group of algorithms we will discuss today is the group of swaps.
+
+\cppversions{\texttt{swap}}{\CC98}{\CC20}{N/A}{\CC20} % TODO noexcept change in C++11
+
+However, we first need to discuss a little complexity arising from argument dependent lookup. It is not unusual when data structures are cheap to swap, so we will want to customize swap for them.
+
+We can specialize std::swap inside the std namespace, but that would mean that this specialization will not be matched using argument dependent lookup (it would live in a different namespace than its parameters). That means that an unqualified call to swap would not find the correct implementation.
+
+The proper way to specialize swap is to provide a (friend) function in the same namespace as the data structure:
+
+\begin{box-note}
+\begin{cppcode}
+namespace SomeLib {
+
+struct SomeStruct {
+    std::vector<int> data;
+
+    friend void swap(SomeStruct& left, SomeStruct& right) {
+        left.data.swap(right.data);
+    }
+};
+
+}
+\end{cppcode}
+\end{box-note}
+
+And the proper way to call swap is to pull in the std::swap before the unqualified call:
+
+\begin{box-note}
+\begin{cppcode}
+void some_algorithm(auto& a, auto& b) {
+    using std::swap;
+    swap(a, b);
+}
+\end{cppcode}
+\end{box-note}
+
+Fortunately, the C++20 rangified version of swap removes this complexity. It serves as an ultimate solution it will:
+
+\begin{itemize}
+    \item will call the user-provided or standard swap matching the types
+    \item if that doesn’t exist and the parameters are ranges, will do swap\_range
+    \item if the parameters aren’t ranges, it will default to a move swap\\
+    \mintinline{cpp}{V v(std::move(t)); t = std::move(u); u = std::move(v);}
+\end{itemize}
+
+\begin{box-note}
+\begin{cppcode}
+namespace Library {
+struct Storage {
+    int value;
+};
+
+void swap(Storage& left, Storage& right) {
+    std::ranges::swap(left.value, right.value);
+}
+}
+
+int main() {
+    int a = 1, b = 2;
+    std::ranges::swap(a, b);
+
+    Library::Storage j{2}, k{3};
+    std::ranges::swap(j, k); // calls custom Library::swap()
+}
+\end{cppcode}
+\end{box-note}
+
+Let’s finally talk about the other two variants, iter\_swap and swap\_ranges.
+
+\cppversions{\texttt{iter\_swap}}{\CC98}{\CC20}{N/A}{\CC20}
+
+Iter swap could also be called indirect swap, swapping the underlying values behind iterators or other indirect types. It is mainly helpful for implementing custom algorithms since those operate on iterators.
+
+Here is an example of a partition algorithm implementation using iter\_swap (line 12):
+
+\begin{box-note}
+\begin{cppcode}
+template <typename It, typename Cond>
+    requires std::forward_iterator<It> 
+        && std::indirectly_swappable<It,It> 
+        && std::predicate<Cond>
+auto partition(It first, It last, Cond cond) {
+    while (first != last && cond(first)) ++first;
+    if (first == last) return last;
+
+    for (auto it = std::next(first); it != last; it++) {
+        if (!cond(it)) continue;
+
+        std::iter_swap(it, first);
+        ++first;
+    }
+    return first;
+}
+\end{cppcode}
+\end{box-note}
+
+Swap ranges is a piecewise swap of two non-overlapping ranges (potentially from the same container). A begin iterator specifies the second range, and it is the caller’s responsibility to ensure that the target range has enough capacity.
+
+\cppversions{\texttt{swap\_ranges}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{ 1, 2, 3, 4, 5, 6, 7, 8, 9};
+std::swap_ranges(data.begin(), data.begin()+3, data.rbegin());
+// 9, 8, 7, 4, 5, 6, 3, 2, 1
+\end{cppcode}
+\end{box-note}
+
+Here we swap the first three elements of the array with the last three elements of the array. The order of elements is reversed because we use rbegin (begin iterator for reverse iteration).

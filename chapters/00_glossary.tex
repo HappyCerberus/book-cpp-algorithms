@@ -1,0 +1,34 @@
+\newglossaryentry{input iterator}{
+    name=input iterator,
+    description={Is an iterator category that allows the following operations: advance and read (one pass)}
+}
+
+\newglossaryentry{forward iterator}{
+    name=forward iterator,
+    description={Is an iterator category that satisfies input iterator and allows elements to be read multiple times and out of order}
+}
+
+\newglossaryentry{bidirectional iterator}{
+    name=bidirectional iterator,
+    description={Is an iterator category that satisfies forward iterator and provides a move back operation (opposite direction of advance)}
+}
+
+\newglossaryentry{random access iterator}{
+    name=random access iterator,
+    description={Is an iterator category that satisfies bidirectional iterator and can advance and move back by any integer and calculate distance between two iterator, both in $O(1)$}
+}
+
+\newglossaryentry{contiguous iterator}{
+    name=contiguous iterator,
+    description={Is an iterator category that satisfies random access iterator and further guarantees that the underlying storage is continuous}
+}
+
+\newglossaryentry{output iterator}{
+    name=output iterator,
+    description={Is an iterator category that allows the following operations: advance and write (one pass)}
+}
+
+\newglossaryentry{mutable iterator}{
+    name=mutable iterator,
+    description={Name for any a combination of output iterator with any of input iterator categories}
+}
