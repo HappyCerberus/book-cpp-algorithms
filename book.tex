@@ -1,5 +1,15 @@
 \documentclass[11pt,svgnames,table,a4paper]{book}
 
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+    }
+    
 \input{packages/fonts}
 \input{packages/color_blocks}
 \input{packages/code_blocks}
@@ -7,23 +17,30 @@
 \input{packages/glossary_and_index}
 \input{packages/local}
 
-\title{The 114 C++ standard algorithms}
+\title{The 114 C++ standard algorithms\\and other related topics}
 
 \author{RNDr. Šimon Tóth}
 \date{2022}
 
 \begin{document}
-
+\frontmatter
 \maketitle
-
 \input{chapters/00_glossary}
 \input{chapters/01_preface}
+
+\mainmatter
+\tableofcontents
+
 \input{chapters/02_introduction}
 \input{chapters/03_algorithms}
 \input{chapters/04_making_your_own}
 \input{chapters/05_parallel_algorithms}
 \input{chapters/06_cpp20_ranges}
+
+\appendix
 %\input{chapters/07_glossary}
 \input{chapters/08_index}
+
+\backmatter
 
 \end{document}
