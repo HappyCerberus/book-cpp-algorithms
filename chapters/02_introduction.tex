@@ -11,22 +11,24 @@ While each \CC standard introduced new algorithms or variants, there are few not
 The \CC98 standard introduced most of the algorithms. However, it was the \CC11 standard with its introduction of lambdas that made algorithms worthwhile. Before lambdas, the time investment of writing a custom function object made the usefulness of algorithms dubious.
 
 \begin{box-note}
-\footnotesize Example of \mintinline{cpp}{std::for_each} algorithm with a custom function object, calculating the number of elements and their sum.
+\footnotesize Example of \mintinline{cpp}{std::for_each}\index{\mintinline{cpp}{std::for_each}} algorithm with a custom function object, calculating the number of elements and their sum.
 \tcblower
 \cppfile{code_examples/introduction/history_cc98_code.h}
 \end{box-note}
 
 \begin{box-note}
-\footnotesize Example of \mintinline{cpp}{std::for_each} algorithm with a capturing lambda, calculating the number of elements and their sum.
+\footnotesize Example of \mintinline{cpp}{std::for_each}\index{\mintinline{cpp}{std::for_each}} algorithm with a capturing lambda, calculating the number of elements and their sum.
 \tcblower
 \cppfile{code_examples/introduction/history_cc11_code.h}
 \end{box-note}
 
 The \CC17 standard introduced parallel algorithms that provide an easy way to speed up processing with minimal effort. All you need to do is to specify the desired execution model, and the library will take care of spawning the correct number of threads.
 
-
-
- Insert an example of a parallel algorithm with time to run comparison.
+\begin{box-note}
+\footnotesize Example of \mintinline{cpp}{std::for_each}\index{\mintinline{cpp}{std::for_each}} algorithm using unsequenced parallel execution model. Note that counters are now shared state and need to be \mintinline{cpp}{std::atomic}\index{\mintinline{cpp}{std::atomic}} or protected by a \mintinline{cpp}{std::mutex}\index{\mintinline{cpp}{std::mutex}}.
+\tcblower
+\cppfile{code_examples/introduction/history_cc17_code.h}
+\end{box-note}
 
 Finally, the \CC20 standard introduced a major re-design in the form of ranges and views.
 
