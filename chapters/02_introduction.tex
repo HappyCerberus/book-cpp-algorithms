@@ -1,37 +1,30 @@
 \chapter{Introduction}
 
-The C++ standard library is arguably quite limited in its functionality. However, when it comes to data and number crunching, the C++ standard library provides a versatile toolkit of algorithms.
+The \CC standard library is arguably quite limited in its functionality. However, when it comes to data and number crunching, the \CC standard library provides a versatile toolkit of algorithms.
 
-If you are a C++ developer, good familiarity with C++ standard algorithms can save you a lot of effort and accidental bugs. Notably, whenever you see a raw loop in your code, you should question whether calling a standard algorithm wouldn't be a better solution (it usually is).
+If you are a \CC developer, good familiarity with \CC standard algorithms can save you a lot of effort and accidental bugs. Notably, whenever you see a raw loop in your code, you should question whether calling a standard algorithm wouldn't be a better solution (it usually is).
 
-\section{History of standard C++ algorithms}
+\section{History of standard \texorpdfstring{\CC}{C++} algorithms}
 
-While each C++ standard introduced new algorithms or variants, there are few notable milestones in the history of C++ standard algorithms.
+While each \CC standard introduced new algorithms or variants, there are few notable milestones in the history of \CC standard algorithms.
 
-The C++98 standard introduced most of the algorithms. However, it was the C++11 standard with its introduction of lambdas that made algorithms worthwhile. Before lambdas, the time investment of writing a custom function object made the usefulness of algorithms dubious.
+The \CC98 standard introduced most of the algorithms. However, it was the \CC11 standard with its introduction of lambdas that made algorithms worthwhile. Before lambdas, the time investment of writing a custom function object made the usefulness of algorithms dubious.
 
 \begin{box-note}
-\cppfile[firstline=6, lastline=19]{code_examples/introduction/history_cc98.cpp}
-\footnotesize Example of \mintinline{cpp}{std::for_each} algorithm with a custom function object.
+\footnotesize Example of \mintinline{cpp}{std::for_each} algorithm with a custom function object, calculating the number of elements and their sum.
+\tcblower
+\cppfile{code_examples/introduction/history_cc98_code.h}
 \end{box-note}
 
-
-The C++17 standard introduced parallel algorithms that provide an easy way to speed up processing with minimal effort. All you need to do is to specify the desired execution model, and the library will take care of 
-spawning the correct number of threads.
+The \CC17 standard introduced parallel algorithms that provide an easy way to speed up processing with minimal effort. All you need to do is to specify the desired execution model, and the library will take care of spawning the correct number of threads.
 
  Insert an example of a parallel algorithm with time to run comparison.
 
-Finally, the C++20 standard introduced a major re-design in the form of ranges and views.
+Finally, the \CC20 standard introduced a major re-design in the form of ranges and views.
 
 Insert an example of a range algorithm with a view.
 
-As of the time of writing, the C++23 is not finalized. However, we already know that it will introduce more range algorithms, more views and the ability to implement custom views.
-
-
-You could critique the \CC standard library for its lack of functionality. However, when it comes to data and number crunching, the \CC standard library provides a versatile toolkit of algorithms. Therefore, if you are a C++ developer, you owe yourself to know what facilities are available.
-
-
-
+As of the time of writing, the \CC23 is not finalized. However, we already know that it will introduce more range algorithms, more views and the ability to implement custom views.
 
 \section{Iterators: the interoperability layer}
 
