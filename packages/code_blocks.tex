@@ -2,13 +2,21 @@
 \usepackage[]{xcolor}
 \usemintedstyle{xcode}
 
-\renewcommand\theFancyVerbLine{\small\arabic{FancyVerbLine}}
+\renewcommand\theFancyVerbLine{\footnotesize\arabic{FancyVerbLine}}
 
 \newminted{cpp}{
     linenos=true,
     xleftmargin=1em,
     breaklines,
-    fontsize=\small,
+    fontsize=\footnotesize,
     numbersep=0.75em
 }
 
+\newmintedfile[cppfile]{cpp}{
+    linenos=true,
+    firstnumber=1,
+    xleftmargin=1em,
+    breaklines,
+    fontsize=\footnotesize,
+    numbersep=0.75em
+}
