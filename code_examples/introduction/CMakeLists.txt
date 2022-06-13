@@ -15,3 +15,6 @@ install(TARGETS iterators DESTINATION bin)
 
 add_executable(sentinels sentinels.cpp)
 install(TARGETS sentinels DESTINATION bin)
+
+add_executable(categories categories.cpp)
+install(TARGETS categories DESTINATION bin)
