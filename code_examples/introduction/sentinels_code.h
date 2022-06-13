@@ -13,3 +13,4 @@ auto it1 = data.begin();
 std::ranges::for_each(it1, Sentinel{it1, 5}, [](int el) {
     std::cout << el << ", ";
 });
+// Prints: 1, 2, 3, 4, 5, 
