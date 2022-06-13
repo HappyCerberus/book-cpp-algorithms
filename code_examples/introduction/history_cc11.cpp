@@ -9,5 +9,5 @@ int main() {
 assert(cnt == 9);
 assert(sum == 45);
 
-std::cout << ".";
+std::cerr << ".";
 }

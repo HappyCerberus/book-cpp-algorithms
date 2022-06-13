@@ -7,7 +7,7 @@ $CMAKE --build build
 $CMAKE --install build --prefix .
 
 for executable in bin/*; do
-	$executable
+	$executable 1> /dev/null
 done
 
 echo "All good!"
