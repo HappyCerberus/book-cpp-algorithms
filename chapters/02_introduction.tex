@@ -66,45 +66,25 @@ Sentinels follow the same idea. However, they do not need to be of an iterator t
 
 \subsection{Iterator categories}
 
-C++ recognizes the following categories of iterators:
+The set of operations that are possible in constant time and space defines the following categories of iterators (and consequently ranges):
 
-\begin{itemize}
-    \item \gls{input iterator}: advance, read, one pass
-    \item \gls{forward iterator}: advance, read
-    \item \gls{bidirectional iterator}: forward iterator + move back
-    \item \gls{random access iterator}: bidirectional iterator + advance \& move back by any integer, calculate distance between two iterators
-    \item \gls{contiguous iterator}: random access + the storage of elements is contiguous
-    \item \gls{output iterator}: advance, write, one pass
-\end{itemize}
-
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> vec{1,2,3,4,5,6};
-auto it = vec.begin();
-it += 5; // *it == 6
-\end{cppcode}
-\noindent\small\texttt{std::vector} provides a continuous access iterator (since C++20), random access iterator (before C++20).
-\end{box-note}
+\begin{description}
+    \item[input/output iterator] read/write each element once, advance\\
+    \textit{data streams, e.g. writing/reading data to/from a network socket}
+    \item[forward iterator] read/write each element repeatedly, advance\\
+    \textit{singly-linked list}
+    \item[bidirectional iterator] forward iterator + move back\\
+    \textit{doubly-linked list, map, set}
+    \item[random access iterator] bidirectional iterator + advance and move back by any integer and calculate distance between two iterators\\
+    \textit{multi-array data structures, e.g. std::deque}
+    \item[contiguous iterator] random access iterator + the storage of elements is contiguous\\
+    \textit{arrays}
+\end{description}
 
 \begin{box-note}
-\begin{cppcode}
-std::list<int> lst{1,2,3,4,5,6};
-auto it = lst.begin();
-// it += 5; Doesn't compile
-std::advance(it, 5); // linear advance, *it == 6
-\end{cppcode}
-\noindent\small\texttt{std::list} only provides a bidirectional iterator.
-\end{box-note}
-
-This categorization allows algorithms to specify the type of iterator they require, either explicitly (using C++20 concepts) or implicitly by using operations supported by a specific kind of iterator.
-
-For example, \emph{\index{std::sort}} requires random access iterators because it needs to calculate the distance of two iterators efficiently. Therefore the following code will not compile (std::list provides bidirectional iterators):
-
-\begin{box-note}
-\begin{cppcode}
-std::list<int> data = { 9, 1, 8, 2, 7, 3};
-std::sort(data.begin(), data.end()); // will not compile
-\end{cppcode}
+\footnotesize Example demonstrating the difference between a random access iterator provided by \mintinline{cpp}{std::vector} and a bidirectional iterator provided by \mintinline{cpp}{std::list}.
+\tcblower
+\cppfile{code_examples/introduction/sentinels_code.h}
 \end{box-note}
 
 \section{Ranges}
