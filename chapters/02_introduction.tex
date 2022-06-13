@@ -30,13 +30,32 @@ The \CC17 standard introduced parallel algorithms that provide an easy way to sp
 \cppfile{code_examples/introduction/history_cc17_code.h}
 \end{box-note}
 
-Finally, the \CC20 standard introduced a major re-design in the form of ranges and views.
+Finally, the \CC20 standard introduced a significant re-design in the form of ranges and views. Range versions of algorithms can now operate on ranges instead of \mintinline{cpp}{begin} and \mintinline{cpp}{end} iterators and views provide lazily evaluated versions of algorithms and utilities.
 
-Insert an example of a range algorithm with a view.
+\begin{box-note}
+\footnotesize Example of the range version of the \mintinline{cpp}{std::for_each}\index{\mintinline{cpp}{std::for_each}} algorithm.
+\tcblower
+\cppfile{code_examples/introduction/history_cc20_code.h}
+\end{box-note}
 
 As of the time of writing, the \CC23 is not finalized. However, we already know that it will introduce more range algorithms, more views and the ability to implement custom views.
 
-\section{Iterators: the interoperability layer}
+\section{Iterators and ranges}
+
+Algorithms operate on data structures, which poses an issue. How do you abstract the implementation details of a specific data structure and allow the algorithm to work with any data structure that satisfies the algorithm's requirements?
+
+The \CC standard library solution to this problem are iterators and ranges. Iterators encapsulate implementation details of data structure traversal and simultaneously expose a set of operations possible on the given data structure in constant time and space.
+
+A range is then denoted by a pair of iterators, or more generally, since \CC20, an iterator and a sentinel.
+
+In mathematical terms, a pair of iterators $it1$, $it2$ denotes a range $[it1, it2)$, that is, the range includes the element referenced by $it1$ and ends before the element referenced by $it2$.
+
+
+
+Sentinels follow the same idea. However, they do not need to be of an iterator type. Instead, they only need to be comparable to an iterator. The end of the range is then the first iterator that compares equal to the sentinel.
+
+Example of specifying a range using an iterator and custom sentinel. The sentinel will compare true with iterators at least the given distance from the start iterator, therefore defining a range with the specified number of elements.
+
 
 At the core that lies between C++ data structures and algorithms are iterators. Iterators abstract away the details of how a particular data structure is traversed while capturing the behavioural limitations that a data structure imposes.
 
@@ -197,4 +216,3 @@ int main() {
 \end{box-note}
 
 Sending invitations can be done in parallel (line 18), but we must avoid going out of bounds (std::min on line 19). For pagination, we go in chunks of PAGE\_SCORE\_SIZE, and for each chunk, invoke for\_each\_n (line 26).
-
