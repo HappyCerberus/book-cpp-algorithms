@@ -48,18 +48,21 @@ The \CC standard library solution to this problem are iterators and ranges. Iter
 
 A range is then denoted by a pair of iterators, or more generally, since \CC20, an iterator and a sentinel.
 
-In mathematical terms, a pair of iterators $it1$, $it2$ denotes a range $[it1, it2)$, that is, the range includes the element referenced by $it1$ and ends before the element referenced by $it2$.
+In mathematical terms, a pair of iterators \mintinline{cpp}{it1}, \mintinline{cpp}{it2} denotes a range \mintinline{cpp}{[it1, it2)}, that is, the range includes the element referenced by \mintinline{cpp}{it1} and ends before the element referenced by \mintinline{cpp}{it2}.
 
-
+\begin{box-note}
+\footnotesize Example of specifying a range using two iterators.
+\tcblower
+\cppfile{code_examples/introduction/iterators_code.h}
+\end{box-note}
 
 Sentinels follow the same idea. However, they do not need to be of an iterator type. Instead, they only need to be comparable to an iterator. The end of the range is then the first iterator that compares equal to the sentinel.
 
-Example of specifying a range using an iterator and custom sentinel. The sentinel will compare true with iterators at least the given distance from the start iterator, therefore defining a range with the specified number of elements.
-
-
-At the core that lies between C++ data structures and algorithms are iterators. Iterators abstract away the details of how a particular data structure is traversed while capturing the behavioural limitations that a data structure imposes.
-
-For example, an array (e.g. \emph{\index{std::vector}}) allows random access, meaning that we can move from one element to another in constant time. On the other hand, a linked list (e.g. std::list) only allows us to move to the next and previous elements in constant time, and moving the distance of n takes n operations (linear complexity).
+\begin{box-note}
+\footnotesize Example of specifying a range using an iterator and custom sentinel. The sentinel will compare \mintinline{cpp}{true} with iterators at least the given distance from the start iterator, therefore defining a range with the specified number of elements.
+\tcblower
+\cppfile{code_examples/introduction/sentinels_code.h}
+\end{box-note}
 
 \subsection{Iterator categories}
 
