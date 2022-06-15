@@ -11,13 +11,13 @@ While each \CC standard introduced new algorithms or variants, there are few not
 The \CC98 standard introduced most of the algorithms. However, it was the \CC11 standard with its introduction of lambdas that made algorithms worthwhile. Before lambdas, the time investment of writing a custom function object made the usefulness of algorithms dubious.
 
 \begin{box-note}
-\footnotesize Example of \mintinline{cpp}{std::for_each}\index{\mintinline{cpp}{std::for_each}} algorithm with a custom function object, calculating the number of elements and their sum.
+\footnotesize Example of \cpp{std::for_each}\index{\cpp{std::for_each}} algorithm with a custom function object, calculating the number of elements and their sum.
 \tcblower
 \cppfile{code_examples/introduction/history_cc98_code.h}
 \end{box-note}
 
 \begin{box-note}
-\footnotesize Example of \mintinline{cpp}{std::for_each}\index{\mintinline{cpp}{std::for_each}} algorithm with a capturing lambda, calculating the number of elements and their sum.
+\footnotesize Example of \cpp{std::for_each}\index{\cpp{std::for_each}} algorithm with a capturing lambda, calculating the number of elements and their sum.
 \tcblower
 \cppfile{code_examples/introduction/history_cc11_code.h}
 \end{box-note}
@@ -25,15 +25,15 @@ The \CC98 standard introduced most of the algorithms. However, it was the \CC11 
 The \CC17 standard introduced parallel algorithms that provide an easy way to speed up processing with minimal effort. All you need to do is to specify the desired execution model, and the library will take care of spawning the correct number of threads.
 
 \begin{box-note}
-\footnotesize Example of \mintinline{cpp}{std::for_each}\index{\mintinline{cpp}{std::for_each}} algorithm using unsequenced parallel execution model. Note that counters are now shared state and need to be \mintinline{cpp}{std::atomic}\index{\mintinline{cpp}{std::atomic}} or protected by a \mintinline{cpp}{std::mutex}\index{\mintinline{cpp}{std::mutex}}.
+\footnotesize Example of \cpp{std::for_each}\index{\cpp{std::for_each}} algorithm using unsequenced parallel execution model. Note that counters are now shared state and need to be \cpp{std::atomic}\index{\cpp{std::atomic}} or protected by a \cpp{std::mutex}\index{\cpp{std::mutex}}.
 \tcblower
 \cppfile{code_examples/introduction/history_cc17_code.h}
 \end{box-note}
 
-Finally, the \CC20 standard introduced a significant re-design in the form of ranges and views. Range versions of algorithms can now operate on ranges instead of \mintinline{cpp}{begin} and \mintinline{cpp}{end} iterators and views provide lazily evaluated versions of algorithms and utilities.
+Finally, the \CC20 standard introduced a significant re-design in the form of ranges and views. Range versions of algorithms can now operate on ranges instead of \cpp{begin} and \cpp{end} iterators and views provide lazily evaluated versions of algorithms and utilities.
 
 \begin{box-note}
-\footnotesize Example of the range version of the \mintinline{cpp}{std::for_each}\index{\mintinline{cpp}{std::for_each}} algorithm.
+\footnotesize Example of the range version of the \cpp{std::for_each}\index{\cpp{std::for_each}} algorithm.
 \tcblower
 \cppfile{code_examples/introduction/history_cc20_code.h}
 \end{box-note}
@@ -48,7 +48,7 @@ The \CC standard library solution to this problem are iterators and ranges. Iter
 
 A range is then denoted by a pair of iterators, or more generally, since \CC20, an iterator and a sentinel.
 
-In mathematical terms, a pair of iterators \mintinline{cpp}{it1}, \mintinline{cpp}{it2} denotes a range \mintinline{cpp}{[it1, it2)}, that is, the range includes the element referenced by \mintinline{cpp}{it1} and ends before the element referenced by \mintinline{cpp}{it2}.
+In mathematical terms, a pair of iterators \cpp{it1}, \cpp{it2} denotes a range \cpp{[it1, it2)}, that is, the range includes the element referenced by \cpp{it1} and ends before the element referenced by \cpp{it2}.
 
 \begin{box-note}
 \footnotesize Example of specifying a range using two iterators.
@@ -59,7 +59,7 @@ In mathematical terms, a pair of iterators \mintinline{cpp}{it1}, \mintinline{cp
 Sentinels follow the same idea. However, they do not need to be of an iterator type. Instead, they only need to be comparable to an iterator. The end of the range is then the first iterator that compares equal to the sentinel.
 
 \begin{box-note}
-\footnotesize Example of specifying a range using an iterator and custom sentinel. The sentinel will compare \mintinline{cpp}{true} with iterators at least the given distance from the start iterator, therefore defining a range with the specified number of elements.
+\footnotesize Example of specifying a range using an iterator and custom sentinel. The sentinel will compare \cpp{true} with iterators at least the given distance from the start iterator, therefore defining a range with the specified number of elements.
 \tcblower
 \cppfile{code_examples/introduction/sentinels_code.h}
 \end{box-note}
@@ -72,9 +72,9 @@ The set of operations that are possible in constant time and space defines the f
     \item[input/output iterator] read/write each element once, advance\\
     \textit{data streams, e.g. writing/reading data to/from a network socket}
     \item[forward iterator] read/write each element repeatedly, advance\\
-    \textit{singly-linked list}
+    \textit{singly-linked list, e.g. std::forward\_list}
     \item[bidirectional iterator] forward iterator + move back\\
-    \textit{doubly-linked list, map, set}
+    \textit{doubly-linked list, e.g. std::list, std::map, std::set}
     \item[random access iterator] bidirectional iterator + advance and move back by any integer and calculate distance between two iterators\\
     \textit{multi-array data structures, e.g. std::deque}
     \item[contiguous iterator] random access iterator + the storage of elements is contiguous\\
@@ -82,120 +82,43 @@ The set of operations that are possible in constant time and space defines the f
 \end{description}
 
 \begin{box-note}
-\footnotesize Example demonstrating the difference between a random access iterator provided by \mintinline{cpp}{std::vector} and a bidirectional iterator provided by \mintinline{cpp}{std::list}.
+\footnotesize Example demonstrating the difference between a random access iterator provided by \cpp{std::vector} and a bidirectional iterator provided by \cpp{std::list}.
 \tcblower
 \cppfile{code_examples/introduction/categories_code.h}
 \end{box-note}
 
-\section{Ranges}
+\subsection{Range categories}
 
-While C++20 formalized the concept of a range, the notion of a range was present in C++ since the beginning. Each container is expected to provide access to two iterators, begin and end. The semantic here is [begin,end), that is, begin is an iterator to the first element, end is an iterator one past the last element.
+Ranges can be classified using the same categories as iterators. In this book, we will be using the range nomenclature over iterators (e.g. input range, forward range, bidirectional range, etc.).
 
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> v{1,2,3,4,5,6};
-for (auto it = v.begin(); it != v.end(); it++) {
-    std::cout << *it << "\n";
-}
-\end{cppcode}
-\end{box-note}
+\section{Naming and common behaviour}
 
-Ranges can be classified using the same categories of iterators. In this series, we will be using the range nomenclature over iterators (e.g. input range, forward range, bidirectional range, etc.).
+While the naming of many algorithms is sub-optimal, there are a few common naming patterns.
 
-\section{for\_each, for\_each\_n}
+\subsection{Counted variants "\texttt{\_n}"}
 
-Enough of theory. Let’s talk specific algorithms, and we will start with the simplest of all, for\_each and for\_each\_n.
+Counted variants of algorithms accept the range specified using the start iterator and the number of elements (instead of begin and end). This behaviour can be a convenient alternative when working with input and output ranges, where we often do not have an explicit end iterator.
 
-\cppversions{\texttt{for\_each}}{\CC98}{\CC20}{\CC17}{\CC20}
-\constraints{\texttt{input\_range}}{}{N/A}{\texttt{unary\_invocable}}
+Since \CC20 we also have access to \cpp{std::counted_iterator} adapter, which will only work with the range versions of algorithms.\\
 
-Since C++11 introduced a range loop, for\_each became a less relevant algorithm. However, there are still a couple of situations where for\_each offers a lot of functionality.
+\noindent Examples: \cpp{std::for_each_n}, \cpp{std::copy_n}\\
 
-The parallel version is probably the most straightforward parallel facility in C++. If all you need is to run an expensive operation on each element in isolation, a parallel for\_each is the perfect solution:
+\noindent Note: while \cpp{std::search_n} does follow the naming, it does not follow the same semantics. The \texttt{\_n} here refers to the number of instances of the searched element.
 
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> data = get_data();
-std::for_each(std::execution::par_unseq, 
-    data.begin(), data.end(),
-    [](int e) { /* some expensive computation */ });
-\end{cppcode}
-\end{box-note}
+\subsection{Copy variants "\texttt{\_copy}"}
 
-Note that if the operations are not entirely isolated, you will need additional synchronization inside the lambda.
+Copy variants of in-place algorithms that output the result through the provided iterator. The copy behaviour allows this variant to operate on immutable ranges.\\
 
-The range version can offer more concise code if all you need is to project an element and then dispatch the result to another function. Here, we have the same code expressed using for\_each and a range loop:
+\noindent Examples: \cpp{std::remove_copy}, \cpp{std::partial_sort_copy}
 
-\begin{box-note}
-\begin{cppcode}
-struct Elem {
-    double value() { return 10.2; }
-};
+\subsection{Predicate variants "\texttt{\_if}"}
 
-void some_function(double);
+Predicate variants of algorithms use a predicate to determine a "match" instead of comparing against a value. The standard also has one instance of \texttt{\_if\_not} variant that inverts the predicate logic (\cpp{false} is treated as a match).\\
 
-int main() {
-    std::vector<Elem> data(10, Elem{});
-    
-    std::ranges::for_each(data, some_function, &Elem::value);
+\noindent Examples: \cpp{std::find_if}, \cpp{std::replace_if}
 
-    for(auto& e: data) {
-        some_function(e.value());
-    }
-}
-\end{cppcode}
-\end{box-note}
+\subsection{Restrictions on invocable}
 
-In the range version (line 10), the first parameter is the range, the second parameter is the function we want to call for each element, and the third is the projection. In this case, we use a member pointer. I have a separate article on C++20 ranges if you want to dig into the details.
+Many algorithms can be customized using an invocable. However, with a few exceptions, the invocable is not permitted to modify elements of the range or invalidate iterators. On top of that, unless explicitly noted, the algorithms do not guarantee any particular order of invocation.
 
-\cppversions{\texttt{for\_each\_n}}{\CC17}{\CC20}{\CC17}{\CC20}
-\constraints{
-    \texttt{(input\_iterator, iter\_difference)}}{
-    \texttt{(forward\_iterator, iter\_difference)}}{
-    N/A}{
-    \texttt{unary\_invocable}}
-
-While for\_each operates on the entire range, the interval [begin, end), for\_each\_n operates on the range [first, first+n). Importantly, because the algorithm doesn’t even have access to the end iterator of the source range, it does no out-of-bounds checking, and it is the responsibility of the caller to ensure that the [first,first+n) range is valid.
-
-For demonstration, let’s look at a piece of code that evaluates a qualification round in a tournament. We want to invite the top players to the main tournament and then post the final score online, paginated by 100 entries:
-
-\begin{box-note}
-\begin{cppcode}
-struct Player {
-    std::string display_name;
-    std::string contact_email;
-    uint32_t score;
-};
-
-std::vector<Player> get_ranking();
-void send_invitation_to_main_tournament(const Player& player);
-void store_final_score(uint32_t page, const std::string& name, uint32_t score);
-
-inline constexpr const ssize_t MAIN_TOURNAMENT_SEATS = 10;
-inline constexpr const ssize_t PAGE_SCORE_SIZE = 100;
-
-int main() {
-    std::vector<Player> final_ranking = get_ranking();
-    std::ranges::sort(final_ranking, std::greater<>(), 
-                      &Player::score);
-
-    std::for_each_n(std::execution::par_unseq, 
-        final_ranking.begin(), 
-        std::min(MAIN_TOURNAMENT_SEATS, final_ranking.size()),
-        send_invitation_to_main_tournament);
-    
-    auto it = final_ranking.begin();
-    uint32_t page = 0;
-    while (it != final_ranking.end()) {
-        ssize_t cnt = std::min(PAGE_SCORE_SIZE, final_ranking.end()-it);
-        std::for_each_n(it, cnt, [page](const Player& p) {
-            store_final_score(page, p.display_name, p.score);
-        });
-        page++;
-        it += cnt;
-    }
-}
-\end{cppcode}
-\end{box-note}
-
-Sending invitations can be done in parallel (line 18), but we must avoid going out of bounds (std::min on line 19). For pagination, we go in chunks of PAGE\_SCORE\_SIZE, and for each chunk, invoke for\_each\_n (line 26).
+These restrictions in practice mean that the passed invocable must be regular. The invocable must return the same result if invoked again with the same arguments. This definition permits accessing a global state such as a cache but does not permit invocables that change their result based on their internal state (such as generators).

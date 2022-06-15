@@ -1,0 +1,394 @@
+\section{Sorting and partitioning algorithms}
+
+\subsection{sort}
+
+The basic sorting algorithm is unsurprisingly std::sort.
+
+\cppversions{\texttt{sort}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints
+    {\texttt{random\_access\_range}}
+    {\texttt{random\_access\_range}}
+    {N/A}
+    {\texttt{strict\_weak\_ordering}}
+    
+While the actual implementation of std::sort might differ (usually intro-sort), it is guaranteed to be $O(n*logn)$ comparisons (since \CC11). As a result, it only operates on random-access ranges. This means that we can’t use std::sort with std::list, which does provide an $O(n*logn)$ sort as a method.
+
+\begin{box-note}
+\begin{cppcode}
+{
+    std::vector<int> data = {9, 1, 8, 2, 7, 3, 6, 4, 5};
+    std::sort(data.begin(), data.end());
+    // 1, 2, 3, 4, 5, 6, 7, 8, 9
+}
+{
+    std::list<int> data = {9, 1, 8, 2, 7, 3, 6, 4, 5};
+    //std::sort(data.begin(), data.end()); // doesn't compile
+    data.sort();
+    // 1, 2, 3, 4, 5, 6, 7, 8, 9
+}
+\end{cppcode}
+\end{box-note}
+
+With C++20, we can take advantage of projections to sort by a method or member:
+
+\begin{box-note}
+\begin{cppcode}
+struct Account {
+    double value();
+};
+
+std::vector<Account> fetch_accounts();
+
+int main() {
+    std::vector<Account> data = fetch_accounts();
+    std::ranges::sort(data, std::greater<>(), &Account::value);
+}
+\end{cppcode}
+\end{box-note}
+
+Here we sort the accounts by their computed value in a descending (technically non-ascending) order. The std::greater<> is a C++14 specialization of std::greater that relies on type deduction to determine the parameter types. Before C++14, you would have to specify the type (in this case std::greater<double>()).
+
+\subsubsection{Making your type comparable}
+
+In the examples, we used std::sort on types that are inherently comparable in the base language or used a projection to narrow down the custom type to a double. However, sometimes you might want to make your custom type comparable.
+
+First, let’s go back to the requirements of std::sort. It expects a strict\_weak\_ordering, which means that the comparison functor (or the less than operator) needs to be ireflexive: $\neg f(a,a)$, anti-symetric: $f(a,b) \Rightarrow \neg f(b,a) $, and transitive: $(f(a,b) \wedge f(b,c)) \Rightarrow f(a,c)$.
+
+If you don’t have a domain-specific ordering for your particular data type, a solid default is lexicographical ordering. Lexicographical ordering is also the ordering provided by standard containers.
+
+In C++20, implementing comparison for your type became a lot simpler with the introduction of the spaceship operator:
+
+\begin{box-note}
+\begin{cppcode}
+struct Point {
+    int x;
+    int y;
+
+    // pre-C++20 lexicographical less-than
+    friend bool operator<(const Point& left, const Point& right) {
+        if (left.x != right.x)
+            return left.x < right.x;
+        return left.y < right.y;
+    }
+
+    // default C++20 spaceship version of lexicographical comparison
+    friend auto operator<=>(const Point&, const Point&) = default;
+
+    // manual implementation of C++20 spaceship version of lexicographical comparison
+    friend auto operator<=>(const Point& left, const Point& right) {
+        if (left.x != right.x)
+            return left.x <=> right.x;
+        return left.y <=> right.y;
+    }
+};
+\end{cppcode}
+\end{box-note}
+
+The default lexicographical ordering (line 13) works recursively. It starts with the object’s bases first, left-to-right, depth-first and then non-static members in declaration order (processing arrays element by element, left-to-right).
+
+The type returned for the spaceship operator is the common comparison category type for the bases and members: strong\_ordering, weak\_ordering, or partial\_ordering.
+
+\subsection{lexicographical\_compare, lexicographical\_compare\_three\_way}
+
+When discussing lexicographical comparison, we have to talk about the two algorithms offering this functionality for ranges.
+
+\cppversions{\texttt{lexicographical\_compare}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{(input\_range, input\_range)}}{\texttt{(forward\_range, forward\_range)}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> range1{1, 2, 3}, range2{1, 3}, range3{1, 3, 1};
+
+assert(std::lexicographical_compare(range1.begin(), range1.end(), 
+                                    range2.begin(), range2.end()));
+assert(std::lexicographical_compare(range2.begin(), range2.end(), 
+                                    range3.begin(), range3.end()));
+
+assert(range1 < range2); // same as lexicographical_compare
+assert(range2 < range3); // same as lexicographical_compare
+\end{cppcode}
+\end{box-note}
+
+As I already mentioned, all standard containers offer lexicographical comparison through their comparison operators (before C++20) or the spaceship operator (since C++20). The primary use of manually calling lexicographical\_compare is when using C-style arrays or when you want to specify a custom element comparator:
+
+\begin{box-note}
+\begin{cppcode}
+int x[] = {1, 2, 3}, y[] = {1, 4}; // for demonstration only, use std::array
+
+assert(std::lexicographical_compare(&x[0], &x[3], &y[0], &y[2]));
+
+std::vector<std::string> names1{"Zod", "Celeste"}, names2{"Adam", "Maria"};
+
+assert(std::ranges::lexicographical_compare(names1, names2, 
+        [](const std::string& left, const std::string& right) {
+            return left.length() < right.length();
+        }));
+\end{cppcode}
+\end{box-note}
+
+
+The lexicographical\_compare\_three\_way is the spaceship operator equivalent to lexicographical\_compare. It returns one of strong\_ordering, weak\_ordering or partial\_ordering types (based on the provided functor).
+
+\cppversions{\texttt{lexicographical\_compare\_three\_way}}{\CC20}{\CC20}{N/A}{N/A}
+
+\constraints{\texttt{(input\_range, input\_range)}}{}{\texttt{operator<=>}}{\texttt{strong\_ordering}, \texttt{weak\_ordering}, \texttt{partial\_ordering}}
+
+\subsection{stable\_sort}
+
+The std::sort is free to re-arrange equivalent elements, which can be undesirable when re-sorting an already sorted range. The std::stable\_sort provides the additional guarantee of preserving the relative order of equal elements. If additional memory is available, stable\_sort remains $O(n*logn)$. However, if it fails to allocate, it will degrade to an $O(n*logn*logn)$ algorithm.
+
+\cppversions{\texttt{stable\_sort}}{\CC98}{N/A}{\CC17}{\CC20}
+
+\constraints{\texttt{random\_access\_range}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+While stable\_sort is not particularly useful when we are already sorting by every aspect of the type (e.g. by relying on lexicographical comparison), it often comes up when the sorting is based on user input (e.g. re-sorting by column in a UI).
+
+\begin{box-note}
+\begin{cppcode}
+struct Record {
+    std::string label;
+    int rank;
+};
+
+std::vector<Record> data {{"q", 1}, {"f", 1}, {"c", 2}, {"a", 1}, {"d", 3}};
+
+std::ranges::stable_sort(data, {}, &Record::label);    
+std::ranges::stable_sort(data, {}, &Record::rank);
+// Guarantted order: a-1, f-1, q-1, c-2, d-3
+\end{cppcode}
+\end{box-note}
+
+\subsection{is\_sorted, is\_sorted\_until}
+
+To verify whether a range is sorted according to the provided predicate, we can use is\_sorted. The default predicate is std::less.
+
+\cppversions{\texttt{is\_sorted}}{\CC11}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{forward\_range}}{}{\texttt{std::less}}{\texttt{strict\_weak\_ordering}}
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data1{1, 2, 3, 4, 5}, data2{5, 4, 3, 2, 1};
+
+assert(std::is_sorted(data1.begin(), data1.end()));
+assert(std::ranges::is_sorted(data2, std::greater<>()));
+\end{cppcode}
+\end{box-note}
+
+Alternatively, we can use the is\_sorted\_until, which returns the iterator to the first out-of-order element.
+
+\cppversions{\texttt{is\_sorted\_until}}{\CC11}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{forward\_range}}{}{\texttt{std::less}}{\texttt{strict\_weak\_ordering}}
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 5, 9, 2, 4, 6};
+auto it = std::is_sorted_until(data.begin(), data.end());
+// *it == 2
+\end{cppcode}
+\end{box-note}
+
+\subsection{partial\_sort, partial\_sort\_copy}
+
+Often, we are only interested in the top couple of elements in the sorted order, which is precisely what the partial sorting algorithms provide. The benefit of using a partial sort is faster runtime — approximately $O(n*logk)$, where k is the number of elements sorted.
+
+\cppversions{\texttt{partial\_sort}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{(random\_access\_range, random\_access\_iterator)}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+The sub-range to be sorted is specified using a middle iterator with the semantic [begin, middle) representing the sorted part of the range.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{9, 8, 7, 6, 5, 4, 3, 2, 1};
+std::partial_sort(data.begin(), data.begin()+3, data.end());
+// 1, 2, 3, -unspecified order-
+
+std::ranges::partial_sort(data, data.begin()+3, std::greater<>());
+// 9, 8, 7, -unspecified order-
+\end{cppcode}
+\end{box-note}
+
+A variant of partial\_sort, advantageous when working with immutable source data, is partial\_sort\_copy.
+
+\cppversions{\texttt{partial\_sort\_copy}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{input\_range -> random\_access\_range}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+This variant only requires the destination range to be mutable and random-access.
+
+\begin{box-note}
+\begin{cppcode}
+struct ScoreRecord {
+    std::string display;
+    uint16_t score;
+};
+
+const std::vector<ScoreRecord>& get_records();
+
+int main() {
+    std::vector<ScoreRecord> top10(10, ScoreRecord{});
+    std::ranges::partial_sort_copy(get_records(), top10, 
+        std::greater<>(), &ScoreRecord::score, &ScoreRecord::score);
+    // process top 10
+}
+\end{cppcode}
+\end{box-note}
+
+\subsection{partition, stable\_partition, partition\_copy, is\_partitioned}
+
+Partition algorithms “partition” a range into two sub-ranges. First, all elements that satisfy the given predicate, followed by all elements that do not satisfy the predicate. Notably, a 3-way partition is the core building block of QuickSort.
+
+\cppversions{\texttt{partition}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{forward\_range}}{}{N/A}{\texttt{unary\_predicate}}
+
+If we are simply interested in grouping elements by a particular property, std::partition is the solution.
+
+\begin{box-note}
+\begin{cppcode}
+struct ExamResult {
+    std::string student_name;
+    uint16_t score;
+};
+
+std::vector<ExamResult> get_results();
+
+int main() {
+    std::vector<ExamResult> results = get_results();
+  
+    auto pp = std::partition(results.begin(), results.end(), 
+        [limit = 49](const ExamResult& result) {
+            return result.score >= limit;
+        });
+ 
+    for (auto it = results.begin(); it != pp; it++) {
+        // process students with passing mark
+    }
+    for (auto it = pp; it != results.end(); it++) {
+        // process students with failing mark
+     }
+}
+\end{cppcode}
+\end{box-note}
+
+Here we partition exam results into students that passed and failed. The partition algorithm returns the partition point (line 11). We can use the partition point to process the two parts of the range (lines 16 and 19).
+
+Similarly to is\_sorted, we can check whether a range is partitioned (according to a given predicate) using is\_partitioned.
+
+\cppversions{\texttt{is\_partitioned}}{\CC11}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{input\_range}}{\texttt{forward\_range}}{N/A}{\texttt{unary\_predicate}}
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{2, 4, 6, 1, 3, 5};
+auto is_even = [](int v) { return v % 2 == 0; };
+assert(std::ranges::is_partitioned(data, is_even));
+\end{cppcode}
+\end{box-note}
+
+Stable partition guarantees that it will not change the relative order of items.
+
+\cppversions{\texttt{stable\_partition}}{\CC98}{N/A}{\CC17}{\CC20}
+
+\constraints{\texttt{bidirectional\_range}}{}{N/A}{\texttt{unary\_predicate}}
+
+\begin{box-note}
+\begin{cppcode}
+struct Item {
+    std::string label;
+    bool is_selected() const;
+};
+
+std::vector<Item> widget = get_widget();
+std::ranges::stable_partition(widget, std::identity{}, &Item::is_selected);
+// selected items moved to the beginning of the range
+\end{cppcode}
+\end{box-note}
+
+This code might be confusing because we are using std::identity in place of the predicate. However, note that the result of the projection is a boolean value. Therefore, all we require from the predicate is to forward this value.
+
+Finally, partition\_copy will not reorder the input range but instead copies the two partitions to the provided output ranges.
+
+\cppversions{\texttt{partition\_copy}}{\CC11}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{input\_range -> (output\_iterator, output\_iterator)}}{\texttt{forward\_range -> (forward\_iterator, forward\_iterator)}}{N/A}{\texttt{unary\_predicate}}
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{2, 4, 6, 1, 3, 5};
+auto is_even = [](int v) { return v % 2 == 0; };
+
+std::vector<int> even, odd;
+std::partition_copy(data.begin(), data.end(),
+    std::back_inserter(even),
+    std::back_inserter(odd),
+    is_even);
+
+// even == {2, 4, 6}
+// odd == {1, 3, 5}
+\end{cppcode}
+\end{box-note}
+
+We are using the back\_inserter adapter to fill the two vectors without the need to pre-allocate enough capacity (the adapter internally calls push\_back).
+
+\subsection{nth\_element}
+
+Sometimes we only need to pick one specific element out of range (e.g. when choosing a median). Sorting (even partial) might then be overkill due to the $O(n*logn)$ complexity. For $O(n)$ complexity, we need to use a selection algorithm, and nth\_element is one of them.
+
+\cppversions{\texttt{nth\_element}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{(random\_access\_range, random\_access\_iterator)}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+The picked element is specified using a middle iterator. The algorithm will reorder the range so that this element will be in its sorted position. Moreover, the algorithm weakly partitions the range (every element before the middle is ≤ every element after the middle).
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{9, 1, 8, 2, 7, 3, 6, 4, 5};
+std::nth_element(data.begin(), data.begin()+4, data.end());
+// data[4] == 5
+
+std::nth_element(data.begin(), data.begin()+7, data.end(), std::greater<>());
+// data[7] == 2
+\end{cppcode}
+\end{box-note}
+
+Depending on your use case, partial\_sort can be sometimes faster than nth\_element despite the worse theoretical complexity.
+
+\subsection{C standard library: qsort}
+
+Because the C standard library is part of the C++ standard library, we also have access to qsort.
+
+\begin{box-note}
+\begin{cppcode}
+int data[] = {2, 1, 9, -1, 7, -8};
+int size = sizeof data / sizeof(int);
+
+qsort(data, size, sizeof(int), [](const void* left, const void* right){
+    int vl = *(const int*)left;
+    int vr = *(const int*)right;
+
+    if (vl < vr) return -1;
+    if (vl > vr) return 1;
+    return 0;
+});
+
+// -8, -1, 1, 2, 7, 9
+\end{cppcode}
+\end{box-note}
+
+I would strongly recommend avoiding qsort, as std::sort and std::ranges::sort should be a better choice in every situation. Moreover, qsort is only valid for trivially copyable types, and those will correctly optimize to memcpy operations even when using std::sort (if desirable).
+
+\begin{box-note}
+\begin{cppcode}
+int data[] = {2, 1, 9, -1, 7, -8};
+int size = sizeof data / sizeof(int);
+
+std::sort(&data[0], &data[size], std::less<>());
+// -8, -1, 1, 2, 7, 9
+\end{cppcode}
+\end{box-note}

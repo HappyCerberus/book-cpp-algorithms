@@ -1,0 +1,146 @@
+\section{Introducing the algorithms}
+
+In this chapter, we introduce each of the 114 standard algorithms. The groups of algorithms are arbitrary and mainly introduced for presentation clarity. Therefore, you might correctly argue that a specific algorithm would be better suited to reside in a different group.
+
+Before we start, we will use the \cpp{std::for_each} and \cpp{std::for_each_n} algorithms to demonstrate this chapter's structure for each algorithm.
+
+\begin{enumerate}[label=\protect\circled{\arabic*}]
+    \item The presentation of each algorithm will start with a short description.
+    \item The margin will contain information about the history of the algorithm: which C++ standard introduced it and whether it has constexpr, parallel and range variants and including versions of the standard that introduced them.
+    \item Following that will be the description of constraints. Algorithms that do not operate inline are denoted using an arrow: \cpp{input_range -> output_range}.
+    \item Finally, each description will conclude with one or more examples with explanations.
+\end{enumerate}
+
+\subsection{\texorpdfstring{\cpp{std::for_each}}{\texttt{std::for\_each}}}
+
+\circled{1} The \cpp{std::for_each} algorithm applies the provided invocable to each element of the range in order. If the underlying range is mutable, the invocable is permitted to change the state of elements but cannot invalidate iterators.
+
+\cppversions{\circled{2} \texttt{std::for\_each}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+% Custom table to inject the circled number.
+\begin{center}
+\footnotesize
+\begin{tabular}{|m{\dimexpr.22\textwidth-2\tabcolsep}|m{\dimexpr.30\textwidth-2\tabcolsep}|m{\dimexpr.45\textwidth-2\tabcolsep}|}
+\hline
+\rowcolor{black!80} \multicolumn{3}{l}{\textcolor{white}{\circled{3} constraints}} \\
+\hline
+domain & \multicolumn{2}{m{\dimexpr.75\textwidth-2\tabcolsep}|}{\cpp{input_range}} \\
+\hline
+parallel domain & \multicolumn{2}{m{\dimexpr.75\textwidth-2\tabcolsep}|}{\cpp{forward_range}} \\
+\hline
+\multirow{2}{.15\textwidth}{invocable} & \cellcolor{black!80} \textcolor{white}{default} & \cellcolor{black!80} \textcolor{white}{custom} \\
+\cline{2-3}
+& N/A & \cpp{unary_invocable} \\
+\hline
+\end{tabular}
+\end{center}
+
+\circled{4} The C++11 standard introduced the range loop, which mostly replaced the uses of \cpp{std::for_each}.
+
+% Basic range loop
+
+However, there are still a few corner cases when using \cpp{std::for_each} is preferable. 
+
+The first case is straightforward parallelization. Invoking an expensive operation for each element in parallel is trivial with \cpp{std::for_each}. On top of that, as long as the operations are independent, there is no need for synchronization primitives.
+
+% Parallel for_each
+
+Second, the range version can provide a more concise and explicit syntax in some cases because of the projection support introduced in C++20.
+
+% Projection example
+
+\if
+\else
+
+\circled{4} Since C++11 introduced a range loop, for\_each became a less relevant algorithm. However, there are still a couple of situations where for\_each offers a lot of functionality.
+
+The parallel version is probably the most straightforward parallel facility in C++. If all you need is to run an expensive operation on each element in isolation, a parallel for\_each is the perfect solution:
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data = get_data();
+std::for_each(std::execution::par_unseq, 
+    data.begin(), data.end(),
+    [](int e) { /* some expensive computation */ });
+\end{cppcode}
+\end{box-note}
+
+Note that if the operations are not entirely isolated, you will need additional synchronization inside the lambda.
+
+The range version can offer more concise code if all you need is to project an element and then dispatch the result to another function. Here, we have the same code expressed using for\_each and a range loop:
+
+\begin{box-note}
+\begin{cppcode}
+struct Elem {
+    double value() { return 10.2; }
+};
+
+void some_function(double);
+
+int main() {
+    std::vector<Elem> data(10, Elem{});
+    
+    std::ranges::for_each(data, some_function, &Elem::value);
+
+    for(auto& e: data) {
+        some_function(e.value());
+    }
+}
+\end{cppcode}
+\end{box-note}
+
+In the range version (line 10), the first parameter is the range, the second parameter is the function we want to call for each element, and the third is the projection. In this case, we use a member pointer. I have a separate article on C++20 ranges if you want to dig into the details.
+
+\cppversions{\texttt{for\_each\_n}}{\CC17}{\CC20}{\CC17}{\CC20}
+\constraints{
+    \texttt{(input\_iterator, iter\_difference)}}{
+    \texttt{(forward\_iterator, iter\_difference)}}{
+    N/A}{
+    \texttt{unary\_invocable}}
+
+While for\_each operates on the entire range, the interval [begin, end), for\_each\_n operates on the range [first, first+n). Importantly, because the algorithm doesn’t even have access to the end iterator of the source range, it does no out-of-bounds checking, and it is the responsibility of the caller to ensure that the [first,first+n) range is valid.
+
+For demonstration, let’s look at a piece of code that evaluates a qualification round in a tournament. We want to invite the top players to the main tournament and then post the final score online, paginated by 100 entries:
+
+\begin{box-note}
+\begin{cppcode}
+struct Player {
+    std::string display_name;
+    std::string contact_email;
+    uint32_t score;
+};
+
+std::vector<Player> get_ranking();
+void send_invitation_to_main_tournament(const Player& player);
+void store_final_score(uint32_t page, const std::string& name, uint32_t score);
+
+inline constexpr const ssize_t MAIN_TOURNAMENT_SEATS = 10;
+inline constexpr const ssize_t PAGE_SCORE_SIZE = 100;
+
+int main() {
+    std::vector<Player> final_ranking = get_ranking();
+    std::ranges::sort(final_ranking, std::greater<>(), 
+                      &Player::score);
+
+    std::for_each_n(std::execution::par_unseq, 
+        final_ranking.begin(), 
+        std::min(MAIN_TOURNAMENT_SEATS, final_ranking.size()),
+        send_invitation_to_main_tournament);
+    
+    auto it = final_ranking.begin();
+    uint32_t page = 0;
+    while (it != final_ranking.end()) {
+        ssize_t cnt = std::min(PAGE_SCORE_SIZE, final_ranking.end()-it);
+        std::for_each_n(it, cnt, [page](const Player& p) {
+            store_final_score(page, p.display_name, p.score);
+        });
+        page++;
+        it += cnt;
+    }
+}
+\end{cppcode}
+\end{box-note}
+
+Sending invitations can be done in parallel (line 18), but we must avoid going out of bounds (std::min on line 19). For pagination, we go in chunks of PAGE\_SCORE\_SIZE, and for each chunk, invoke for\_each\_n (line 26).
+
+\fi
