@@ -13,5 +13,5 @@ std::advance(it2, 5); // OK, linear advance by 5 steps
 ++it2; // OK, all iterators provide advance operation
 
 // it2 - lst.begin(); Would not compile
-ssize_t dst2 = std::distance(lst.begin(), it2); // OK, linear calculation
+ssize_t dst2 = std::distance(lst.begin(), it2); // OK, linear calc. 
 // dst2 == 6

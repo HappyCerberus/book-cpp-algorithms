@@ -10,3 +10,4 @@ set(CMAKE_CXX_FLAGS "-std=c++20 -Wall -Wextra -Werror -Wno-unused-variable -peda
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 
 add_subdirectory(introduction)
+add_subdirectory(algorithms)
