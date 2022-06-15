@@ -61,7 +61,11 @@ The first case is straightforward parallelization. Invoking an expensive operati
 
 Second, the range version can provide a more concise and explicit syntax in some cases because of the projection support introduced in C++20.
 
-% Projection example
+\begin{box-note}
+\footnotesize Example of the range version \cpp{std::ranges::for_each} utilizing a projection to iterate over the result of invoking the method \cpp{getValue()} on each element.
+\tcblower
+\cppfile{code_examples/algorithms/for_each_code_cpp20.h}
+\end{box-note}
 
 \if
 \else
