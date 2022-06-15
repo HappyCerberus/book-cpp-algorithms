@@ -1,0 +1,308 @@
+\section{Left folds and other reductions}
+
+All algorithms we will discuss today (except for the boolean reductions) come from the <numeric> header and do not have counterparts in the C++20 ranges library (some support to land in C++23).
+
+\subsection{accumulate, inner\_product}
+
+We start with the left folds, algorithms that operate strictly left to right, evaluating accumulator = op(accumulator, element) for each element and returning the final accumulator value.
+
+\cppversions{\texttt{accumulate}}{\CC98}{\CC20}{N/A}{N/A}
+
+\constraints{\texttt{input\_range}}{}{\texttt{operator +}}{\texttt{binary\_functor}}
+
+Due to the strictly linear operation, we do not have access to parallel versions of these algorithms. The default version of accumulate uses the binary operator+, and if specified, the binary functor is not permitted to modify the elements in the range or invalidate iterators.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 2, 3, 4, 5};
+auto sum = std::accumulate(data.begin(), data.end(), 0);
+// sum == 15
+auto product = std::accumulate(data.begin(), data.end(), 1, std::multiplies<>{});
+// product == 120
+\end{cppcode}
+\end{box-note}
+
+To turn any of the left fold algorithms into a right fold, we can use rbegin() and rend() (as long as the range is bidirectional).
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 2, 3, 4, 5};
+auto left = std::accumulate(data.begin(), data.end(), 0, [](int acc, int el) {
+    return acc / 2 + el;
+});
+auto right = std::accumulate(data.rbegin(), data.rend(), 0, [](int acc, int el) {
+    return acc / 2 + el;
+});
+// left == 8, right == 3
+\end{cppcode}
+\end{box-note}
+
+By adding another range and a join operation, we arrive at inner\_product. The left fold operation changes to accumulator = op(accumulator, join(elem1, elem2)), where elem1 comes from the first range and elem2 from the second range.
+
+\cppversions{\texttt{inner\_product}}{\CC98}{\CC20}{N/A}{N/A}
+
+\constraints{\texttt{(input\_range, input\_iterator)}}{}{\texttt{operator *, operator +}}{\texttt{(binary\_functor, binary\_functor)}}
+
+The default version uses operator+ for the accumulation and operator* for the join. If specified, neither functor is permitted to modify the elements or invalidate iterators.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> heights{1, 2, 3, 4, 5};
+std::vector<int> widths{2, 3, 4, 5, 6};
+auto total_area = std::inner_product(heights.begin(), heights.end(), widths.begin(), 0);
+// total_area == 70
+\end{cppcode}
+\end{box-note}
+
+Naturally, we can also use inner\_product with a single range, for example, to calculate the sum of absolute differences between consecutive elements:
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{6, 4, 3, 7, 2, 1};
+auto sum_of_diffs = std::inner_product(data.begin(), std::prev(data.end()), 
+                                       std::next(data.begin()), 
+                                       0, std::plus<>{}, 
+                                       [](int left, int right) { return std::abs(left-right); });
+// sum_of_diffs == 13
+\end{cppcode}
+\end{box-note}
+
+\subsection{A short arithmetic detour}
+
+The algorithms in the <numeric> header can have sharp edges. This mainly has to do with the way C++ handles mixed numerical types and how template deduction works. For example, the following is an easy mistake to make:
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<double> data{1.1, 2.2, 3.3, 4.4, 5.5};
+auto result = std::accumulate(data.begin(), data.end(), 0);
+// result == 15 (actual sum 16.5)
+\end{cppcode}
+\end{box-note}
+
+Because we are passing a 0 as the initial value of the accumulator, which is a constant of type int, the accumulator ends up as int. Each fold operation then adds an integer and a double, resulting in a floating-point value. However, it immediately stores it in an integer variable, truncating the value.
+
+If you want to avoid this problem, you need to be familiar with literal suffixes:
+
+% TODO: include this information directly in the book, instead of the original links.
+\begin{itemize}
+    \item integer literal suffixes
+    \item floating-point literal suffixes
+    \item fixed-size integer literal macros
+\end{itemize}
+
+The second problem arises when mixing different integer types, particularly signed and unsigned integers. Again, as long as you do not mix types, you will not run into issues, but remember that the types that matter are the element types, the initial accumulator value and the functor arguments and return type.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<unsigned> data{1, std::numeric_limits<unsigned>::max()/2};
+auto ok = std::accumulate(data.begin(), data.end(), 0u, 
+                          [](auto acc, auto el) { return acc + el; });
+// Always OK, matching types.
+
+auto impl = std::accumulate(data.begin(), data.end(), 0, 
+                            [](auto acc, auto el) { return acc + el; });
+// Implementation defined:
+// acc is int
+// in acc + el: acc promoted to unsigned, result is unsigned
+
+// if an unsigned value cannot be represented by the target singed variable
+// the behavior is implementation defined
+
+auto maybe = std::accumulate(data.begin(), data.end(), 0L, 
+                             [](auto acc, auto el) { return acc + el; });
+// OK as long as sizeof(long) > sizeof(unsigned)
+// acc is long
+// in acc + el: el is promoted to long
+
+// if sizeof(long) > sizeof(unsigned), the long can represent all 
+// values of unsigned, therefore OK
+\end{cppcode}
+\end{box-note}
+
+These are arguably very synthetic examples and shouldn’t appear in production codebases.
+
+If you are interested in more details about integer conversions and promotions, there is an excellent cheatsheet from hackingcpp on this topic.
+
+\subsection{partial\_sum}
+
+The partial\_sum algorithm is a bit of an outlier here, as it’s not a strict reduction algorithm. Instead, it computes partial sums on the given range. The nth generated element is the sum of the first n elements from the source range.
+
+\cppversions{\texttt{partial\_sum}}{\CC98}{\CC20}{N/A}{N/A}
+
+\constraints{\texttt{input\_range -> output\_iterator}}{}{\texttt{operator+}}{\texttt{binary\_functor}}
+
+The output iterator is permitted to be the input ranges’ begin iterator. The default operation is the binary plus, and a custom functor is not permitted to modify elements or invalidate iterators.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data(6, 1);
+// data == {1, 1, 1, 1, 1, 1}
+std::partial_sum(data.begin(), data.end(), data.begin());
+// data == {1, 2, 3, 4, 5, 6}
+
+std::vector<int> out;
+std::partial_sum(data.begin(), data.end(), std::back_inserter(out), std::multiplies<>{});
+// out == {1, 2, 6, 24, 120, 720}
+\end{cppcode}
+\end{box-note}
+
+\subsection{reduce, transform\_reduce}
+
+The previous algorithms we talked about are all left folds. They evaluate strictly linearly from left to right, which removes any potential for parallel execution.
+
+However, when we work with operations that are associative op(a, op(b,c)) == op(op(a,b),c) and commutative op(a,b) == op(b,a), it really doesn’t matter what permutation of elements and order of operations we evaluate, we will always arrive at the same result.
+
+In C++17, along with the other parallel algorithms, we have received reduce, inclusive\_scan and exclusive\_scan, which are relaxed versions of accumulate, inner\_product and partial\_sum that require an associative and commutative operation to produce deterministic results.
+
+\cppversions{\texttt{reduce}}{\CC17}{\CC20}{\CC17}{N/A}
+
+\constraints{\texttt{input\_range}}{\texttt{forward\_range}}{\texttt{std::plus<>()}}{\texttt{binary\_functor}}
+
+On top of the accumulate equivalents, we get one more overload that does away with the initial accumulator value, reducing the aforementioned numerical problems.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<double> data{1.1, 2.2, 3.3, 4.4, 5.5};
+auto result = reduce(data.begin(), data.end());
+// result == 16.5
+\end{cppcode}
+\end{box-note}
+
+The accumulator will be of the type of the ranges’ elements and will be value initialised. So, the accumulator will be type double and initialised to zero in this example.
+
+Of course, this also works for custom types:
+
+\begin{box-note}
+\begin{cppcode}
+struct Duck {
+    std::string sound = "Quack";
+    friend Duck operator+(const Duck& left, const Duck& right) {
+        return {left.sound+right.sound};
+    }
+};
+
+std::vector<Duck> data(2, Duck{});
+Duck final_duck = std::reduce(data.begin(), data.end());
+// final_duck.sound == "QuackQuackQuack"
+\end{cppcode}
+\end{box-note}
+
+The initial value of the accumulator will be “Quack”. Adding the other two ducks, we end up with “QuackQuackQuack”.
+
+The counterpart to inner\_product is transform\_reduce, with additional overloads for the unary case (single range).
+
+\cppversions{\texttt{transform\_reduce}}{\CC17}{\CC20}{\CC17}{N/A}
+
+Unary version:
+
+\constraints{\texttt{input\_range}}{\texttt{forward\_range}}{N/A}{\texttt{(binary\_functor, unary\_functor)}}
+
+Binary version:
+
+\constraints{\texttt{(input\_range, input\_iterator)}}{\texttt{(forward\_range, forward\_iterator)}}{\texttt{(std::plus<>(), std::multiplies<>())}}{\texttt{(binary\_functor, binary\_functor)}}
+
+Same as reduce, provided functors must not modify the elements or invalidate iterators. In addition, the reduction functor must be associative and commutative.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 2, 3, 4, 5};
+auto sum_of_squares = std::transform_reduce(data.begin(), data.end(), 0, 
+                                            std::plus<>{}, [](int v) { return v*v; });
+// sum_of_squares == 55
+
+std::vector<int> coef{1, -1, 1, -1, 1};
+auto result = std::transform_reduce(data.begin(), data.end(), coef.begin(), 0);
+// result == 1*1 + 2*(-1) + 3*1 + 4*(-1) + 5*1 == 3
+\end{cppcode}
+\end{box-note}
+
+\subsection{exclusive\_scan, inclusive\_scan, transform\_exclusive\_scan, transform\_inclusive\_scan}
+
+The last left-fold algorithm without a parallel counterpoint is partial\_sum.
+
+\cppversions{\texttt{exclusive\_scan, inclusive\_scan}}{\CC17}{\CC20}{\CC17}{N/A}
+
+\constraints{\texttt{input\_range -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{\texttt{std::plus<>()}}{\texttt{binary\_functor}}
+
+The 1:1 counterpoint to partial\_sum is inclusive\_scan, which follows the same logic: nth generated element is the sum of the first n source elements. On top of that, we also get exclusive\_scan, where the nth generated element is the sum of the first n-1 source elements. Or: the inclusive version includes the element on the nth position, and the exclusive version excludes it.
+
+Consequently, for the exclusive\_scan algorithm, we must specify an initial value of the accumulator, which will be the value of the first generated element.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> src{1, 2, 3, 4, 5, 6};
+{
+    std::vector<int> out;
+    std::inclusive_scan(src.begin(), src.end(), std::back_inserter(out));
+    // out == {1, 3, 6, 10, 15, 21}
+    std::inclusive_scan(src.begin(), src.end(), out.begin(), std::multiplies<>{}, 1);
+    // out == {1, 2, 6, 24, 120, 720}
+}
+{
+    std::vector<int> out;
+    std::exclusive_scan(src.begin(), src.end(), std::back_inserter(out), 0);
+    // out == {0, 1, 3, 6, 10, 15}
+    std::exclusive_scan(src.begin(), src.end(), out.begin(), 1, std::multiplies<>{});
+    // out == {1, 1, 2, 6, 24, 120}
+}
+\end{cppcode}
+\end{box-note}
+
+\cppversions{\texttt{transform\_inclusive\_scan, transform\_exclusive\_scan}}{\CC17}{\CC20}{\CC17}{N/A}
+
+\constraints{\texttt{input\_range -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{N/A}{\texttt{(binary\_functor, unary\_functor)}}
+
+The transform variants of inclusive\_scan and exclusive\_scan apply a unary transformation to each element. Unfortunately, we do not get an overload that would operate on two input ranges (in the style of inner\_product).
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{-10, 3, -2, 5, 6};
+
+std::vector<int> out1;
+std::inclusive_scan(data.begin(), data.end(), std::back_inserter(out1), 
+                    std::plus<>{});
+// out1 == {-10, -7, -9, -4, 2}
+
+std::vector<int> out2;
+std::transform_inclusive_scan(data.begin(), data.end(), std::back_inserter(out2), 
+                              std::plus<>{}, [](int v) { return std::abs(v); });
+// out2 == {10, 13, 15, 20, 26}
+\end{cppcode}
+\end{box-note}
+
+\subsection{all\_of, any\_of, none\_of}
+
+Finally, we switch back to the <algorithm> header, where we have three boolean reductions.
+
+\cppversions{\texttt{all\_of, any\_of, none\_of}}{\CC11}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{input\_range}}{\texttt{forward\_range}}{N/A}{\texttt{unary\_predicate}}
+
+The algorithms follow the expected boolean logic.
+
+\begin{tabular}{c c c c c}
+\hline
+& all true & all false & mixed & empty \\
+\hline
+\texttt{all\_of} & true & false & false & true \\
+\hline
+\texttt{any\_of} & true & false & true & false \\
+\hline
+\texttt{none\_of} & false & true & false & true \\
+\hline
+\end{tabular}
+
+Note that any\_of requires a positive presence; it only returns true if there is at least one element for which the predicate returns true and returns false on an empty range.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{-2, 0, 2, 4, 6, 8};
+auto is_even = [](int v) { return v % 2 == 0; };
+auto is_odd = [](int v) { return v % 2 != 0; };
+auto is_negative = [](int v) { return std::signbit(v); };
+
+assert(std::ranges::all_of(data, is_even));
+assert(std::ranges::any_of(data, is_negative));
+assert(std::ranges::none_of(data, is_odd));
+\end{cppcode}
+\end{box-note}

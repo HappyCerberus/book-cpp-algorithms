@@ -1,0 +1,354 @@
+\section{Algorithms that operate on sorted or partitioned ranges}
+
+While hash-based containers give us the ability to look up any element in O(1) average time, this approach has two drawbacks. Firstly, we can only look up a specific element, and if that element is not present in the container, we get a simple lookup failure. Secondly, our type needs to be hashable.
+
+Divide and conquer algorithms allow the lookup of bounds based on strict weak ordering and work even when the container’s specific value is not present. Additionally, since we are working with a sorted container, we can easily access neighbouring values once we have determined a boundary.
+
+If you didn’t read previous chapter in the series, a strict weak ordering is an ordering that satisfies these constraints: is ireflexive: $\neg f(a,a)$, anti-symetric: $f(a,b) \Rightarrow \neg f(b,a)$, and transitive: $(f(a,b) \wedge f(b,c)) \Rightarrow f(a,c)$.
+
+\subsection{lower\_bound, upper\_bound, equal\_range}
+
+C++ offers three bound search algorithms.
+
+\cppversions{\texttt{lower\_bound}}{\CC98}{\CC20}{N/A}{\CC20}
+\cppversions{\texttt{upper\_bound}}{\CC98}{\CC20}{N/A}{\CC20}
+
+\constraints{\texttt{forward\_range}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+The algorithms differ in which bound they are searching for:
+
+\begin{itemize}
+    \item \texttt{lower\_bound} returns the first element that is not less than the provided value
+    \item \texttt{upper\_bound} returns the first element that is greater than the provided value
+\end{itemize}
+
+If no such element exists, both algorithms return the end iterator.
+
+\begin{box-note}
+\begin{cppcode}
+struct ExamResult {
+    std::string student_name;
+    uint16_t score;
+};
+
+const std::vector<ExamResult>& get_results();
+
+int main() {
+    const std::vector<ExamResult>& results = get_results();
+
+    auto lb = std::ranges::lower_bound(results, 49, {}, &ExamResult::score);
+    auto ub = std::ranges::upper_bound(results, 99, {}, &ExamResult::score);
+ 
+    for (auto it = results.begin(); it != lb; it++) {
+        // Process fails, upto 48
+    }
+    
+    for (auto it = lb; it != ub; it++) {
+        // Process passes, 49-99
+    }
+    
+    for (auto it = ub; it != results.end(); it++) {
+        // Process with honors, 100+
+    }
+}
+\end{cppcode}
+\end{box-note}
+
+If you read the previous chapter, this piece of code might look familiar since we used std::partition for very similar behaviour. The main difference is that we are working with an immutable range (line 9) that we expect to be already in sorted order (in this case, for score). When we use both lower\_bound and upper\_bound, the resulting sub-range will represent the closed range of values, in this case [49,99] (lines 11, 12).
+
+The logarithmic behaviour is only available for random-access ranges. Using lower\_bound or upper\_bound on std::set, std::multiset, std::map, or std::multimap will result in linear search.
+
+Therefore, all these containers provided their $O(logn)$ implementations of lower and upper bound in the form of methods.
+
+\begin{box-note}
+\begin{cppcode}
+std::multiset<int> data{1, 2, 3, 4, 5, 6, 6, 6, 7, 8, 9};
+
+auto lb = data.lower_bound(6);
+// std::distance(data.begin(), lb) == 5, *lb == 6
+
+auto ub = data.upper_bound(6);
+// std::distance(data.begin(), ub) == 8, *ub == 7
+\end{cppcode}
+\end{box-note}
+
+A combination of lower\_bound and upper\_bound is equal\_range that returns both bounds.
+
+\cppversions{\texttt{equal\_range}}{\CC98}{\CC20}{N/A}{\CC20}
+
+\constraints{\texttt{forward\_range}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+We could simulate equal\_range by calling both lower\_bound and upper\_bound for the same value.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 2, 3, 4, 5, 6, 6, 6, 7, 8, 9};
+
+auto [lb, ub] = std::equal_range(data.begin(), data.end(), 6);
+// std::distance(data.begin(), lb) == 5, *lb == 6
+// std::distance(data.begin(), ub) == 8, *ub == 7
+\end{cppcode}
+\end{box-note}
+
+The bracket syntax (if you are not familiar with it) is structured bindings from C++17. Structured bindings allow us to decompose the std::pair returned by equal\_range into two named variables.
+
+\subsection{partition\_point, binary\_search}
+
+Despite the naming, partition\_point works very similarly to upper\_bound, however instead of searching for a particular value, it searches using a predicate.
+
+\cppversions{\texttt{partition\_point}}{\CC11}{\CC20}{N/A}{\CC20}
+
+\constraints{\texttt{forward\_range}}{}{N/A}{\texttt{unary\_predicate}}
+
+Partition point will return the first element that does not satisfy the provided predicate. This algorithm only requires the range to be partitioned (with respect to the predicate).
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 2, 3, 4, 5, 6, 7, 8, 9};
+auto pp = std::partition_point(data.begin(), data.end(), 
+                                [](int v) { return v < 5; });
+// *pp == 5
+\end{cppcode}
+\end{box-note}
+
+Finally, binary search serves as a presence check, returning boolean indicating whether the request value is present in the sorted range or not.
+
+\cppversions{\texttt{binary\_search}}{\CC98}{\CC20}{N/A}{\CC20}
+
+\constraints{\texttt{forward\_range}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+While functionally identical to calling equal\_range and checking whether the returned range is empty, binary\_search will generally be faster. This is because the binary\_search algorithm must be implemented as a single search, while equal\_range is permitted two.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+auto [lb, ub] = std::ranges::equal_range(data, 5);
+bool exists = std::ranges::binary_search(data, 5);
+assert((lb != ub) && exists);
+\end{cppcode}
+\end{box-note}
+
+Since the number five is present in the range, equal\_range will return a non-empty range, and binary\_search will return TRUE.
+
+\subsection{C standard library: bsearch}
+
+From the C standard library, C++ inherits bsearch. This algorithm returns one of the elements equal to the provided key, or nullptr if none such element is found.
+
+\begin{box-note}
+\begin{cppcode}
+int data[] = {-2, -1, 0, 1, 2};
+int size = sizeof data / sizeof(int);
+
+auto cmp = [](const void* left, const void* right){
+    int vl = *(const int*)left;
+    int vr = *(const int*)right;
+
+    if (vl < vr) return -1;
+    if (vl > vr) return 1;
+    return 0;
+};
+
+int value = 1;
+void* el1 = bsearch(&value, data, size, sizeof(int), cmp);
+assert(*static_cast<int*>(el1) == 1);
+
+value = 3;
+void *el2 = bsearch(&value, data, size, sizeof(int), cmp); 
+assert(el2 == nullptr);
+\end{cppcode}
+\end{box-note}
+
+As with qsort, there is effectively no reason to use bsearch in C++ code.
+
+Depending on the specific use case, one of the previously mentioned algorithms should be a suitable replacement.
+
+\begin{box-note}
+\begin{cppcode}
+int data[] = {-2, -1, 0, 1, 2};
+int size = sizeof data / sizeof(int);
+
+int value = 1;
+bool exist = std::binary_search(&data[0], &data[size], value);
+
+auto candidate = std::lower_bound(&data[0], &data[size], value);
+if (candidate != &data[size] && *candidate == value) {
+    // process element
+}
+
+auto [lb, ub] = std::equal_range(&data[0], &data[size], value);
+if (lb != ub) {
+    // process equal elements
+}
+\end{cppcode}
+\end{box-note}
+
+\subsection{includes}
+
+The first linear algorithm we will talk about is std::includes. This algorithm determines whether one range is a sub-range of another. Since we are working on sorted ranges, std::includes runs in linear time.
+
+\cppversions{\texttt{includes}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{(input\_range, input\_range)}}{\texttt{forward\_range, forward\_range)}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+Here we check whether the input text contains all the lowercase English letters.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<char> letters('z'-'a'+1,'\0');
+std::iota(letters.begin(), letters.end(), 'a');
+
+std::string input = "the quick brown fox jumps over the lazy dog";
+std::ranges::sort(input);
+
+assert(std::ranges::includes(input, letters));
+\end{cppcode}
+\end{box-note}
+
+First, we generate the list of English letters programmatically using another algorithm std::iota (line 2). The iota algorithm generates consecutively increasing values to fill the given range. Because of this, we preallocate the vector to 26 elements (line 1).
+
+\subsection{merge, inplace\_merge}
+
+Another operation that is feasible in linear time is merging two sorted ranges.
+
+\cppversions{\texttt{merge}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{(input\_range, input\_range)}}{\texttt{(forward\_range, forward\_range)}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+The result of the merge operation is stored using the provided output iterator. Note that the output range is not permitted to overlap with either of the input ranges.
+
+The merge operation is stable. Equal elements from the first range will be ordered before equal elements from the second range.
+
+\begin{box-note}
+\begin{cppcode}
+struct LabeledValue {
+    int value;
+    std::string label;
+};
+
+std::vector<LabeledValue> data1{{1, "first"}, {2, "first"}, {3, "first"}};
+std::vector<LabeledValue> data2{{0, "second"}, {2, "second"}, {4, "second"}};
+
+std::vector<LabeledValue> result;
+std::ranges::merge(data1, data2, std::back_inserter(result),
+  [](const auto& left, const auto& right) { return left.value < right.value; });
+// result == {0, second}, {1, first}, {2, first}, {2, second}, {3, first}, {4, second}
+\end{cppcode}
+\end{box-note}
+
+The parallel version requires the output to be a forward range (represented by a forward\_iterator). Therefore, we cannot use wrappers like std::back\_inserter and must preallocate the output range to sufficient capacity.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data1{1, 2, 3, 4, 5, 6};
+std::vector<int> data2{3, 4, 5, 6, 7, 8};
+
+std::vector<int> out(data1.size()+data2.size(), 0);
+std::merge(std::execution::par_unseq,
+    data1.begin(), data1.end(),
+    data2.begin(), data2.end(),
+    out.begin());
+\end{cppcode}
+\end{box-note}
+
+\cppversions{\texttt{inplace\_merge}}{\CC98}{N/A}{\CC17}{\CC20}
+
+\constraints{\texttt{(bidirectional\_range, bidirectional\_iterator)}}{}{\texttt{operator<}}{\texttt{inplace\_merge}}
+
+Because merge forbids the input and output ranges from overlapping, we have an alternative inplace\_merge that serves this use case.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> range{1, 3, 5, 2, 4, 6};
+std::inplace_merge(range.begin(), range.begin()+3, range.end());
+// range == { 1, 2, 3, 4, 5, 6 }
+\end{cppcode}
+\end{box-note}
+
+\subsection{unique, unique\_copy}
+
+The std::unique algorithm removes consecutive duplicate values. The typical use case is in conjunction with a sorted range. However, this is not a requirement of std::unique.
+
+\cppversions{\texttt{unique}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{forward\_range}}{}{\texttt{operator==}}{\texttt{binary\_predicate}}
+
+Because unique works in-place and cannot resize the underlying range, it leaves the end of the range with unspecified values and returns an iterator to the beginning of this sub-range (or the sub-range in case of the range version).
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 1, 2, 2, 3, 4, 5, 6, 6, 6};
+auto it = std::unique(data.begin(), data.end());
+// Range version: auto it = std::ranges::unique(data).begin();
+
+// data == {1, 2, 3, 4, 5, 6, unspec, unspec, unspec, unspec}
+data.resize(std::distance(data.begin(), it));
+// data == {1, 2, 3, 4, 5, 6}
+\end{cppcode}
+\end{box-note}
+
+\cppversions{\texttt{unique\_copy}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{input\_range -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{\texttt{operator==}}{\texttt{binary\_predicate}}
+
+The copy version of unique instead outputs the unique values to an output range represented by an iterator.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 1, 2, 2, 3, 4, 5, 6, 6, 6};
+std::vector<int> out;
+std::ranges::unique_copy(data, std::back_inserter(out));
+// out == {1, 2, 3, 4, 5, 6}
+\end{cppcode}
+\end{box-note}
+
+\subsection{set\_difference, set\_symmetric\_difference, set\_union, set\_intersection}
+
+The last group of algorithms that require sorted ranges are set operations.
+
+\cppversions{\texttt{set\_difference}}{\CC98}{\CC20}{\CC17}{\CC20}
+\cppversions{\texttt{set\_symmetric\_difference}}{\CC98}{\CC20}{\CC17}{\CC20}
+\cppversions{\texttt{set\_union}}{\CC98}{\CC20}{\CC17}{\CC20}
+\cppversions{\texttt{set\_intersection}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+All the set operations work in the same way, processing two input ranges and copying results into the result range, with the following semantics:
+
+\begin{description}
+   \item[\texttt{set\_difference}] elements that are present in the first range, but not the second
+   \item[\texttt{set\_symmetric\_difference}] elements that are present in only one of the ranges, but not both
+   \item[\texttt{set\_union}] elements that are present in either of the ranges
+   \item[\texttt{set\_intersection}] elements that are present in both ranges
+\end{description}
+
+We also need to talk about the behaviour for equal elements. If we have m such elements in the first range and n such elements in the second range, the resulting range will contain:
+
+
+\begin{description}
+   \item[\texttt{set\_difference}] $max(m-n,0)$ elements
+   \item[\texttt{set\_symmetric\_difference}] $abs(m-n)$, that is: if $m>n$, $m-n$ elements will be copied from the first range; otherwise, $n-m$ elements will be copied from the second range
+   \item[\texttt{set\_union}] $max(m,n)$, first $m$ elements will be copied from the first range, followed by $max(n-m,0)$ elements from the second range
+   \item[\texttt{set\_intersection}] $min(m,n)$, elements will be copied from the first range
+\end{description}
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data1{1, 2, 5};
+std::vector<int> data2{2, 4, 6};
+
+std::vector<int> difference;
+std::ranges::set_difference(data1, data2, std::back_inserter(difference));
+// difference == {1, 5}
+
+std::vector<int> symmetric;
+std::ranges::set_symmetric_difference(data1, data2, std::back_inserter(symmetric));
+// symmetric == {1, 4, 5, 6}
+
+std::vector<int> set_union;
+std::ranges::set_union(data1, data2, std::back_inserter(set_union));
+// set_union == {1, 2, 4, 5, 6}
+
+std::vector<int> intersection;
+std::ranges::set_intersection(data1, data2, std::back_inserter(intersection));
+// intersection == {2}
+\end{cppcode}
+\end{box-note}

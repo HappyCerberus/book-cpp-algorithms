@@ -1,0 +1,114 @@
+\section{Swaps}
+
+\subsection{swap, swap\_ranges, iter\_swap}
+
+The second group of algorithms we will discuss today is the group of swaps.
+
+\cppversions{\texttt{swap}}{\CC98}{\CC20}{N/A}{\CC20} % TODO noexcept change in C++11
+
+However, we first need to discuss a little complexity arising from argument dependent lookup. It is not unusual when data structures are cheap to swap, so we will want to customize swap for them.
+
+We can specialize std::swap inside the std namespace, but that would mean that this specialization will not be matched using argument dependent lookup (it would live in a different namespace than its parameters). That means that an unqualified call to swap would not find the correct implementation.
+
+The proper way to specialize swap is to provide a (friend) function in the same namespace as the data structure:
+
+\begin{box-note}
+\begin{cppcode}
+namespace SomeLib {
+
+struct SomeStruct {
+    std::vector<int> data;
+
+    friend void swap(SomeStruct& left, SomeStruct& right) {
+        left.data.swap(right.data);
+    }
+};
+
+}
+\end{cppcode}
+\end{box-note}
+
+And the proper way to call swap is to pull in the std::swap before the unqualified call:
+
+\begin{box-note}
+\begin{cppcode}
+void some_algorithm(auto& a, auto& b) {
+    using std::swap;
+    swap(a, b);
+}
+\end{cppcode}
+\end{box-note}
+
+Fortunately, the C++20 rangified version of swap removes this complexity. It serves as an ultimate solution it will:
+
+\begin{itemize}
+    \item will call the user-provided or standard swap matching the types
+    \item if that doesn’t exist and the parameters are ranges, will do swap\_range
+    \item if the parameters aren’t ranges, it will default to a move swap\\
+    \mintinline{cpp}{V v(std::move(t)); t = std::move(u); u = std::move(v);}
+\end{itemize}
+
+\begin{box-note}
+\begin{cppcode}
+namespace Library {
+struct Storage {
+    int value;
+};
+
+void swap(Storage& left, Storage& right) {
+    std::ranges::swap(left.value, right.value);
+}
+}
+
+int main() {
+    int a = 1, b = 2;
+    std::ranges::swap(a, b);
+
+    Library::Storage j{2}, k{3};
+    std::ranges::swap(j, k); // calls custom Library::swap()
+}
+\end{cppcode}
+\end{box-note}
+
+Let’s finally talk about the other two variants, iter\_swap and swap\_ranges.
+
+\cppversions{\texttt{iter\_swap}}{\CC98}{\CC20}{N/A}{\CC20}
+
+Iter swap could also be called indirect swap, swapping the underlying values behind iterators or other indirect types. It is mainly helpful for implementing custom algorithms since those operate on iterators.
+
+Here is an example of a partition algorithm implementation using iter\_swap (line 12):
+
+\begin{box-note}
+\begin{cppcode}
+template <typename It, typename Cond>
+    requires std::forward_iterator<It> 
+        && std::indirectly_swappable<It,It> 
+        && std::predicate<Cond>
+auto partition(It first, It last, Cond cond) {
+    while (first != last && cond(first)) ++first;
+    if (first == last) return last;
+
+    for (auto it = std::next(first); it != last; it++) {
+        if (!cond(it)) continue;
+
+        std::iter_swap(it, first);
+        ++first;
+    }
+    return first;
+}
+\end{cppcode}
+\end{box-note}
+
+Swap ranges is a piecewise swap of two non-overlapping ranges (potentially from the same container). A begin iterator specifies the second range, and it is the caller’s responsibility to ensure that the target range has enough capacity.
+
+\cppversions{\texttt{swap\_ranges}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{ 1, 2, 3, 4, 5, 6, 7, 8, 9};
+std::swap_ranges(data.begin(), data.begin()+3, data.rbegin());
+// 9, 8, 7, 4, 5, 6, 3, 2, 1
+\end{cppcode}
+\end{box-note}
+
+Here we swap the first three elements of the array with the last three elements of the array. The order of elements is reversed because we use rbegin (begin iterator for reverse iteration).

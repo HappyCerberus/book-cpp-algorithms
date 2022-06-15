@@ -21,16 +21,18 @@ rangified & #5 \\
 
 \newcommand{\constraints}[4]{
 \begin{center}
+\footnotesize
 \begin{tabular}{|m{\dimexpr.22\textwidth-2\tabcolsep}|m{\dimexpr.30\textwidth-2\tabcolsep}|m{\dimexpr.45\textwidth-2\tabcolsep}|}
 \hline
 \rowcolor{black!80} \multicolumn{3}{l}{\textcolor{white}{constraints}} \\
+
 \hline
-domain & \multicolumn{2}{l|}{#1} \\
+domain & \multicolumn{2}{m{\dimexpr.75\textwidth-2\tabcolsep}|}{#1} \\
 
 
 \ifx\hfuzz#2\hfuzz\else
 \hline
-parallel domain & \multicolumn{2}{l|}{#2} \\
+parallel domain & \multicolumn{2}{m{\dimexpr.75\textwidth-2\tabcolsep}|}{#2} \\
 \fi
 
 \ifx\hfuzz#3#4\hfuzz\else
@@ -44,3 +46,5 @@ parallel domain & \multicolumn{2}{l|}{#2} \\
 \end{tabular}
 \end{center}
 }
+
+\newmintinline[cpp]{cpp}{}

@@ -1,0 +1,392 @@
+\section{Transformation algorithms}
+
+\subsection{transform}
+
+The most straightforward transformation possible is to apply a transformation function to each element.
+
+\cppversions{\texttt{transform}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+% Mention lazy version
+
+\constraints{\texttt{input\_range -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{N/A}{\texttt{unary\_functor}}
+\constraints{\texttt{(input\_range, input\_iterator) -> output\_iterator}}{\texttt{(forward\_range, forward\_iterator) -> forward\_iterator}}{N/A}{\texttt{binary\_functor}}
+
+The standard library provides both a unary and a binary std::transform.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 2, 3, 4, 5, 6, 7, 8};
+std::transform(data.begin(), data.end(),
+               data.begin(), [](int v) { return v*2; });
+// data = {2, 4, 6, 8, 10, 12, 14, 16}
+
+std::vector<int> add{8, 7, 6, 5, 4, 3, 2, 1};
+std::transform(data.begin(), data.end(), add.begin(),
+               data.begin(), [](int left, int right) {
+                  return left+right; });
+// data = {10, 11, 12, 13, 14, 15, 16, 17}
+\end{cppcode}
+\end{box-note}
+
+Since the output range is specified using an iterator, both transform algorithms can operate inline or output to another range.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 2, 3, 4, 5, 6, 7, 8};
+std::vector<int> out;
+std::transform(data.begin(), data.end(),
+    std::back_inserter(out), [](int v) { return v*2; });
+// out = {2, 4, 6, 8, 10, 12, 14, 16}
+\end{cppcode}
+\end{box-note}
+
+For both variants, the provided functor cannot invalidate iterators or modify elements of either of the ranges. On top of that, neither transform guarantees that the provided functor will be applied strictly left-to-right (which only matters for stateful functors).
+
+These limitations are what sets the unary std::transform apart from std::for\_each.
+
+\begin{box-note}
+\begin{cppcode}
+struct MyStruct {
+    void some_modifying_operation() {}
+};
+
+std::vector<int> data(8, 1);
+std::ranges::for_each(data, [v = 0](int& el) mutable { el = ++v; });
+// data = {1, 2, 3, 4, 5, 6, 7, 8}
+
+// Unspecified result:
+std::ranges::transform(data, data.begin(), [v = 0](int) mutable { return ++v; });
+
+std::vector<MyStruct> db{{}, {}, {}};
+std::ranges::for_each(db, [](auto& el) { el.some_modifying_operation(); });
+
+// INVALID:
+std::ranges::transform(db, db.begin(), 
+    [](MyStruct& el) -> MyStruct& { el.some_modifying_operation(); return el; });
+// Valid, operating on a copy:
+std::ranges::transform(db, db.begin(), 
+    [](MyStruct el) -> MyStruct { el.some_modifying_operation(); return el; });
+\end{cppcode}
+\end{box-note}
+
+The example utilizes mutable lambdas (lines 6 and 10) and generalized lambda capture from C++14 that allows the creation and initialization of variables in the capture section of the lambda.
+
+Transform is also the first algorithm we talked about with a lazy variant. C++20 introduced the concept of views as part of the ranges functionality.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 2, 3, 4, 5, 6, 7};
+auto is_even = [](int v) { return v % 2 == 0; };
+
+std::vector<int> out;
+auto even_squares = data
+             | std::ranges::views::filter(is_even) 
+             | std::ranges::views::transform([](int v) { return v*v; });
+
+std::ranges::copy(even_squares, std::back_inserter(out));
+// out = {4, 16, 36}
+\end{cppcode}
+\end{box-note}
+
+I have a separate article on C++20 ranges that also covers Views. The main takeaways here are:
+
+\begin{itemize}
+    \item composing views happens at compile-time; there is no runtime operation happening on line 5
+    \item the even\_squares object is a view itself; it is cheap to copy and move and doesn’t own the data it is viewing
+    \item each component of the view is evaluated lazily; if we read only a single element out of the even\_squares view, the views::filter would be evaluated twice and views::transform only once
+\end{itemize}
+
+\subsection{adjacent\_difference}
+
+Despite the naming, adjacent\_difference is a variant of a binary transform, operating on adjacent elements in a single range.
+
+Unlike transform, adjacent\_difference guarantees left-to-right application. Furthermore, because input ranges permit each element to be read only once, the algorithm internally stores a copy of the last read value (for use as the left operand).
+
+\cppversions{\texttt{adjacent\_difference}}{\CC98}{\CC20}{\CC17}{N/A}
+
+\constraints{\texttt{input\_range -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{\texttt{operator -}}{\texttt{binary\_functor}}
+
+The default version will calculate the difference of adjacent elements, with the first element copied.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{2, 4, 8, 16, 32, 64};
+std::adjacent_difference(data.begin(), data.end(), data.begin());
+// 2, 2 (4-2), 4 (8-4), 8 (16-8), 16 (32-16), 32 (64-32)
+\end{cppcode}
+\end{box-note}
+
+However, since we can choose a different functor (other than std::minus), we can also use std::adjacent\_difference to generate sequences:
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data(10, 1);
+std::adjacent_difference(data.begin(), std::prev(data.end()), 
+                         std::next(data.begin()), std::plus<int>());
+// Fibonacci sequence: 1, 1, 2, 3, 5, 8, 13, 21, 34, 55,
+\end{cppcode}
+\end{box-note}
+
+Note that the std::next(data.begin()) for the output range is critical here. The adjacent\_difference algorithm will read each element only once and remembers the previously read value for the left argument. The std::next ensures that we generate one element ahead of either argument.
+
+\subsection{remove, remove\_if}
+
+\cppversions{\texttt{remove, remove\_if}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{forward\_range}}{}{N/A}{\texttt{unary\_predicate}}
+
+Similar to std::unique, the algorithm cannot resize the range, so it instead returns an iterator to designate the new end.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 2, 3, 4, 5};
+auto it = std::remove(data.begin(), data.end(), 3);
+data.resize(it-data.begin()); // Random Access Ranges only
+// data = {1, 2, 4, 5}
+
+auto is_even = [](int v) { return v % 2 == 0; };
+it = std::remove_if(data.begin(), data.end(), is_even);
+data.erase(it, data.end()); // Erase sub-range
+// data = {1, 5}
+\end{cppcode}
+\end{box-note}
+
+This naming schema will be repeated across several algorithms. The base version is always a variant that operates based on a provided value (line 2), the \_if variant relies on a provided predicate (line 7).
+
+While remove doesn’t have a direct lazy version, we can often replace it with std::views::filter.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 2, 3, 4, 5};
+auto is_odd = [](int v) { return v % 2 != 0; };
+for (int v : data | std::ranges::views::filter(is_odd)) {
+    // iterate over 1, 3, 5
+}
+\end{cppcode}
+\end{box-note}
+
+A significant difference is that views::filter changes how the range is iterated and does not modify its actual content of the range.
+
+\subsection{replace, replace\_if}
+
+We can use the replace algorithm to replace values instead of removing them.
+
+\cppversions{\texttt{replace, replace\_if}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{forward\_range}}{}{N/A}{\texttt{unary\_predicate}}
+
+Following the same naming schema, std::replace replaces elements matching a given value, whereas std::replace\_if replaces elements based on a predicate.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 2, 3, 4, 5, 6, 7};
+std::ranges::replace(data, 4, 0);
+// data={1, 2, 3, 0, 5, 6, 7}
+
+auto is_odd = [](int v) { return v % 2 != 0; };
+std::ranges::replace_if(data, is_odd, -1);
+// data={-1, 2, -1, 0, -1, 6, -1}
+\end{cppcode}
+\end{box-note}
+
+\subsection{reverse, rotate, shuffle}
+
+The reverse algorithm provides a straightforward swap-based reversion of a given bi-directional range.
+
+\cppversions{\texttt{reverse}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{bidirectional\_range}}{}{}{}
+
+While only C++20 introduced the view version of reverse, every bidirectional range natively supports reverse iteration through the rbegin() and rend() variants of begin() and end() iterators.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 2, 3, 4, 5, 6, 7};
+std::reverse(data.begin(), data.end());
+// data = {7, 6, 5, 4, 3, 2, 1}
+
+for (auto it = data.rbegin(); it != data.rend(); ++it) {
+    // iterate over: 1, 2, 3, 4, 5, 6, 7
+}
+
+for (auto v : data | std::views::reverse) {
+    // iterate over: 1, 2, 3, 4, 5, 6, 7
+}
+\end{cppcode}
+\end{box-note}
+
+When working with legacy types such as C arrays or strings, reverse iteration can be awkward. However, we can lean on std::span (since C++20) and std::string\_view (since C++17) that both provide bi-directional support.
+
+\begin{box-note}
+\begin{cppcode}
+int c_array[] = {1, 2, 3, 4, 5, 6, 7};
+auto arr_view = std::span(c_array, sizeof(c_array)/sizeof(int));
+
+for (auto it = arr_view.rbegin(); it != arr_view.rend(); ++it) {
+    // iterate over: {7, 6, 5, 4, 3, 2, 1}
+}
+
+const char* c_string = "No lemon, no melon";
+auto str_view = std::string_view(c_string);
+
+for (auto it = str_view.rbegin(); it != str_view.rend(); ++it) {
+    // iterate over: "nolem on ,nomel oN"
+}
+\end{cppcode}
+\end{box-note}
+
+The reverse algorithm also gives us an excellent place to demonstrate a more advanced composition of views. For example, the following is a trim view that skips over leading and trailing whitespace:
+
+\begin{box-note}
+\begin{cppcode}
+const char* c_string = "  No lemon, no melon.     ";
+auto str_view = std::string_view(c_string);
+
+auto is_ws = [](char c) { return isspace(c); };
+auto skip_ws = std::views::drop_while(is_ws);
+auto skip_trailing_ws = std::views::reverse | skip_ws | std::views::reverse;
+auto trim = skip_trailing_ws | skip_ws;
+
+std::string out;
+std::ranges::copy(str_view | trim, std::back_inserter(out));
+// out = "No lemon, no melon."
+\end{cppcode}
+\end{box-note}
+
+As with previous examples, no runtime computation is happening on lines 4–7, and the processing is done on-demand as the std::copy algorithm iterates over the composed view (line 10).
+
+We start with a predicate that returns true for whitespace characters (line 4). We then utilize the drop\_while view that skips over elements until the predicate returns false (line 5). This is already our one-way trim.
+
+To construct a reverse trim, we reverse the range, trim the now leading whitespace and then reverse the range again (line 6). Finally, the full trim is simply a composition of the two partial trim operations.
+
+The rotate algorithm does precisely that, and it rotates the elements in the range such that the designated element is now the first element of the range.
+
+\cppversions{\texttt{rotate}}{\CC11}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{(forward\_range, forward\_iterator)}}{}{}{}
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 2, 3, 4, 5, 6, 7};
+std::rotate(data.begin(), data.begin()+3, data.end());
+// data=4, 5, 6, 7, 1, 2, 3
+\end{cppcode}
+\end{box-note}
+
+The shuffle algorithm is a successor of the now-defunct random\_shuffle algorithm (deprecated in C++14, removed in C++17) and relies on new random facilities added in C++11.
+
+\cppversions{\texttt{shuffle}}{\CC11}{N/A}{N/A}{\CC20}
+
+\constraints{\texttt{random\_access\_range}}{}{}{}
+
+The random facilities are out of scope for this article. However, shuffle will work with any uniform random bit generator.
+
+\begin{box-note}
+\begin{cppcode}
+struct Card {
+    unsigned index;
+    
+    friend std::ostream& operator << (std::ostream& s, const Card& card) {
+        static constexpr std::array<const char*, 13> ranks = {"Ace", "Two", "Three", 
+          "Four", "Five", "Six", "Seven", "Eight", 
+          "Nine", "Ten", "Jack", "Queen", "King"};
+        static constexpr std::array<const char*, 4> suits = {"Hearts", "Diamonds", 
+                                                             "Clubs", "Spades"};
+
+        if (card.index >= 52)
+            throw std::domain_error("Card index has to be in the range 0..51");
+
+        s << ranks[card.index%13] << " of " << suits[card.index/13];
+
+        return s;
+    }
+};
+
+std::vector<Card> deck(52, Card{});
+std::ranges::generate(deck, [i = 0u]() mutable { return Card{i++}; });
+// deck = {Ace of Hearts, Two of Hearts, Three of Hearts, Four of Hearts...}
+
+std::random_device rd;
+std::mt19937 gen{rd()};
+
+std::ranges::shuffle(deck, gen);
+// deck = { random order }
+\end{cppcode}
+\end{box-note}
+
+We use the std::generate algorithm, which we will discuss in an upcoming article, to generate the 52 unique cards (line 21). After generating, the cards will be in sorted order.
+
+We then use the Mersenne Twister Engine uniform bit generator (in its 32bit pre-defined alias), which we pass to the shuffle algorithm resulting in a randomly shuffled range.
+
+The output stream operator overload on lines 4–17 provides the translation from index to a text representation, e.g. “Jack of Clubs”.
+
+\subsection{next\_permutation, prev\_permutation, is\_permutation}
+
+Permutation algorithms will generate either the next or previous permutation in lexicographical order.
+
+\cppversions{\texttt{next\_permutation, prev\_permutation}}{\CC98}{\CC20}{N/A}{\CC20}
+
+\constraints{\texttt{bidirectional\_range}}{}{\texttt{operator <}}{\texttt{strict\_weak\_ordering}}
+
+Strictly speaking, calling next\_permutation will adjust the order of elements such that it is the next higher value as per std::lexicographical\_compare (using the same functor). If there is no such range, next\_permutation will cycle back to the lowest value and return false.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 2, 3};
+do {
+    // iterate over:
+    // 1, 2, 3
+    // 1, 3, 2
+    // 2, 1, 3
+    // 2, 3, 1
+    // 3, 1, 2
+    // 3, 2, 1
+} while (std::next_permutation(data.begin(), data.end()));
+// data = {1, 2, 3}
+\end{cppcode}
+\end{box-note}
+
+When used with a range of booleans, next\_permutation can serve to iterate over all sets of a particular size.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<std::string> data{"apple", "avocado", "banana", 
+  "cherry", "lemon", "mango", 
+  "orange", "plums", "watermelon"};
+
+std::vector<char> pick(data.size(), false);
+std::fill_n(pick.begin(), 3, true);
+
+do {
+    for (size_t i = 0; i < pick.size(); ++i) {
+        if (pick[i])
+            std::cout << data[i] << ", ";
+    }
+    std::cout << "\n";
+} while (std::prev_permutation(pick.begin(), pick.end(), std::less<bool>()));
+\end{cppcode}
+\end{box-note}
+
+We start with a range filled with false values, setting the first three elements to true (line 6). We then print out the elements corresponding to the TRUE values (line 10). Finally, prev\_permutation will return false once we have cycled back to the initial range with the first three elements set to true (line 14).
+
+Lastly, to check whether one range is a permutation of another, we can use the is\_permutation algorithm.
+
+\cppversions{\texttt{is\_permutation}}{\CC11}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{(forward\_range, forward\_range)}}{}{\texttt{operator==}}{\texttt{binary\_predicate}}
+
+The utility of is\_permutation mainly pops up in testing, where we often need to test whether two ranges are piecewise equal but not necessarily in the same order.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data = { 8, 1, 7, 3, 4, 6, 2, 5};
+for (size_t i = 0; i < data.size()-1; ++i)
+    for (size_t j = i+1; j < data.size(); ++j)
+        if (data[i] > data[j])
+            std::swap(data[i], data[j]);
+
+assert(std::ranges::is_sorted(data));
+assert(std::ranges::is_permutation(data, 
+                                   std::vector<int>{1, 2, 3, 4, 5, 6, 7, 8}));
+\end{cppcode}
+\end{box-note}
