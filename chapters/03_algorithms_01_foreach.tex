@@ -67,56 +67,40 @@ Second, the range version can provide a more concise and explicit syntax in some
 \cppfile{code_examples/algorithms/for_each_code_cpp20.h}
 \end{box-note}
 
+\subsection{\texorpdfstring{\cpp{std::for_each_n}}{\texttt{std::for\_each\_n}}}
+
+\circled{1} The \cpp{std::for_each_n} algorithm applies the provided invocable to each element of the range specified using an iterator and the number of elements. If the underlying range is mutable, the invocable is permitted to change the state of elements but cannot invalidate iterators.
+
+\cppversions{\circled{2} \texttt{for\_each\_n}}{\CC17}{\CC20}{\CC17}{\CC20}
+
+% Custom table to inject the circled number.
+\begin{center}
+\footnotesize
+\begin{tabular}{|m{\dimexpr.22\textwidth-2\tabcolsep}|m{\dimexpr.30\textwidth-2\tabcolsep}|m{\dimexpr.45\textwidth-2\tabcolsep}|}
+\hline
+\rowcolor{black!80} \multicolumn{3}{l}{\textcolor{white}{\circled{3} constraints}} \\
+\hline
+domain & \multicolumn{2}{m{\dimexpr.75\textwidth-2\tabcolsep}|}{\cpp{input_iterator}} \\
+\hline
+parallel domain & \multicolumn{2}{m{\dimexpr.75\textwidth-2\tabcolsep}|}{\cpp{forward_iterator}} \\
+\hline
+\multirow{2}{.15\textwidth}{invocable} & \cellcolor{black!80} \textcolor{white}{default} & \cellcolor{black!80} \textcolor{white}{custom} \\
+\cline{2-3}
+& N/A & \cpp{unary_invocable} \\
+\hline
+\end{tabular}
+\end{center}
+
+\circled{4} While \cpp{std::for_each} operates on the entire range, the interval $[begin, end)$, \cpp{std::for_each_n} operates on the range $[first, first+n)$. Importantly, because the algorithm does not have access to the end iterator of the source range, it does no out-of-bounds checking, and it is the responsibility of the caller to ensure that the range $[first, first+n)$ is valid.
+
+\begin{box-note}
+\footnotesize Example of multiple uses of \cpp{std::for_each_n}.
+\tcblower
+\cppfile{code_examples/algorithms/for_each_n_code.h}
+\end{box-note}
+
 \if
 \else
-
-\circled{4} Since C++11 introduced a range loop, for\_each became a less relevant algorithm. However, there are still a couple of situations where for\_each offers a lot of functionality.
-
-The parallel version is probably the most straightforward parallel facility in C++. If all you need is to run an expensive operation on each element in isolation, a parallel for\_each is the perfect solution:
-
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> data = get_data();
-std::for_each(std::execution::par_unseq, 
-    data.begin(), data.end(),
-    [](int e) { /* some expensive computation */ });
-\end{cppcode}
-\end{box-note}
-
-Note that if the operations are not entirely isolated, you will need additional synchronization inside the lambda.
-
-The range version can offer more concise code if all you need is to project an element and then dispatch the result to another function. Here, we have the same code expressed using for\_each and a range loop:
-
-\begin{box-note}
-\begin{cppcode}
-struct Elem {
-    double value() { return 10.2; }
-};
-
-void some_function(double);
-
-int main() {
-    std::vector<Elem> data(10, Elem{});
-    
-    std::ranges::for_each(data, some_function, &Elem::value);
-
-    for(auto& e: data) {
-        some_function(e.value());
-    }
-}
-\end{cppcode}
-\end{box-note}
-
-In the range version (line 10), the first parameter is the range, the second parameter is the function we want to call for each element, and the third is the projection. In this case, we use a member pointer. I have a separate article on C++20 ranges if you want to dig into the details.
-
-\cppversions{\texttt{for\_each\_n}}{\CC17}{\CC20}{\CC17}{\CC20}
-\constraints{
-    \texttt{(input\_iterator, iter\_difference)}}{
-    \texttt{(forward\_iterator, iter\_difference)}}{
-    N/A}{
-    \texttt{unary\_invocable}}
-
-While for\_each operates on the entire range, the interval [begin, end), for\_each\_n operates on the range [first, first+n). Importantly, because the algorithm doesn’t even have access to the end iterator of the source range, it does no out-of-bounds checking, and it is the responsibility of the caller to ensure that the [first,first+n) range is valid.
 
 For demonstration, let’s look at a piece of code that evaluates a qualification round in a tournament. We want to invite the top players to the main tournament and then post the final score online, paginated by 100 entries:
 
