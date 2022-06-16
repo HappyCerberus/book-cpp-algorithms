@@ -22,7 +22,13 @@ The benefit of relying on ADL is that there is no complexity on the caller's sit
 
 If on top of having the ability to specialize, we also want default behaviour as a fallback, the caller now needs to make sure to pull in the default overload to the local scope.
 
-\subsection{swap}
+\begin{box-note}
+\footnotesize Example of argument-dependent lookup with a default templated version of the function.
+\tcblower
+\cppfile{code_examples/theory/adl_default_code.h}
+\end{box-note}
+
+\subsection{\texorpdfstring{\cpp{std::swap}}{\texttt{std::swap}}}
 
 The second group of algorithms we will discuss today is the group of swaps.
 
