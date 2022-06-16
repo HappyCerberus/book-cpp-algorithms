@@ -30,73 +30,33 @@ If on top of having the ability to specialize, we also want default behaviour as
 
 \subsection{\texorpdfstring{\cpp{std::swap}}{\texttt{std::swap}}}
 
-The second group of algorithms we will discuss today is the group of swaps.
+The non-range version of \cpp{std::swap} will swap the values of the two parameters using a three-step move-swap. Users can provide a more optimized implementation as friend functions on their type.
 
-\cppversions{\texttt{swap}}{\CC98}{\CC20}{N/A}{\CC20} % TODO noexcept change in C++11
+\cppversions{\texttt{swap}}{\CC98}{\CC20}{N/A}{\CC20}
 
-However, we first need to discuss a little complexity arising from argument dependent lookup. It is not unusual when data structures are cheap to swap, so we will want to customize swap for them.
-
-We can specialize std::swap inside the std namespace, but that would mean that this specialization will not be matched using argument dependent lookup (it would live in a different namespace than its parameters). That means that an unqualified call to swap would not find the correct implementation.
-
-The proper way to specialize swap is to provide a (friend) function in the same namespace as the data structure:
+Correctly calling swap (as mentioned at the beginning of this section) requires pulling the default std::swap version to the local scope.
 
 \begin{box-note}
-\begin{cppcode}
-namespace SomeLib {
-
-struct SomeStruct {
-    std::vector<int> data;
-
-    friend void swap(SomeStruct& left, SomeStruct& right) {
-        left.data.swap(right.data);
-    }
-};
-
-}
-\end{cppcode}
+\footnotesize Example of correctly calling \cpp{std::swap}.
+\tcblower
+\cppfile{code_examples/algorithms/swap_calling_code.h}
 \end{box-note}
+\newpage
 
-And the proper way to call swap is to pull in the std::swap before the unqualified call:
-
-\begin{box-note}
-\begin{cppcode}
-void some_algorithm(auto& a, auto& b) {
-    using std::swap;
-    swap(a, b);
-}
-\end{cppcode}
-\end{box-note}
-
-Fortunately, the C++20 rangified version of swap removes this complexity. It serves as an ultimate solution it will:
+The C++20 rangified version of swap removes this complexity, and it will:
 
 \begin{itemize}
-    \item will call the user-provided or standard swap matching the types
-    \item if that doesn’t exist and the parameters are ranges, will do swap\_range
-    \item if the parameters aren’t ranges, it will default to a move swap\\
-    \mintinline{cpp}{V v(std::move(t)); t = std::move(u); u = std::move(v);}
+    \item call the user-provided (found by ADL) overload of swap
+    \item if that doesn't exist and the parameters are arrays of the same span, \cpp{std::ranges::swap} will behave as \cpp{std::swap_ranges}
+    \item if the parameters are also not arrays, it will default to a move-swap
 \end{itemize}
 
 \begin{box-note}
-\begin{cppcode}
-namespace Library {
-struct Storage {
-    int value;
-};
-
-void swap(Storage& left, Storage& right) {
-    std::ranges::swap(left.value, right.value);
-}
-}
-
-int main() {
-    int a = 1, b = 2;
-    std::ranges::swap(a, b);
-
-    Library::Storage j{2}, k{3};
-    std::ranges::swap(j, k); // calls custom Library::swap()
-}
-\end{cppcode}
+\footnotesize Example of specializing and calling \cpp{std::ranges::swap}.
+\tcblower
+\cppfile{code_examples/algorithms/swap_ranges_code.h}
 \end{box-note}
+\newpage
 
 \subsection{iter\_swap}
 
