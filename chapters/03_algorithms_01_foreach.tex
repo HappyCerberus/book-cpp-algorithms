@@ -94,55 +94,9 @@ parallel domain & \multicolumn{2}{m{\dimexpr.75\textwidth-2\tabcolsep}|}{\cpp{fo
 \circled{4} While \cpp{std::for_each} operates on the entire range, the interval $[begin, end)$, \cpp{std::for_each_n} operates on the range $[first, first+n)$. Importantly, because the algorithm does not have access to the end iterator of the source range, it does no out-of-bounds checking, and it is the responsibility of the caller to ensure that the range $[first, first+n)$ is valid.
 
 \begin{box-note}
-\footnotesize Example of multiple uses of \cpp{std::for_each_n}.
+\footnotesize Example demonstrating multiple uses of \cpp{std::for_each_n}.
 \tcblower
 \cppfile{code_examples/algorithms/for_each_n_code.h}
 \end{box-note}
 
-\if
-\else
-
-For demonstration, let’s look at a piece of code that evaluates a qualification round in a tournament. We want to invite the top players to the main tournament and then post the final score online, paginated by 100 entries:
-
-\begin{box-note}
-\begin{cppcode}
-struct Player {
-    std::string display_name;
-    std::string contact_email;
-    uint32_t score;
-};
-
-std::vector<Player> get_ranking();
-void send_invitation_to_main_tournament(const Player& player);
-void store_final_score(uint32_t page, const std::string& name, uint32_t score);
-
-inline constexpr const ssize_t MAIN_TOURNAMENT_SEATS = 10;
-inline constexpr const ssize_t PAGE_SCORE_SIZE = 100;
-
-int main() {
-    std::vector<Player> final_ranking = get_ranking();
-    std::ranges::sort(final_ranking, std::greater<>(), 
-                      &Player::score);
-
-    std::for_each_n(std::execution::par_unseq, 
-        final_ranking.begin(), 
-        std::min(MAIN_TOURNAMENT_SEATS, final_ranking.size()),
-        send_invitation_to_main_tournament);
-    
-    auto it = final_ranking.begin();
-    uint32_t page = 0;
-    while (it != final_ranking.end()) {
-        ssize_t cnt = std::min(PAGE_SCORE_SIZE, final_ranking.end()-it);
-        std::for_each_n(it, cnt, [page](const Player& p) {
-            store_final_score(page, p.display_name, p.score);
-        });
-        page++;
-        it += cnt;
-    }
-}
-\end{cppcode}
-\end{box-note}
-
-Sending invitations can be done in parallel (line 18), but we must avoid going out of bounds (std::min on line 19). For pagination, we go in chunks of PAGE\_SCORE\_SIZE, and for each chunk, invoke for\_each\_n (line 26).
-
-\fi
+ Sending invitations to the \texttt{MAIN\_SEATS} top players is done in parallel (lines 4-7). Then all users' scores are stored in chunks of \texttt{PAGE\_SIZE} records (lines 13-15). Note that calculating the remaining number of elements (line 12) and jumping ahead by the number of stored elements (line 17) requires a random access iterator (in this case, provided by \cpp{std::vector}).

@@ -1,6 +1,18 @@
 \section{Swaps}
 
-\subsection{swap, swap\_ranges, iter\_swap}
+Before discussing swaps, we need to make a short detour and discuss argument-dependent lookup, an essential aspect of the pre-C++20 version of the std::swap algorithm.
+
+Argument-dependent lookup is relied upon heavily in C++, notably when overloading operators.
+
+
+
+Moreover, when using friend functions, the function is only visible for ADL.
+
+The benefit of relying on ADL is that there is no complexity on the caller's site. An unqualified call will invoke the correct overload. Except, this wouldn't be C++ if there weren't an exception to this rule.
+
+If on top of having the ability to specialize, we also want default behaviour as a fallback, the caller now needs to make sure to pull in the default overload to the local scope.
+
+\subsection{swap}
 
 The second group of algorithms we will discuss today is the group of swaps.
 
@@ -70,6 +82,8 @@ int main() {
 \end{cppcode}
 \end{box-note}
 
+\subsection{iter\_swap}
+
 Let’s finally talk about the other two variants, iter\_swap and swap\_ranges.
 
 \cppversions{\texttt{iter\_swap}}{\CC98}{\CC20}{N/A}{\CC20}
@@ -98,6 +112,8 @@ auto partition(It first, It last, Cond cond) {
 }
 \end{cppcode}
 \end{box-note}
+
+\subsection{swap\_ranges}
 
 Swap ranges is a piecewise swap of two non-overlapping ranges (potentially from the same container). A begin iterator specifies the second range, and it is the caller’s responsibility to ensure that the target range has enough capacity.
 
