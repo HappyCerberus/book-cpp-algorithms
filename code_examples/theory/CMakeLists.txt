@@ -3,3 +3,6 @@ add_executable(adl adl.cpp)
 
 add_executable(adl_friend adl_friend.cpp)
 # Compile only
+
+add_executable(adl_default adl_default.cpp)
+# Compile only
