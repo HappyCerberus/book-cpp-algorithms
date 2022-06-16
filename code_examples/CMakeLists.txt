@@ -11,3 +11,4 @@ set(CMAKE_VERBOSE_MAKEFILE OFF)
 
 add_subdirectory(introduction)
 add_subdirectory(algorithms)
+add_subdirectory(theory)
