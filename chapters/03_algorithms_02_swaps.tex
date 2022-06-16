@@ -4,9 +4,19 @@ Before discussing swaps, we need to make a short detour and discuss argument-dep
 
 Argument-dependent lookup is relied upon heavily in C++, notably when overloading operators.
 
+\begin{box-note}
+\footnotesize Example of argument-dependent lookup for \cpp{operator<<} implemented as a function.
+\tcblower
+\cppfile{code_examples/theory/adl_code.h}
+\end{box-note}
 
+The situation changes slightly when the function is implemented as a friend function. Such a function is a member of the surrounding namespace. However, it is not visible outside of ADL.
 
-Moreover, when using friend functions, the function is only visible for ADL.
+\begin{box-note}
+\footnotesize Example of argument-dependent lookup for \cpp{operator<<} implemented as a friend function.
+\tcblower
+\cppfile{code_examples/theory/adl_friend_code.h}
+\end{box-note}
 
 The benefit of relying on ADL is that there is no complexity on the caller's site. An unqualified call will invoke the correct overload. Except, this wouldn't be C++ if there weren't an exception to this rule.
 
