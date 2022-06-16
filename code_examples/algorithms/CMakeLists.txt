@@ -6,3 +6,6 @@ install(TARGETS for_each_n DESTINATION bin)
 
 add_executable(swap_calling swap_calling.cpp)
 # Compile only
+
+add_executable(swap_ranges swap_ranges.cpp)
+# Compile only
