@@ -3,3 +3,6 @@ install(TARGETS for_each DESTINATION bin)
 
 add_executable(for_each_n for_each_n.cpp)
 install(TARGETS for_each_n DESTINATION bin)
+
+add_executable(swap_calling swap_calling.cpp)
+# Compile only
