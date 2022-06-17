@@ -13,7 +13,7 @@ friend bool operator<(const Point& left, const Point& right) {
 // default C++20 spaceship version of lexicographical comparison
 friend auto operator<=>(const Point&, const Point&) = default;
 
-// manual implementation spaceship operator lexicographical comparison
+// manual version of lexicographical comparison using operator <=>
 friend auto operator<=>(const Point& left, const Point& right) {
 	if (left.x != right.x)
 		return left.x <=> right.x;

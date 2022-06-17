@@ -18,3 +18,9 @@ install(TARGETS iter_swap_partition DESTINATION bin)
 
 add_executable(swap_ranges swap_ranges.cpp)
 install(TARGETS swap_ranges DESTINATION bin)
+
+add_executable(lexicographical_compare lexicographical_compare.cpp)
+install(TARGETS lexicographical_compare DESTINATION bin)
+
+add_executable(lexicographical_compare_useful lexicographical_compare_useful.cpp)
+install(TARGETS lexicographical_compare_useful DESTINATION bin)
