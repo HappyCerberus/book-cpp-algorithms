@@ -52,46 +52,31 @@ Because the standard containers already offer a built-in lexicographical compari
 
 \subsection{\texorpdfstring{\cpp{std::lexicographical_compare_three_way}}{\texttt{std::lexicographical\_compare\_three\_way}}}
 
-The \texttt{std::lexicographical\_compare\_three\_way} is the spaceship operator equivalent to \texttt{std::lexicographical\_compare}. It returns one of \texttt{std::strong\_ordering}, \texttt{std::weak\_ordering} or {std::partial\_ordering} types, depending on the type returned by the elements' spaceship operator.
+The \texttt{std::lexicographical\_compare\_three\_way} is the spaceship operator equivalent to \texttt{std::lexicographical\_compare}. It returns one of \texttt{std::strong\_ordering}, \texttt{std::weak\_ordering} or \texttt{std::partial\_ordering} types, depending on the type returned by the elements' spaceship operator.
 
 \cppversions{\texttt{lex\dots three\_way}}{\CC20}{\CC20}{N/A}{N/A}
 
 \constraints{\texttt{(input\_range, input\_range)}}{}{\texttt{operator<=>}}{\texttt{strong\_ordering}, \texttt{weak\_ordering}, \texttt{partial\_ordering}}
 
 \begin{box-note}
-\footnotesize Example of using \cpp{lexicographical_compare_three_way}.
+\footnotesize Example of using \cpp{std::lexicographical_compare_three_way}.
 \tcblower
 \cppfile{code_examples/algorithms/lexicographical_compare_three_way_code.h}
 \end{box-note}
 
-\subsection{sort}
+\subsection{\texorpdfstring{\cpp{std::sort}}{\texttt{std::sort}}}
 
-The basic sorting algorithm is unsurprisingly std::sort.
+The \cpp{std::sort} algorithm is the canonical $O(n*logn)$ sort (typically implemented as intro-sort).
 
 \cppversions{\texttt{sort}}{\CC98}{\CC20}{\CC17}{\CC20}
+\constraints{\cpp{random_access_range}}{\cpp{random_access_range}}{N/A}{\cpp{strict_weak_ordering}}
 
-\constraints
-    {\texttt{random\_access\_range}}
-    {\texttt{random\_access\_range}}
-    {N/A}
-    {\texttt{strict\_weak\_ordering}}
-    
-While the actual implementation of std::sort might differ (usually intro-sort), it is guaranteed to be $O(n*logn)$ comparisons (since \CC11). As a result, it only operates on random-access ranges. This means that we can’t use std::sort with std::list, which does provide an $O(n*logn)$ sort as a method.
+Due to the $O(n*logn)$ complexity guarantee, \cpp{std::sort} only operates on \cpp{random_access} ranges. Notably, \cpp{std::list} offers a method with an approximate $n*logn$ complexity.
 
 \begin{box-note}
-\begin{cppcode}
-{
-    std::vector<int> data = {9, 1, 8, 2, 7, 3, 6, 4, 5};
-    std::sort(data.begin(), data.end());
-    // 1, 2, 3, 4, 5, 6, 7, 8, 9
-}
-{
-    std::list<int> data = {9, 1, 8, 2, 7, 3, 6, 4, 5};
-    //std::sort(data.begin(), data.end()); // doesn't compile
-    data.sort();
-    // 1, 2, 3, 4, 5, 6, 7, 8, 9
-}
-\end{cppcode}
+\footnotesize Example of using \cpp{std::sort}.
+\tcblower
+\cppfile{code_examples/algorithms/sort_code.h}
 \end{box-note}
 
 With C++20, we can take advantage of projections to sort by a method or member:
