@@ -1,15 +1,17 @@
 \section{Sorting}
-Before we talk about sorting, we need to discuss what the standard requires for types to be comparable—specifically, the strict weak ordering required by sorting algorithms.
+Before we talk about sorting, we need to discuss what the standard requires for types to be comparable—specifically, the \cpp{strict_weak_ordering} required by sorting algorithms.
 
-Implementing a strict weak ordering for a custom type at minimum requires providing an overload of operator< with the following behaviour:
+Implementing a \cpp{strict_weak_ordering} for a custom type at minimum requires providing an overload of \cpp{operator<} with the following behaviour:
 
 \begin{itemize}
-    \item irreflexive
-    \item anti-symmetric
-    \item transitive
+    \item irreflexive $\neg f(a,a)$
+    \item anti-symmetric $f(a,b) \Rightarrow \neg f(b,a)$
+    \item transitive $(f(a,b) \wedge f(b,c)) \Rightarrow f(a,c)$
 \end{itemize}
 
-A good default is lexicographical ordering if you do not have domain-specific ordering for your particular data type. Lexicographical ordering is also the ordering provided by standard containers. Since C++20 introduced the spaceship operator, user-defined types can easily access the default version of lexicographical ordering.
+A good default for a \cpp{strict_weak_ordering} implementation is lexicographical ordering. Lexicographical ordering is also the ordering provided by standard containers.
+
+Since C++20 introduced the spaceship operator, user-defined types can easily access the default version of lexicographical ordering.
 
 \begin{box-note}
 \footnotesize Example of three approaches to implementing lexicographical comparison for a custom type.
@@ -17,54 +19,42 @@ A good default is lexicographical ordering if you do not have domain-specific or
 \cppfile{code_examples/theory/comparable_code.h}
 \end{box-note}
 
+The default lexicographical ordering (line 14) works recursively. It starts with the object’s bases first, left-to-right, depth-first and then non-static members in declaration order (processing arrays element by element, left-to-right).
 
-\subsubsection{Making your type comparable}
+The type returned for the spaceship operator is the common comparison category type for the bases and members, one of:
+\begin{itemize}
+    \item \cpp{std::strong_ordering}
+    \item \cpp{std::weak_ordering}
+    \item \cpp{std::partial_ordering}
+\end{itemize}
 
-In the examples, we used std::sort on types that are inherently comparable in the base language or used a projection to narrow down the custom type to a double. However, sometimes you might want to make your custom type comparable.
+\subsection{\texorpdfstring{\cpp{std::lexicographical_compare}}{\texttt{std::lexicographical\_compare}}}
 
-First, let’s go back to the requirements of std::sort. It expects a strict\_weak\_ordering, which means that the comparison functor (or the less than operator) needs to be ireflexive: $\neg f(a,a)$, anti-symetric: $f(a,b) \Rightarrow \neg f(b,a) $, and transitive: $(f(a,b) \wedge f(b,c)) \Rightarrow f(a,c)$.
+Lexicographical \cpp{strict_weak_ordering} for ranges is exposed through the \cpp{std::lexicographical_compare} algorithm.
 
-If you don’t have a domain-specific ordering for your particular data type, a solid default is lexicographical ordering. Lexicographical ordering is also the ordering provided by standard containers.
+\cppversions{\texttt{lex\dots compare}}{\CC98}{\CC20}{\CC17}{\CC20}
 
-In C++20, implementing comparison for your type became a lot simpler with the introduction of the spaceship operator:
+\constraints{(\cpp{input_range}, \cpp{input_range})}{(\cpp{forward_range}, \cpp{forward_range})}{\cpp{operator<}}{\cpp{strict_weak_ordering}}
 
 \begin{box-note}
-\begin{cppcode}
-struct Point {
-    int x;
-    int y;
-
-    // pre-C++20 lexicographical less-than
-    friend bool operator<(const Point& left, const Point& right) {
-        if (left.x != right.x)
-            return left.x < right.x;
-        return left.y < right.y;
-    }
-
-    // default C++20 spaceship version of lexicographical comparison
-    friend auto operator<=>(const Point&, const Point&) = default;
-
-    // manual implementation of C++20 spaceship version of lexicographical comparison
-    friend auto operator<=>(const Point& left, const Point& right) {
-        if (left.x != right.x)
-            return left.x <=> right.x;
-        return left.y <=> right.y;
-    }
-};
-\end{cppcode}
+\footnotesize Example of using \cpp{lexicographical_compare} and the built-in less than operator to compare vectors of integers.
+\tcblower
+\cppfile{code_examples/theory/comparable_code.h}
 \end{box-note}
 
-The default lexicographical ordering (line 13) works recursively. It starts with the object’s bases first, left-to-right, depth-first and then non-static members in declaration order (processing arrays element by element, left-to-right).
+Because the standard containers already offer a built-in lexicographical comparison, the algorithm mainly finds use for comparing raw C arrays and in cases when we need to specify a custom comparator.
 
-The type returned for the spaceship operator is the common comparison category type for the bases and members: strong\_ordering, weak\_ordering, or partial\_ordering.
 
-\subsection{lexicographical\_compare, lexicographical\_compare\_three\_way}
+
+\subsection{\texorpdfstring{\cpp{std::lexicographical_compare_three_way}}{\texttt{std::lexicographical\_compare\_three\_way}}}
+
+
 
 When discussing lexicographical comparison, we have to talk about the two algorithms offering this functionality for ranges.
 
-\cppversions{\texttt{lexicographical\_compare}}{\CC98}{\CC20}{\CC17}{\CC20}
 
-\constraints{\texttt{(input\_range, input\_range)}}{\texttt{(forward\_range, forward\_range)}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+
 
 \begin{box-note}
 \begin{cppcode}
