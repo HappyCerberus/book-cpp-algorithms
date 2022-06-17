@@ -1,53 +1,22 @@
-\section{Sorting and partitioning algorithms}
+\section{Sorting}
+Before we talk about sorting, we need to discuss what the standard requires for types to be comparable—specifically, the strict weak ordering required by sorting algorithms.
 
-\subsection{sort}
+Implementing a strict weak ordering for a custom type at minimum requires providing an overload of operator< with the following behaviour:
 
-The basic sorting algorithm is unsurprisingly std::sort.
+\begin{itemize}
+    \item irreflexive
+    \item anti-symmetric
+    \item transitive
+\end{itemize}
 
-\cppversions{\texttt{sort}}{\CC98}{\CC20}{\CC17}{\CC20}
-
-\constraints
-    {\texttt{random\_access\_range}}
-    {\texttt{random\_access\_range}}
-    {N/A}
-    {\texttt{strict\_weak\_ordering}}
-    
-While the actual implementation of std::sort might differ (usually intro-sort), it is guaranteed to be $O(n*logn)$ comparisons (since \CC11). As a result, it only operates on random-access ranges. This means that we can’t use std::sort with std::list, which does provide an $O(n*logn)$ sort as a method.
+A good default is lexicographical ordering if you do not have domain-specific ordering for your particular data type. Lexicographical ordering is also the ordering provided by standard containers. Since C++20 introduced the spaceship operator, user-defined types can easily access the default version of lexicographical ordering.
 
 \begin{box-note}
-\begin{cppcode}
-{
-    std::vector<int> data = {9, 1, 8, 2, 7, 3, 6, 4, 5};
-    std::sort(data.begin(), data.end());
-    // 1, 2, 3, 4, 5, 6, 7, 8, 9
-}
-{
-    std::list<int> data = {9, 1, 8, 2, 7, 3, 6, 4, 5};
-    //std::sort(data.begin(), data.end()); // doesn't compile
-    data.sort();
-    // 1, 2, 3, 4, 5, 6, 7, 8, 9
-}
-\end{cppcode}
+\footnotesize Example of three approaches to implementing lexicographical comparison for a custom type.
+\tcblower
+\cppfile{code_examples/theory/comparable_code.h}
 \end{box-note}
 
-With C++20, we can take advantage of projections to sort by a method or member:
-
-\begin{box-note}
-\begin{cppcode}
-struct Account {
-    double value();
-};
-
-std::vector<Account> fetch_accounts();
-
-int main() {
-    std::vector<Account> data = fetch_accounts();
-    std::ranges::sort(data, std::greater<>(), &Account::value);
-}
-\end{cppcode}
-\end{box-note}
-
-Here we sort the accounts by their computed value in a descending (technically non-ascending) order. The std::greater<> is a C++14 specialization of std::greater that relies on type deduction to determine the parameter types. Before C++14, you would have to specify the type (in this case std::greater<double>()).
 
 \subsubsection{Making your type comparable}
 
@@ -134,6 +103,57 @@ The lexicographical\_compare\_three\_way is the spaceship operator equivalent to
 \cppversions{\texttt{lexicographical\_compare\_three\_way}}{\CC20}{\CC20}{N/A}{N/A}
 
 \constraints{\texttt{(input\_range, input\_range)}}{}{\texttt{operator<=>}}{\texttt{strong\_ordering}, \texttt{weak\_ordering}, \texttt{partial\_ordering}}
+
+
+\subsection{sort}
+
+The basic sorting algorithm is unsurprisingly std::sort.
+
+\cppversions{\texttt{sort}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints
+    {\texttt{random\_access\_range}}
+    {\texttt{random\_access\_range}}
+    {N/A}
+    {\texttt{strict\_weak\_ordering}}
+    
+While the actual implementation of std::sort might differ (usually intro-sort), it is guaranteed to be $O(n*logn)$ comparisons (since \CC11). As a result, it only operates on random-access ranges. This means that we can’t use std::sort with std::list, which does provide an $O(n*logn)$ sort as a method.
+
+\begin{box-note}
+\begin{cppcode}
+{
+    std::vector<int> data = {9, 1, 8, 2, 7, 3, 6, 4, 5};
+    std::sort(data.begin(), data.end());
+    // 1, 2, 3, 4, 5, 6, 7, 8, 9
+}
+{
+    std::list<int> data = {9, 1, 8, 2, 7, 3, 6, 4, 5};
+    //std::sort(data.begin(), data.end()); // doesn't compile
+    data.sort();
+    // 1, 2, 3, 4, 5, 6, 7, 8, 9
+}
+\end{cppcode}
+\end{box-note}
+
+With C++20, we can take advantage of projections to sort by a method or member:
+
+\begin{box-note}
+\begin{cppcode}
+struct Account {
+    double value();
+};
+
+std::vector<Account> fetch_accounts();
+
+int main() {
+    std::vector<Account> data = fetch_accounts();
+    std::ranges::sort(data, std::greater<>(), &Account::value);
+}
+\end{cppcode}
+\end{box-note}
+
+Here we sort the accounts by their computed value in a descending (technically non-ascending) order. The std::greater<> is a C++14 specialization of std::greater that relies on type deduction to determine the parameter types. Before C++14, you would have to specify the type (in this case std::greater<double>()).
+
 
 \subsection{stable\_sort}
 
