@@ -7,7 +7,7 @@ install(TARGETS for_each_n DESTINATION bin)
 add_executable(swap_calling swap_calling.cpp)
 # Compile only
 
-add_executable(swap_ranges swap_ranges.cpp)
+add_executable(swap_range swap_range.cpp)
 # Compile only
 
 add_executable(iter_swap_unique_ptr iter_swap_unique_ptr.cpp)
@@ -15,3 +15,6 @@ install(TARGETS iter_swap_unique_ptr DESTINATION bin)
 
 add_executable(iter_swap_partition iter_swap_partition.cpp)
 install(TARGETS iter_swap_partition DESTINATION bin)
+
+add_executable(swap_ranges swap_ranges.cpp)
+install(TARGETS swap_ranges DESTINATION bin)

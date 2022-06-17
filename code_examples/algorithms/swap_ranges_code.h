@@ -1,17 +1,3 @@
-namespace Library {
-struct Storage {
-	int value;
-};
-
-void swap(Storage& left, Storage& right) {
-	std::ranges::swap(left.value, right.value);
-}
-}
-
-int main() {
-	int a = 1, b = 2;
-	std::ranges::swap(a, b); // 3-step-swap
-
-	Library::Storage j{2}, k{3};
-	std::ranges::swap(j, k); // calls custom Library::swap()
-}
+std::vector<int> data{ 1, 2, 3, 4, 5, 6, 7, 8, 9};
+std::swap_ranges(data.begin(), data.begin()+3, data.rbegin());
+// data = { 9, 8, 7, 4, 5, 6, 3, 2, 1 }
