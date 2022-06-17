@@ -54,60 +54,40 @@ The C++20 rangified version of swap removes this complexity, and it will:
 \begin{box-note}
 \footnotesize Example of specializing and calling \cpp{std::ranges::swap}.
 \tcblower
-\cppfile{code_examples/algorithms/swap_ranges_code.h}
+\cppfile{code_examples/algorithms/swap_range_code.h}
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::iter_swap}}{\texttt{std::iter\_swap}}}
 
-The \cpp{std::iter_swap} is an indirect swap, swapping values behind two forward iterators. The range version extends the functionality to other dereferenceable objects.
+The \cpp{std::iter_swap} is an indirect swap, swapping values behind two forward iterators.
 
 \cppversions{\texttt{iter\_swap}}{\CC98}{\CC20}{N/A}{\CC20}
 
 \constraints{(\cpp{forward_iterator}, \cpp{forward_iterator}) (non-range)}{}{}{}
 
-
-
-Let’s finally talk about the other two variants, iter\_swap and swap\_ranges.
-
-
-
-Iter swap could also be called indirect swap, swapping the underlying values behind iterators or other indirect types. It is mainly helpful for implementing custom algorithms since those operate on iterators.
-
-Here is an example of a partition algorithm implementation using iter\_swap (line 12):
-
 \begin{box-note}
-\begin{cppcode}
-template <typename It, typename Cond>
-    requires std::forward_iterator<It> 
-        && std::indirectly_swappable<It,It> 
-        && std::predicate<Cond>
-auto partition(It first, It last, Cond cond) {
-    while (first != last && cond(first)) ++first;
-    if (first == last) return last;
-
-    for (auto it = std::next(first); it != last; it++) {
-        if (!cond(it)) continue;
-
-        std::iter_swap(it, first);
-        ++first;
-    }
-    return first;
-}
-\end{cppcode}
+\footnotesize Example demonstrating the use \cpp{std::iter_swap} in a generic two-way partition algorithm. The algorithm uses concepts to constrain the acceptable types of its arguments.
+\tcblower
+\cppfile{code_examples/algorithms/iter_swap_partition_code.h}
 \end{box-note}
 
-\subsection{swap\_ranges}
+The range version extends the functionality to other dereferenceable objects.
 
-Swap ranges is a piecewise swap of two non-overlapping ranges (potentially from the same container). A begin iterator specifies the second range, and it is the caller’s responsibility to ensure that the target range has enough capacity.
+\begin{box-note}
+\footnotesize Example demonstrating the use of range version of \cpp{std::ranges::iter_swap} to swap the values pointed to by two instances of \cpp{std::unique_ptr}.
+\tcblower
+\cppfile{code_examples/algorithms/iter_swap_unique_ptr_code.h}
+\end{box-note}
+
+\subsection{\texorpdfstring{\cpp{std::swap_ranges}}{\texttt{std::swap\_ranges}}}
+
+The \cpp{std::swap_ranges} algorithm exchanges elements between two non-overlapping ranges (potentially from the same container).
 
 \cppversions{\texttt{swap\_ranges}}{\CC98}{\CC20}{\CC17}{\CC20}
 
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> data{ 1, 2, 3, 4, 5, 6, 7, 8, 9};
-std::swap_ranges(data.begin(), data.begin()+3, data.rbegin());
-// 9, 8, 7, 4, 5, 6, 3, 2, 1
-\end{cppcode}
-\end{box-note}
 
-Here we swap the first three elements of the array with the last three elements of the array. The order of elements is reversed because we use rbegin (begin iterator for reverse iteration).
+\begin{box-note}
+\footnotesize Example of swapping the first three elements of an array with the last three elements using \cpp{std::swap_ranges}. Note the reversed order of elements due to the use of \cpp{rbegin}.
+\tcblower
+\cppfile{code_examples/algorithms/swap_ranges_code.h}
+\end{box-note}
