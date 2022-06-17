@@ -27,3 +27,6 @@ install(TARGETS lexicographical_compare_three_way DESTINATION bin)
 
 add_executable(lexicographical_compare_useful lexicographical_compare_useful.cpp)
 install(TARGETS lexicographical_compare_useful DESTINATION bin)
+
+add_executable(sort sort.cpp)
+install(TARGETS sort DESTINATION bin)
