@@ -47,7 +47,7 @@ The C++20 rangified version of swap removes this complexity, and it will:
 
 \begin{itemize}
     \item call the user-provided (found by ADL) overload of swap
-    \item if that doesn't exist and the parameters are arrays of the same span, \cpp{std::ranges::swap} will behave as \cpp{std::swap_ranges}
+    \item if that doesn't exist and the parameters are arrays of the same span, \cpp{std::ranges::swap} will behave as \cpp{std::ranges::swap_ranges}
     \item if the parameters are also not arrays, it will default to a move-swap
 \end{itemize}
 
@@ -56,13 +56,20 @@ The C++20 rangified version of swap removes this complexity, and it will:
 \tcblower
 \cppfile{code_examples/algorithms/swap_ranges_code.h}
 \end{box-note}
-\newpage
 
-\subsection{iter\_swap}
+\subsection{\texorpdfstring{\cpp{std::iter_swap}}{\texttt{std::iter\_swap}}}
+
+The \cpp{std::iter_swap} is an indirect swap, swapping values behind two forward iterators. The range version extends the functionality to other dereferenceable objects.
+
+\cppversions{\texttt{iter\_swap}}{\CC98}{\CC20}{N/A}{\CC20}
+
+\constraints{(\cpp{forward_iterator}, \cpp{forward_iterator}) (non-range)}{}{}{}
+
+
 
 Let’s finally talk about the other two variants, iter\_swap and swap\_ranges.
 
-\cppversions{\texttt{iter\_swap}}{\CC98}{\CC20}{N/A}{\CC20}
+
 
 Iter swap could also be called indirect swap, swapping the underlying values behind iterators or other indirect types. It is mainly helpful for implementing custom algorithms since those operate on iterators.
 
