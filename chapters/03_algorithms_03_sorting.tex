@@ -30,7 +30,7 @@ The type returned for the spaceship operator is the common comparison category t
 
 \subsection{\texorpdfstring{\cpp{std::lexicographical_compare}}{\texttt{std::lexicographical\_compare}}}
 
-Lexicographical \cpp{strict_weak_ordering} for ranges is exposed through the \cpp{std::lexicographical_compare} algorithm.
+Lexicographical \texttt{strict\_weak\_ordering} for ranges is exposed through the \texttt{std::lexicographical\_compare} algorithm.
 
 \cppversions{\texttt{lex\dots compare}}{\CC98}{\CC20}{\CC17}{\CC20}
 
@@ -39,61 +39,30 @@ Lexicographical \cpp{strict_weak_ordering} for ranges is exposed through the \cp
 \begin{box-note}
 \footnotesize Example of using \cpp{lexicographical_compare} and the built-in less than operator to compare vectors of integers.
 \tcblower
-\cppfile{code_examples/theory/comparable_code.h}
+\cppfile{code_examples/algorithms/lexicographical_compare_code.h}
 \end{box-note}
 
 Because the standard containers already offer a built-in lexicographical comparison, the algorithm mainly finds use for comparing raw C arrays and in cases when we need to specify a custom comparator.
 
-
+\begin{box-note}
+\footnotesize Example of using \cpp{lexicographical_compare} for C-style arrays and customizing the comparator.
+\tcblower
+\cppfile{code_examples/algorithms/lexicographical_compare_useful_code.h}
+\end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::lexicographical_compare_three_way}}{\texttt{std::lexicographical\_compare\_three\_way}}}
 
+The \texttt{std::lexicographical\_compare\_three\_way} is the spaceship operator equivalent to \texttt{std::lexicographical\_compare}. It returns one of \texttt{std::strong\_ordering}, \texttt{std::weak\_ordering} or {std::partial\_ordering} types, depending on the type returned by the elements' spaceship operator.
 
-
-When discussing lexicographical comparison, we have to talk about the two algorithms offering this functionality for ranges.
-
-
-
-
-
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> range1{1, 2, 3}, range2{1, 3}, range3{1, 3, 1};
-
-assert(std::lexicographical_compare(range1.begin(), range1.end(), 
-                                    range2.begin(), range2.end()));
-assert(std::lexicographical_compare(range2.begin(), range2.end(), 
-                                    range3.begin(), range3.end()));
-
-assert(range1 < range2); // same as lexicographical_compare
-assert(range2 < range3); // same as lexicographical_compare
-\end{cppcode}
-\end{box-note}
-
-As I already mentioned, all standard containers offer lexicographical comparison through their comparison operators (before C++20) or the spaceship operator (since C++20). The primary use of manually calling lexicographical\_compare is when using C-style arrays or when you want to specify a custom element comparator:
-
-\begin{box-note}
-\begin{cppcode}
-int x[] = {1, 2, 3}, y[] = {1, 4}; // for demonstration only, use std::array
-
-assert(std::lexicographical_compare(&x[0], &x[3], &y[0], &y[2]));
-
-std::vector<std::string> names1{"Zod", "Celeste"}, names2{"Adam", "Maria"};
-
-assert(std::ranges::lexicographical_compare(names1, names2, 
-        [](const std::string& left, const std::string& right) {
-            return left.length() < right.length();
-        }));
-\end{cppcode}
-\end{box-note}
-
-
-The lexicographical\_compare\_three\_way is the spaceship operator equivalent to lexicographical\_compare. It returns one of strong\_ordering, weak\_ordering or partial\_ordering types (based on the provided functor).
-
-\cppversions{\texttt{lexicographical\_compare\_three\_way}}{\CC20}{\CC20}{N/A}{N/A}
+\cppversions{\texttt{lex\dots three\_way}}{\CC20}{\CC20}{N/A}{N/A}
 
 \constraints{\texttt{(input\_range, input\_range)}}{}{\texttt{operator<=>}}{\texttt{strong\_ordering}, \texttt{weak\_ordering}, \texttt{partial\_ordering}}
 
+\begin{box-note}
+\footnotesize Example of using \cpp{lexicographical_compare_three_way}.
+\tcblower
+\cppfile{code_examples/algorithms/lexicographical_compare_three_way_code.h}
+\end{box-note}
 
 \subsection{sort}
 
