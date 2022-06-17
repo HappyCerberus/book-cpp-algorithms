@@ -22,5 +22,8 @@ install(TARGETS swap_ranges DESTINATION bin)
 add_executable(lexicographical_compare lexicographical_compare.cpp)
 install(TARGETS lexicographical_compare DESTINATION bin)
 
+add_executable(lexicographical_compare_three_way lexicographical_compare_three_way.cpp)
+install(TARGETS lexicographical_compare_three_way DESTINATION bin)
+
 add_executable(lexicographical_compare_useful lexicographical_compare_useful.cpp)
 install(TARGETS lexicographical_compare_useful DESTINATION bin)
