@@ -55,7 +55,6 @@ Because the standard containers already offer a built-in lexicographical compari
 The \texttt{std::lexicographical\_compare\_three\_way} is the spaceship operator equivalent to \texttt{std::lexicographical\_compare}. It returns one of \texttt{std::strong\_ordering}, \texttt{std::weak\_ordering} or \texttt{std::partial\_ordering} types, depending on the type returned by the elements' spaceship operator.
 
 \cppversions{\texttt{lex\dots three\_way}}{\CC20}{\CC20}{N/A}{N/A}
-
 \constraints{\texttt{(input\_range, input\_range)}}{}{\texttt{operator<=>}}{\texttt{strong\_ordering}, \texttt{weak\_ordering}, \texttt{partial\_ordering}}
 
 \begin{box-note}
@@ -69,12 +68,12 @@ The \texttt{std::lexicographical\_compare\_three\_way} is the spaceship operator
 The \cpp{std::sort} algorithm is the canonical $O(n*logn)$ sort (typically implemented as intro-sort).
 
 \cppversions{\texttt{sort}}{\CC98}{\CC20}{\CC17}{\CC20}
-\constraints{\cpp{random_access_range}}{\cpp{random_access_range}}{N/A}{\cpp{strict_weak_ordering}}
+\constraints{\cpp{random_access_range}}{\cpp{random_access_range}}{\cpp{operator<}}{\cpp{strict_weak_ordering}}
 
 Due to the $O(n*logn)$ complexity guarantee, \cpp{std::sort} only operates on \cpp{random_access} ranges. Notably, \cpp{std::list} offers a method with an approximate $n*logn$ complexity.
 
 \begin{box-note}
-\footnotesize Example of using \cpp{std::sort}.
+\footnotesize Basic example of using \cpp{std::sort} and \cpp{std::list::sort}.
 \tcblower
 \cppfile{code_examples/algorithms/sort_code.h}
 \end{box-note}
@@ -82,46 +81,26 @@ Due to the $O(n*logn)$ complexity guarantee, \cpp{std::sort} only operates on \c
 With C++20, we can take advantage of projections to sort by a method or member:
 
 \begin{box-note}
-\begin{cppcode}
-struct Account {
-    double value();
-};
-
-std::vector<Account> fetch_accounts();
-
-int main() {
-    std::vector<Account> data = fetch_accounts();
-    std::ranges::sort(data, std::greater<>(), &Account::value);
-}
-\end{cppcode}
+\footnotesize Example of using a projection in conjunction with a range algorithm. The algorithm will sort the elements based on the values obtained by invoking the method \cpp{value} on each element.
+\tcblower
+\cppfile{code_examples/algorithms/sort_projection_code.h}
 \end{box-note}
 
-Here we sort the accounts by their computed value in a descending (technically non-ascending) order. The std::greater<> is a C++14 specialization of std::greater that relies on type deduction to determine the parameter types. Before C++14, you would have to specify the type (in this case std::greater<double>()).
+Before C++14, you would have to fully specify the type of the comparator, i.e. \cpp{std::greater<double>{}}. The type erased variant \cpp{std::greater<>{}} relies on type deduction to determine the parameter types. Projections accept an unary invocable, including pointers to members and member functions.
 
+\subsection{\texorpdfstring{\cpp{std::stable_sort}}{\texttt{std::stable\_sort}}}
 
-\subsection{stable\_sort}
-
-The std::sort is free to re-arrange equivalent elements, which can be undesirable when re-sorting an already sorted range. The std::stable\_sort provides the additional guarantee of preserving the relative order of equal elements. If additional memory is available, stable\_sort remains $O(n*logn)$. However, if it fails to allocate, it will degrade to an $O(n*logn*logn)$ algorithm.
+The \cpp{std::sort} is free to re-arrange equivalent elements, which can be undesirable when re-sorting an already sorted range. The \cpp{std::stable_sort} provides the additional guarantee of preserving the relative order of equal elements.
 
 \cppversions{\texttt{stable\_sort}}{\CC98}{N/A}{\CC17}{\CC20}
+\constraints{\cpp{random_access_range}}{}{\cpp{operator<}}{\cpp{strict_weak_ordering}}
 
-\constraints{\texttt{random\_access\_range}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
-
-While stable\_sort is not particularly useful when we are already sorting by every aspect of the type (e.g. by relying on lexicographical comparison), it often comes up when the sorting is based on user input (e.g. re-sorting by column in a UI).
+If additional memory is available, stable\_sort remains $O(n*logn)$. However, if it fails to allocate, it will degrade to an $O(n*logn*logn)$ algorithm.
 
 \begin{box-note}
-\begin{cppcode}
-struct Record {
-    std::string label;
-    int rank;
-};
-
-std::vector<Record> data {{"q", 1}, {"f", 1}, {"c", 2}, {"a", 1}, {"d", 3}};
-
-std::ranges::stable_sort(data, {}, &Record::label);    
-std::ranges::stable_sort(data, {}, &Record::rank);
-// Guarantted order: a-1, f-1, q-1, c-2, d-3
-\end{cppcode}
+\footnotesize Example of re-sorting a range using \cpp{std::stable_sort}, resulting in a guaranteed order of elements.
+\tcblower
+\cppfile{code_examples/algorithms/stable_sort_code.h}
 \end{box-note}
 
 \subsection{is\_sorted, is\_sorted\_until}
