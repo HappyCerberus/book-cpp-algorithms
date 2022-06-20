@@ -37,4 +37,14 @@ install(TARGETS sort_projection DESTINATION bin)
 add_executable(stable_sort stable_sort.cpp)
 install(TARGETS stable_sort DESTINATION bin)
 
+add_executable(is_sorted is_sorted.cpp)
+install(TARGETS is_sorted DESTINATION bin)
 
+add_executable(is_sorted_until is_sorted_until.cpp)
+install(TARGETS is_sorted_until DESTINATION bin)
+
+add_executable(partial_sort partial_sort.cpp)
+install(TARGETS partial_sort DESTINATION bin)
+
+add_executable(partial_sort_copy partial_sort_copy.cpp)
+# Compile-only
