@@ -165,34 +165,18 @@ The consequence of writing output to a second range is that the source range doe
 
 \subsection{\texorpdfstring{\cpp{qsort}}{\texttt{qsort}} - C standard library}
 
-Because the C standard library is part of the C++ standard library, we also have access to qsort.
+Because the C standard library is part of the C++ standard library, we also have access to \cpp{qsort}.
 
 \begin{box-note}
-\begin{cppcode}
-int data[] = {2, 1, 9, -1, 7, -8};
-int size = sizeof data / sizeof(int);
-
-qsort(data, size, sizeof(int), [](const void* left, const void* right){
-    int vl = *(const int*)left;
-    int vr = *(const int*)right;
-
-    if (vl < vr) return -1;
-    if (vl > vr) return 1;
-    return 0;
-});
-
-// -8, -1, 1, 2, 7, 9
-\end{cppcode}
+\footnotesize Example of using \cpp{qsort} to sort an array of integers.
+\tcblower
+\cppfile{code_examples/algorithms/qsort_code.h}
 \end{box-note}
 
-I would strongly recommend avoiding qsort, as std::sort and std::ranges::sort should be a better choice in every situation. Moreover, qsort is only valid for trivially copyable types, and those will correctly optimize to memcpy operations even when using std::sort (if desirable).
+I would strongly recommend avoiding \cpp{qsort}, as \cpp{std::sort} and \cpp{std::ranges::sort} should be a better choice in every situation. Moreover, \cpp{qsort} is only valid for trivially copyable types, and those will correctly optimize to \cpp{memcpy}/\cpp{memmove} operations even when using \cpp{std::sort}.
 
 \begin{box-note}
-\begin{cppcode}
-int data[] = {2, 1, 9, -1, 7, -8};
-int size = sizeof data / sizeof(int);
-
-std::sort(&data[0], &data[size], std::less<>());
-// -8, -1, 1, 2, 7, 9
-\end{cppcode}
+\footnote Example of using \cpp{std::sort} to achieve the same result as in the previous example.
+\tcblower
+\cppfile{code_examples/algorithms/qsort_not_code.h}
 \end{box-note}
