@@ -30,3 +30,11 @@ install(TARGETS lexicographical_compare_useful DESTINATION bin)
 
 add_executable(sort sort.cpp)
 install(TARGETS sort DESTINATION bin)
+
+add_executable(sort_projection sort_projection.cpp)
+install(TARGETS sort_projection DESTINATION bin)
+
+add_executable(stable_sort stable_sort.cpp)
+install(TARGETS stable_sort DESTINATION bin)
+
+
