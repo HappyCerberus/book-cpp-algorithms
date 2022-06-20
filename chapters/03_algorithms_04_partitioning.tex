@@ -1,1 +1,122 @@
 \section{Partitioning}
+
+\subsection{partition, stable\_partition, partition\_copy, is\_partitioned}
+
+Partition algorithms “partition” a range into two sub-ranges. First, all elements that satisfy the given predicate, followed by all elements that do not satisfy the predicate. Notably, a 3-way partition is the core building block of QuickSort.
+
+\cppversions{\texttt{partition}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{forward\_range}}{}{N/A}{\texttt{unary\_predicate}}
+
+If we are simply interested in grouping elements by a particular property, std::partition is the solution.
+
+\begin{box-note}
+\begin{cppcode}
+struct ExamResult {
+    std::string student_name;
+    uint16_t score;
+};
+
+std::vector<ExamResult> get_results();
+
+int main() {
+    std::vector<ExamResult> results = get_results();
+  
+    auto pp = std::partition(results.begin(), results.end(), 
+        [limit = 49](const ExamResult& result) {
+            return result.score >= limit;
+        });
+ 
+    for (auto it = results.begin(); it != pp; it++) {
+        // process students with passing mark
+    }
+    for (auto it = pp; it != results.end(); it++) {
+        // process students with failing mark
+     }
+}
+\end{cppcode}
+\end{box-note}
+
+Here we partition exam results into students that passed and failed. The partition algorithm returns the partition point (line 11). We can use the partition point to process the two parts of the range (lines 16 and 19).
+
+Similarly to is\_sorted, we can check whether a range is partitioned (according to a given predicate) using is\_partitioned.
+
+\cppversions{\texttt{is\_partitioned}}{\CC11}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{input\_range}}{\texttt{forward\_range}}{N/A}{\texttt{unary\_predicate}}
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{2, 4, 6, 1, 3, 5};
+auto is_even = [](int v) { return v % 2 == 0; };
+assert(std::ranges::is_partitioned(data, is_even));
+\end{cppcode}
+\end{box-note}
+
+Stable partition guarantees that it will not change the relative order of items.
+
+\cppversions{\texttt{stable\_partition}}{\CC98}{N/A}{\CC17}{\CC20}
+
+\constraints{\texttt{bidirectional\_range}}{}{N/A}{\texttt{unary\_predicate}}
+
+\begin{box-note}
+\begin{cppcode}
+struct Item {
+    std::string label;
+    bool is_selected() const;
+};
+
+std::vector<Item> widget = get_widget();
+std::ranges::stable_partition(widget, std::identity{}, &Item::is_selected);
+// selected items moved to the beginning of the range
+\end{cppcode}
+\end{box-note}
+
+This code might be confusing because we are using std::identity in place of the predicate. However, note that the result of the projection is a boolean value. Therefore, all we require from the predicate is to forward this value.
+
+Finally, partition\_copy will not reorder the input range but instead copies the two partitions to the provided output ranges.
+
+\cppversions{\texttt{partition\_copy}}{\CC11}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{input\_range -> (output\_iterator, output\_iterator)}}{\texttt{forward\_range -> (forward\_iterator, forward\_iterator)}}{N/A}{\texttt{unary\_predicate}}
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{2, 4, 6, 1, 3, 5};
+auto is_even = [](int v) { return v % 2 == 0; };
+
+std::vector<int> even, odd;
+std::partition_copy(data.begin(), data.end(),
+    std::back_inserter(even),
+    std::back_inserter(odd),
+    is_even);
+
+// even == {2, 4, 6}
+// odd == {1, 3, 5}
+\end{cppcode}
+\end{box-note}
+
+We are using the back\_inserter adapter to fill the two vectors without the need to pre-allocate enough capacity (the adapter internally calls push\_back).
+
+\subsection{nth\_element}
+
+Sometimes we only need to pick one specific element out of range (e.g. when choosing a median). Sorting (even partial) might then be overkill due to the $O(n*logn)$ complexity. For $O(n)$ complexity, we need to use a selection algorithm, and nth\_element is one of them.
+
+\cppversions{\texttt{nth\_element}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{(random\_access\_range, random\_access\_iterator)}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+The picked element is specified using a middle iterator. The algorithm will reorder the range so that this element will be in its sorted position. Moreover, the algorithm weakly partitions the range (every element before the middle is ≤ every element after the middle).
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{9, 1, 8, 2, 7, 3, 6, 4, 5};
+std::nth_element(data.begin(), data.begin()+4, data.end());
+// data[4] == 5
+
+std::nth_element(data.begin(), data.begin()+7, data.end(), std::greater<>());
+// data[7] == 2
+\end{cppcode}
+\end{box-note}
+
+Depending on your use case, partial\_sort can be sometimes faster than nth\_element despite the worse theoretical complexity.
