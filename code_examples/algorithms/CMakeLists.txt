@@ -48,3 +48,6 @@ install(TARGETS partial_sort DESTINATION bin)
 
 add_executable(partial_sort_copy partial_sort_copy.cpp)
 # Compile-only
+
+add_executable(qsort qsort.cpp)
+install(TARGETS qsort DESTINATION bin)
