@@ -1,6 +1,6 @@
 \section{Partitioning}
 
-Partition algorithms rearrange elements in the range based on a predicate, such that elements for which the predicate returns true precede elements for which the predicate returns false.
+Partition algorithms rearrange elements in the range based on a predicate, such that elements for which the predicate returns \cpp{true} precede elements for which the predicate returns \cpp{false}.
 
 Partitioning comes up often when we need to group elements based on a particular property. You can also think of partitioning as equal to sorting if we would sort based on the values of a boolean property.
 
@@ -19,7 +19,9 @@ The \cpp{std::partition} algorithm provides the basic partitioning functionality
 
 \subsection{\texorpdfstring{\cpp{std::stable_partition}}{\texttt{std::stable\_partition}}}
 
-The \cpp{std::partition} algorithm is permitted to rearrange the elements with the only guarantee that elements for which the predicate evaluated to true will precede elements for which the predicate evaluated to false. This behaviour can be undesirable, for example, for UI elements. The \cpp{std::stable_partition} algorithm adds the guarantee of preserving the relative order of elements in both partitions.
+The \cpp{std::partition} algorithm is permitted to rearrange the elements with the only guarantee that elements for which the predicate evaluated to \cpp{true} will precede elements for which the predicate evaluated to \cpp{false}. This behaviour can be undesirable, for example, for UI elements.
+
+The \cpp{std::stable_partition} algorithm adds the guarantee of preserving the relative order of elements in both partitions.
 
 \cppversions{\texttt{stable\_partition}}{\CC98}{N/A}{\CC17}{\CC20}
 
@@ -31,14 +33,23 @@ The \cpp{std::partition} algorithm is permitted to rearrange the elements with t
 \cppfile{code_examples/algorithms/stable_partition_code.h}
 \end{box-note}
 
-
-
-
-Finally, partition\_copy will not reorder the input range but instead copies the two partitions to the provided output ranges.
-
 \subsection{\texorpdfstring{\cpp{std::is_partitioned}}{\texttt{std::is\_partitioned}}}
 
-\subsection{stable\_partition, partition\_copy}
+The \cpp{std::is_partitioned} algorithm is a linear check returning a boolean denoting whether the ranges elements are partitioned in regards to the predicate.
+
+\cppversions{\texttt{is\_partitioned}}{\CC11}{\CC20}{\CC17}{\CC20}
+\constraints{\texttt{input\_range}}{\texttt{forward\_range}}{N/A}{\texttt{unary\_predicate}}
+
+Note that a sorted range is always partitioned for any possible value (with a different partition point).
+
+\begin{box-note}
+\footnotesize Example of using \cpp{std::is_partitioned}.
+\tcblower
+\cppfile{code_examples/algorithms/is_partitioned.h}
+\end{box-note}
+
+
+\subsection{artition\_copy}
 
 Partition algorithms “partition” a range into two sub-ranges. First, all elements that satisfy the given predicate, followed by all elements that do not satisfy the predicate. Notably, a 3-way partition is the core building block of QuickSort.
 
@@ -46,50 +57,10 @@ Partition algorithms “partition” a range into two sub-ranges. First, all ele
 
 \constraints{\texttt{forward\_range}}{}{N/A}{\texttt{unary\_predicate}}
 
-If we are simply interested in grouping elements by a particular property, std::partition is the solution.
-
-\begin{box-note}
-\begin{cppcode}
-struct ExamResult {
-    std::string student_name;
-    uint16_t score;
-};
-
-std::vector<ExamResult> get_results();
-
-int main() {
-    std::vector<ExamResult> results = get_results();
-  
-    auto pp = std::partition(results.begin(), results.end(), 
-        [limit = 49](const ExamResult& result) {
-            return result.score >= limit;
-        });
- 
-    for (auto it = results.begin(); it != pp; it++) {
-        // process students with passing mark
-    }
-    for (auto it = pp; it != results.end(); it++) {
-        // process students with failing mark
-     }
-}
-\end{cppcode}
-\end{box-note}
-
-Here we partition exam results into students that passed and failed. The partition algorithm returns the partition point (line 11). We can use the partition point to process the two parts of the range (lines 16 and 19).
-
 Similarly to is\_sorted, we can check whether a range is partitioned (according to a given predicate) using is\_partitioned.
 
-\cppversions{\texttt{is\_partitioned}}{\CC11}{\CC20}{\CC17}{\CC20}
 
-\constraints{\texttt{input\_range}}{\texttt{forward\_range}}{N/A}{\texttt{unary\_predicate}}
 
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> data{2, 4, 6, 1, 3, 5};
-auto is_even = [](int v) { return v % 2 == 0; };
-assert(std::ranges::is_partitioned(data, is_even));
-\end{cppcode}
-\end{box-note}
 
 Stable partition guarantees that it will not change the relative order of items.
 
