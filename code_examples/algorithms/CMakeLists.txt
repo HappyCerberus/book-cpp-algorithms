@@ -54,3 +54,6 @@ install(TARGETS qsort DESTINATION bin)
 
 add_executable(qsort_not qsort_not.cpp)
 install(TARGETS qsort_not DESTINATION bin)
+
+add_executable(partition partition.cpp)
+install(TARGETS partition DESTINATION bin)
