@@ -1,6 +1,44 @@
 \section{Partitioning}
 
-\subsection{partition, stable\_partition, partition\_copy, is\_partitioned}
+Partition algorithms rearrange elements in the range based on a predicate, such that elements for which the predicate returns true precede elements for which the predicate returns false.
+
+Partitioning comes up often when we need to group elements based on a particular property. You can also think of partitioning as equal to sorting if we would sort based on the values of a boolean property.
+
+\subsection{\texorpdfstring{\cpp{std::partition}}{\texttt{std::partition}}}
+
+The \cpp{std::partition} algorithm provides the basic partitioning functionality, reordering elements based on a unary predicate. The algorithm returns the partition point, an iterator to the first element for which the predicate returned \cpp{false}.
+
+\cppversions{\texttt{partition}}{\CC98}{\CC20}{\CC17}{\CC20}
+\constraints{\texttt{forward\_range}}{\texttt{forward\_range}}{N/A}{\texttt{unary\_predicate}}
+
+\begin{box-note}
+\footnotesize Example of using \cpp{std::partition} to process exam results.
+\tcblower
+\cppfile{code_examples/algorithms/partition_code.h}
+\end{box-note}
+
+\subsection{\texorpdfstring{\cpp{std::stable_partition}}{\texttt{std::stable\_partition}}}
+
+The \cpp{std::partition} algorithm is permitted to rearrange the elements with the only guarantee that elements for which the predicate evaluated to true will precede elements for which the predicate evaluated to false. This behaviour can be undesirable, for example, for UI elements. The \cpp{std::stable_partition} algorithm adds the guarantee of preserving the relative order of elements in both partitions.
+
+\cppversions{\texttt{stable\_partition}}{\CC98}{N/A}{\CC17}{\CC20}
+
+\constraints{\texttt{bidirectional\_range}}{\texttt{bidirectional\_range}}{N/A}{\texttt{unary\_predicate}}
+
+\begin{box-note}
+\footnotesize Example of using \cpp{std::stable_partition} to move selected items to the beginning of a list.
+\tcblower
+\cppfile{code_examples/algorithms/stable_partition_code.h}
+\end{box-note}
+
+
+
+
+Finally, partition\_copy will not reorder the input range but instead copies the two partitions to the provided output ranges.
+
+\subsection{\texorpdfstring{\cpp{std::is_partitioned}}{\texttt{std::is\_partitioned}}}
+
+\subsection{stable\_partition, partition\_copy}
 
 Partition algorithms “partition” a range into two sub-ranges. First, all elements that satisfy the given predicate, followed by all elements that do not satisfy the predicate. Notably, a 3-way partition is the core building block of QuickSort.
 
@@ -55,26 +93,7 @@ assert(std::ranges::is_partitioned(data, is_even));
 
 Stable partition guarantees that it will not change the relative order of items.
 
-\cppversions{\texttt{stable\_partition}}{\CC98}{N/A}{\CC17}{\CC20}
 
-\constraints{\texttt{bidirectional\_range}}{}{N/A}{\texttt{unary\_predicate}}
-
-\begin{box-note}
-\begin{cppcode}
-struct Item {
-    std::string label;
-    bool is_selected() const;
-};
-
-std::vector<Item> widget = get_widget();
-std::ranges::stable_partition(widget, std::identity{}, &Item::is_selected);
-// selected items moved to the beginning of the range
-\end{cppcode}
-\end{box-note}
-
-This code might be confusing because we are using std::identity in place of the predicate. However, note that the result of the projection is a boolean value. Therefore, all we require from the predicate is to forward this value.
-
-Finally, partition\_copy will not reorder the input range but instead copies the two partitions to the provided output ranges.
 
 \cppversions{\texttt{partition\_copy}}{\CC11}{\CC20}{\CC17}{\CC20}
 

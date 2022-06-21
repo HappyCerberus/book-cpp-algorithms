@@ -176,7 +176,7 @@ Because the C standard library is part of the C++ standard library, we also have
 I would strongly recommend avoiding \cpp{qsort}, as \cpp{std::sort} and \cpp{std::ranges::sort} should be a better choice in every situation. Moreover, \cpp{qsort} is only valid for trivially copyable types, and those will correctly optimize to \cpp{memcpy}/\cpp{memmove} operations even when using \cpp{std::sort}.
 
 \begin{box-note}
-\footnote Example of using \cpp{std::sort} to achieve the same result as in the previous example.
+\footnotesize Example of using \cpp{std::sort} to achieve the same result as in the previous example.
 \tcblower
 \cppfile{code_examples/algorithms/qsort_not_code.h}
 \end{box-note}
