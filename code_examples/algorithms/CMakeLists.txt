@@ -60,3 +60,10 @@ install(TARGETS partition DESTINATION bin)
 
 add_executable(is_partitioned is_partitioned.cpp)
 install(TARGETS is_partitioned DESTINATION bin)
+
+add_executable(partition_copy partition_copy.cpp)
+install(TARGETS partition_copy DESTINATION bin)
+
+add_executable(nth_element nth_element.cpp)
+install(TARGETS nth_element DESTINATION bin)
+
