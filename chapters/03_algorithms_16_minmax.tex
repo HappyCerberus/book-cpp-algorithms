@@ -1,8 +1,14 @@
 \section{Min-Max algorithms}
 
-This group contains straightforward algorithms that operate with minimums and maximums. However, we should first talk about \cpp{std::initializer_list} and \cpp{const_cast}.
+This group contains straightforward algorithms that operate with minimums and maximums. However, two theoretical topics are relevant here, and we need to talk about them first: \cpp{std::initializer_list} and \cpp{const_cast}.
 
 For functions that accept an \cpp{std::initializer_list}, it is worth keeping in mind that \cpp{std::initializer_list} is constructed by copy; its internal array of elements is copy constructed from the listed elements. Therefore we need to be careful when using \cpp{std::initializer_list} outside of compile-time contexts.
+
+\begin{box-note}
+\footnotesize Example demonstrating case when utilizing \cpp{std::initializer_list} leads to excessive copies.
+\tcblower
+\cppfile{code_examples/theory/const_cast_code.h}
+\end{box-note}
 
 In rare cases, we can force constness on a mutable entity. If the constness is undesirable, using \cpp{const_cast} to cast away the const is an option.
 
