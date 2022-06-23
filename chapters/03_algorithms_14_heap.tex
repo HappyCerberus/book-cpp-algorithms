@@ -1,0 +1,92 @@
+\section{Heap}
+
+\subsection{Heap data structure}
+
+The standard offers a convenient wrapper for a max heap data structure through std::priority\_queue. However, when using std::priority\_queue, we lose access to the underlying data, which might be inconvenient.
+
+\cppversions{\texttt{make\_heap, push\_heap, pop\_heap, sort\_heap}}{\CC98}{\CC20}{N/A}{\CC20}
+
+\constraints{\texttt{random\_access\_range}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+% mention complexity
+
+For comparison, let’s implement a simple version of the topk algorithm that returns the top k elements from a range (similar to partial\_sort\_copy):
+
+\begin{box-note}
+\begin{cppcode}
+auto topk_queue(std::input_iterator auto begin, std::sentinel_for<decltype(begin)> auto end, 
+                size_t k) {
+
+    using vtype = std::iter_value_t<decltype(begin)>;
+    std::priority_queue<vtype, std::vector<vtype>, std::greater<vtype>> pq;
+
+    while (begin != end) {
+        pq.push(*begin);
+        if (pq.size() > k)
+            pq.pop();
+        ++begin;
+    }
+
+    std::vector<vtype> result(k);
+    for (auto &el: result | std::views::reverse) {
+        el = std::move(pq.top());
+        pq.pop();
+    }
+    return result;    
+}
+\end{cppcode}
+\end{box-note}
+
+When using the priority queue, we can utilize the simple push() and pop() interface provided (lines 8 and 10). However, extracting all data from the queue is only possible by repeatedly applying pop() until the queue is empty (line 17).
+
+\begin{box-note}
+\begin{cppcode}
+auto topk(std::input_iterator auto begin, std::sentinel_for<decltype(begin)> auto end, 
+          size_t k) {
+          
+    std::vector<std::iter_value_t<decltype(begin)>> result;
+    while (begin != end) {
+        result.push_back(*begin);
+        std::ranges::push_heap(result, std::greater<>{});
+        if (result.size() > k) {
+            std::ranges::pop_heap(result, std::greater<>{});
+            result.pop_back();
+        }
+        ++begin;
+    }
+    
+    std::ranges::sort_heap(result, std::greater<>{});
+    return result;    
+}
+\end{cppcode}
+\end{box-note}
+
+When using the heap algorithms, we need to manually manage the underlying data structure (lines 6–7 and 9–10). However, we do not need to extract the data, and on top of that, we could omit the final sort\_heap (line 15) if we do not need the top k elements in sorted order.
+
+Our example does not utilize std::make\_heap, as we start from an empty range, which is a valid heap.
+
+\cppversions{\texttt{is\_heap, is\_heap\_until}}{\CC11}{\CC20}{N/A}{\CC20}
+
+\constraints{\texttt{random\_access\_range}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+The two test algorithms check the heap invariant. Max heap is a binary tree, where each child is equal to or less than the parent element. The is\_heap variant returns a boolean, where the is\_heap\_until returns an iterator denoting the leading part of the range, which satisfies the max heap invariant.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+assert(!std::is_heap(data.begin(), data.end()));
+assert(std::is_heap_until(data.begin(), data.end()) == std::next(data.begin()));
+
+std::make_heap(data.begin(), data.end());
+
+assert(std::is_heap(data.begin(), data.end()));
+assert(std::is_heap_until(data.begin(), data.end()) == data.end());
+\end{cppcode}
+\end{box-note}
+
+Before applying make\_heap, only the first element is in the correct heap order (parent of 2 is 1, which violates the max heap invariant). Therefore, is\_heap returns false (line 3) and is\_heap\_until returns an iterator to the second element (line 4).
+
+After applying make\_heap, the entire range is in heap order, is\_heap returns true (line 8), and is\_heap\_until returns the end of range iterator (line 9).
+
+Notably, is\_heap(begin, is\_heap\_until(begin, end)) will always return true.
