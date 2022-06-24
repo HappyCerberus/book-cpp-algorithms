@@ -7,8 +7,10 @@ For functions that accept an \cpp{std::initializer_list}, it is worth keeping in
 \begin{box-note}
 \footnotesize Example demonstrating case when utilizing \cpp{std::initializer_list} leads to excessive copies.
 \tcblower
-\cppfile{code_examples/theory/const_cast_code.h}
+\cppfile{code_examples/theory/initializer_list_code.h}
 \end{box-note}
+
+In this example, using \cpp{std::initializer_list} leads to six copies (which we count using the static data member \cpp{X::copy_cnt}). Five copies result from passing in the variables \texttt{a} to \texttt{e} into the \cpp{std::initializer_list}, and one is the result of the return from \cpp{std::max}.
 
 In rare cases, we can force constness on a mutable entity. If the constness is undesirable, using \cpp{const_cast} to cast away the const is an option.
 
@@ -20,12 +22,27 @@ In rare cases, we can force constness on a mutable entity. If the constness is u
 
 Please remember that when using casts like \cpp{const_cast}, you effectively override the compiler's judgment. Therefore it is entirely up to you to ensure that the given cast is valid.
 
-\subsection{min, max, minmax}
+\subsection{\texorpdfstring{\cpp{std::min}, \cpp{std::max}, \cpp{std::minmax}}{\texttt{std::min}, \texttt{std::max}, \texttt{std::minmax}}}
 
-The first group of min-max algorithms also do not operate on ranges (except a C++20 range variant).
+The basic versions of \cpp{std::min}, \cpp{std::max} and \cpp{std::minmax} operate on two elements, accepting their arguments by const-reference and returning by const-reference. Unfortunately, as mentioned earlier, this creates a constness problem, and we also must be careful to capture the result by value when passing in temporary objects.
 
 \cppversions{\texttt{min, max}}{\CC98}{\CC14}{N/A}{\CC20}
 \cppversions{\texttt{minmax}}{\CC11}{\CC14}{N/A}{\CC20}
+
+\begin{box-note}
+\footnotesize Example demonstrating use of \cpp{std::min} and \cpp{std::max}.
+\tcblower
+\cppfile{code_examples/algorithms/min_max_code.h}
+\end{box-note}
+
+Capturing the result by value gets a bit more complicated with \cpp{std::minmax}, which returns a \cpp{std::pair} of const references. To avoid dangling references to expired prvalues we must explicitly name the result type. Unfortunately, there is no way to work around this problem when using auto or structured binding.
+
+\begin{box-note}
+\footnotesize Example demonstrating use of \cpp{std::minmax}.
+\tcblower
+\cppfile{code_examples/algorithms/minmax_code.h}
+\end{box-note}
+
 
 \constraints{\texttt{initializer\_list} since \CC14}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 \constraints{\texttt{input\_range} \CC20 range version only}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
