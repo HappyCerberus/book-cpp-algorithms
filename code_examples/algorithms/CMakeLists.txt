@@ -72,3 +72,9 @@ install(TARGETS min_max DESTINATION bin)
 
 add_executable(minmax minmax.cpp)
 install(TARGETS minmax DESTINATION bin)
+
+add_executable(minmax_extra minmax_extra.cpp)
+install(TARGETS minmax_extra DESTINATION bin)
+
+add_executable(clamp clamp.cpp)
+install(TARGETS clamp DESTINATION bin)

@@ -4,11 +4,14 @@
 #include <iostream>
 #include <string>
 #include <iterator>
+#include <list>
 
 int main() {
-#include "min_max_code.h"
-assert(min == 10);
-assert(greeting == "hello universe");
-assert(k == 20);
+#include "minmax_extra_code.h"
+assert(min == -2);
+assert(minmax.first == -2);
+assert(minmax.second == 5);
+assert(max == 5);
+
 std::cerr << ".";
 }
