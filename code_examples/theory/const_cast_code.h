@@ -6,5 +6,6 @@ v = 5;
 
 // !IMPORTANT! the following compiles, but is undefined behaviour
 // i.e. the program is ill-formed
-auto& w = const_cast<int&>(std::min(x, 3));
+const int z = 3;
+auto& w = const_cast<int&>(std::min(x, z));
 w = 10;

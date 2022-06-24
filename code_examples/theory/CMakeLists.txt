@@ -8,7 +8,7 @@ add_executable(adl_default adl_default.cpp)
 # Compile only
 
 add_executable(const_cast const_cast.cpp)
-# Compile only
+install(TARGETS const_cast DESTINATION bin)
 
 add_executable(initializer_list initializer_list.cpp)
 install(TARGETS initializer_list DESTINATION bin)

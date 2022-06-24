@@ -67,3 +67,8 @@ install(TARGETS partition_copy DESTINATION bin)
 add_executable(nth_element nth_element.cpp)
 install(TARGETS nth_element DESTINATION bin)
 
+add_executable(min_max min_max.cpp)
+install(TARGETS min_max DESTINATION bin)
+
+add_executable(minmax minmax.cpp)
+install(TARGETS minmax DESTINATION bin)
