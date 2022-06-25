@@ -35,7 +35,7 @@ The basic versions of \cpp{std::min}, \cpp{std::max} and \cpp{std::minmax} opera
 \cppfile{code_examples/algorithms/min_max_code.h}
 \end{box-note}
 
-Capturing the result by value gets a bit more complicated with \cpp{std::minmax}, which returns a \cpp{std::pair} of const references. To avoid dangling references to expired prvalues we must explicitly name the result type. Unfortunately, there is no way to work around this problem when using auto or structured binding.
+Capturing the result by value gets a bit more complicated with \cpp{std::minmax}, which returns a \cpp{std::pair} of const references. To avoid dangling references to expired prvalues we must explicitly name the result type. Unfortunately, there is no way to work around this problem when using \cpp{auto} or structured binding.
 
 \begin{box-note}
 \footnotesize Example demonstrating use of \cpp{std::minmax}.
@@ -55,7 +55,7 @@ The C++14 and C++20 standards introduced additional variants of the min-max algo
 
 \subsection{\texorpdfstring{\cpp{std::clamp}}{\texttt{std::clamp}}}
 
-The std::clamp algorithm will clamp the given value between the provided minimum and maximum:
+The \cpp{std::clamp} algorithm takes three arguments, the value, the minimum and the maximum bound and will clamp the value between the provided minimum and maximum:
 
 \cppversions{\texttt{clamp}}{\CC17}{\CC17}{N/A}{\CC20}
 
@@ -73,16 +73,16 @@ Because the algorithm accepts its arguments by const reference and returns a con
 \cppfile{code_examples/algorithms/clamp_code.h}
 \end{box-note}
 
-\subsection{min\_element, max\_element, minmax\_element}
+
+\subsection{\texorpdfstring{\cpp{std::min_element}, \cpp{std::max_element}, \cpp{std::minmax_element}}{\texttt{std::min\_element}, \texttt{std::max\_element}, \texttt{std::minmax\_element}}}
 
 The element versions of min-max algorithms operate on ranges and, instead of returning by const-reference or value, return an iterator to the minimum or maximum elements.
 
-\cppversions{\texttt{min\_element, max\_element}}{\CC98}{\CC20}{\CC17}{\CC20}
+\cppversions{\texttt{min\_element}}{\CC98}{\CC20}{\CC17}{\CC20}
+\cppversions{\texttt{max\_element}}{\CC98}{\CC20}{\CC17}{\CC20}
 \cppversions{\texttt{minmax\_element}}{\CC11}{\CC20}{\CC17}{\CC20}
 
-\constraints{\texttt{forward\_range}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
-
-All variants require forward\_range as they return iterators to the min-max elements instead of a value.
+\constraints{\texttt{forward\_range}}{\texttt{forward\_range}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
 \begin{box-note}
 \begin{cppcode}
