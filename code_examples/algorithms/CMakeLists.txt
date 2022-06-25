@@ -78,3 +78,9 @@ install(TARGETS minmax_extra DESTINATION bin)
 
 add_executable(clamp clamp.cpp)
 install(TARGETS clamp DESTINATION bin)
+
+add_executable(min_element min_element.cpp)
+install(TARGETS min_element DESTINATION bin)
+
+add_executable(min_element_dangling min_element_dangling.cpp)
+install(TARGETS min_element_dangling DESTINATION bin)
