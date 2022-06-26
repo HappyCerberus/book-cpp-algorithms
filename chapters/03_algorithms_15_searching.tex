@@ -1,8 +1,8 @@
-\section{Searching and min-max}
+\section{Search and compare algorithms}
 
-The search and min-max algorithms we will cover today all operate linearly with O(n) (when operating on a single range) or O(m*n) complexity (when operating on two ranges). We have covered faster lookup algorithms in article number three.
+The search and compare category provides straightforward linear (when compared against a single value) and quadratic (when compared against a range) complexity algorithms.
 
-\subsection{find, find\_if, find\_if\_not}
+\subsection{\texorpdfstring{\cpp{std::find}, \cpp{std::find_if}, \cpp{std::find_if_not}}{\texttt{std::find}, \texttt{std::find\_if}, \texttt{std::find\_if\_not}}}
 
 The std::find algorithm provides a basic linear search. The standard provides three variants, one searching by value and two variants using a predicate.
 
@@ -14,36 +14,17 @@ The std::find algorithm provides a basic linear search. The standard provides th
 A typical example of searching by value is finding delimiters:
 
 \begin{box-note}
-\begin{cppcode}
-std::string data = "John;Doe;April;1;1900;";
-auto it = data.begin(), token = data.begin();
-std::vector<std::string> out;
-
-while ((token = find(it, data.end(), ';')) != data.end()) {
-    out.push_back("");
-    std::copy(it, token, std::back_inserter(out.back()));
-    it = std::next(token);
-}
-// out == { "John", "Doe", "April", "1", "1900" }
-\end{cppcode}
+\footnotesize Example of utilizing \cpp{std::find} to find delimiters in a string.
+\tcblower
+\cppfile{code_examples/algorithms/find_code.h}
 \end{box-note}
 
-Because std::find\_if and std::find\_if\_not compare elements using a predicate, we can search for categories of values. In this example, we use std::find\_if\_not to find the first non-white-space character from either direction:
+If we want to search for categories of elements, we can use \cpp{std::find_if} and \cpp{std::find_if_not} since these two variants search using a predicate.
 
 \begin{box-note}
-\begin{cppcode}
-std::string data = "   hello world!  ";
-auto begin = std::find_if_not(data.begin(), data.end(), 
-                              [](char c) { return isspace(c); });
-if (begin == data.end()) // only spaces
-    return 0;
-
-std::string out;
-std::copy(begin, std::find_if_not(data.rbegin(), data.rend(), 
-                                  [](char c) { return isspace(c); }).base(), 
-          std::back_inserter(out));
-// out == "hello world!"
-\end{cppcode}
+\footnotesize Example of utilizing \cpp{std::find_if_not} to find leading and trailing whitespace.
+\tcblower
+\cppfile{code_examples/algorithms/find_if_code.h}
 \end{box-note}
 
 \subsection{adjacent\_find, search\_n}
