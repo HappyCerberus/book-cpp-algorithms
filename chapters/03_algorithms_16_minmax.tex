@@ -1,6 +1,6 @@
 \section{Min-Max algorithms}
 
-This group contains straightforward algorithms that operate with minimums and maximums. However, two theoretical topics are relevant here, and we need to talk about them first: \cpp{std::initializer_list} and \cpp{const_cast}.
+This group contains algorithms that operate with minimums and maximums. However, two theoretical topics are relevant here, and we need to talk about them first: \cpp{std::initializer_list} and \cpp{const_cast}.
 
 For functions that accept an \cpp{std::initializer_list}, it is worth keeping in mind that \cpp{std::initializer_list} is constructed by copy; its internal array of elements is copy constructed from the listed elements. Therefore we need to be careful when using \cpp{std::initializer_list} outside of compile-time contexts.
 
@@ -85,15 +85,17 @@ The element versions of min-max algorithms operate on ranges and, instead of ret
 \constraints{\texttt{forward\_range}}{\texttt{forward\_range}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data = { 5, 3, -2 , 0};
-auto i = std::min_element(data.begin(), data.end());
-// *i == -2 (i.e. data[2])
-auto j = std::max_element(data.begin(), data.end());
-// *j == 5 (i.e. data[0])
-
-auto k = std::minmax_element(data.begin(), data.end());
-// *k.first == -2, *k.second == 5
-\end{cppcode}
+\footnotesize Example of using element versions of min-max algorithms.
+\tcblower
+\cppfile{code_examples/algorithms/min_element_code.h}
 \end{box-note}
 
+You might be wondering whether we can cause the same dangling reference (iterator) issue with the element versions of min-max algorithms. Fortunately, one very nice feature of C++20 ranges is the protection against precisely this problem.
+
+\begin{box-note}
+\footnotesize Example demonstrating protection from dangling iterators.
+\tcblower
+\cppfile{code_examples/algorithms/min_element_dangling_code.h}
+\end{box-note}
+
+All ranged versions of algorithms that return iterators will return the \cpp{std::ranges::dangling} type when invoked on a temporary range. This would preclude the use case of using \cpp{std::span} to sub-reference a range, which is why the range algorithms have an additional concept of a \cpp{borrowed_range}. Such ranges can be passed in as temporaries since they do not own their elements.
