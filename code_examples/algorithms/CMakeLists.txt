@@ -84,3 +84,9 @@ install(TARGETS min_element DESTINATION bin)
 
 add_executable(min_element_dangling min_element_dangling.cpp)
 install(TARGETS min_element_dangling DESTINATION bin)
+
+add_executable(find find.cpp)
+install(TARGETS find DESTINATION bin)
+
+add_executable(find_if find_if.cpp)
+install(TARGETS find_if DESTINATION bin)
