@@ -114,3 +114,6 @@ install(TARGETS equal DESTINATION bin)
 
 add_executable(mismatch mismatch.cpp)
 install(TARGETS mismatch DESTINATION bin)
+
+add_executable(equal_range equal_range.cpp)
+install(TARGETS equal_range DESTINATION bin)
