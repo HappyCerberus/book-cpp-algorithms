@@ -137,51 +137,12 @@ The \cpp{std::mismatch} algorithm behaves exactly like \cpp{std::equal}; however
 \cppfile{code_examples/algorithms/mismatch_code.h}
 \end{box-note}
 
-
-
-
+On top of the basic variants, both \cpp{std::equal} and \cpp{std::mismatch} offer a version where both ranges are fully specified (since C++14). These versions can detect mismatches beyond the first range's scope.
 
 \constraints{\texttt{(input\_range, input\_range)} since \CC14}{(forward\_range, forward\_range)}{\texttt{operator==}}{\texttt{binary\_predicate}}
 
-The default operator== can be replaced by a binary predicate for both algorithms.
-
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> first = { 1, 2, 3, 4, 5 };
-std::vector<int> second = { -1, -2, -3, -4, -5 };
-
-assert(!std::equal(first.begin(), first.end(), second.begin()));
-
-assert(std::equal(first.begin(), first.end(), second.begin(), 
-                  [](int l, int r) { return std::abs(l) == std::abs(r); }));
-\end{cppcode}
-\end{box-note}
-
-The std::mismatch algorithm returns a pair of iterators whose underlying elements do not match.
-
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> first = { 1, 2, 3, 4, 5 };
-std::vector<int> second = { 1, 2, 2, 4, 5 };
-
-auto it_pair = std::mismatch(first.begin(), first.end(), second.begin());
-// *it_pair.first == 3, *it_pair.second == 2
-\end{cppcode}
-\end{box-note}
-
-Both std::equal and std::mismatch provide two variants of specifying the second range. The distinction is important here. If we specify the second range using an iterator, we cannot detect a mismatch in the size of the ranges.
-
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> first = { 1, 2, 3, 4, 5 };
-std::vector<int> second = { 1, 2, 3, 4, 5, 6 };
-
-assert(std::equal(first.begin(), first.end(), 
-                  second.begin()));
-// Cannot detect mismatch in size.
-
-assert(!std::equal(first.begin(), first.end(), 
-                   second.begin(), second.end()));
-// Different number of elements -> not equal.
-\end{cppcode}
+\footnotesize Example of detecting a mismatch beyond the scope of the first range.
+\tcblower
+\cppfile{code_examples/algorithms/mismatch_code.h}
 \end{box-note}
