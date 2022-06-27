@@ -126,16 +126,17 @@ The \cpp{std::equal} algorithm provides an equality comparison for ranges.
 \cppfile{code_examples/algorithms/equal_code.h}
 \end{box-note}
 
-
-In a previous article, we discussed lexicographical comparisons using std::lexicographical\_compare and std::lexicographical\_compare\_three\_way. The std::equal and std::mismatch algorithms provide a simpler equality comparison, with std::equal returning a simple boolean and std::mismatch returning a pair of iterators denoting the mismatching elements.
-
-\cppversions{\texttt{equal}}{\CC98}{\CC20}{\CC17}{\CC20}
-\constraints{\texttt{(input\_range, input\_iterator)}}{\texttt{(forward\_range, forward\_iterator)}}{\texttt{operator==}}{\texttt{binary\_predicate}}
-
-
+The \cpp{std::mismatch} algorithm behaves exactly like \cpp{std::equal}; however, instead of returning a simple boolean, it returns a pair of iterators denoting the mismatched elements.
 
 \cppversions{\texttt{mismatch}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{(input\_range, input\_iterator)}}{\texttt{(forward\_range, forward\_iterator)}}{\texttt{operator==}}{\texttt{binary\_predicate}}
+
+\begin{box-note}
+\footnotesize Example of using \cpp{std::mismatch}.
+\tcblower
+\cppfile{code_examples/algorithms/mismatch_code.h}
+\end{box-note}
+
 
 
 
