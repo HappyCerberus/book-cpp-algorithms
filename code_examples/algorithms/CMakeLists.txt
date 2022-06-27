@@ -99,3 +99,6 @@ install(TARGETS search_n DESTINATION bin)
 
 add_executable(find_first_of find_first_of.cpp)
 install(TARGETS find_first_of DESTINATION bin)
+
+add_executable(search search.cpp)
+install(TARGETS search DESTINATION bin)
