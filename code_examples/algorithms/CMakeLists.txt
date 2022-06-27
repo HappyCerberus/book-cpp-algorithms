@@ -102,3 +102,6 @@ install(TARGETS find_first_of DESTINATION bin)
 
 add_executable(search search.cpp)
 install(TARGETS search DESTINATION bin)
+
+add_executable(searchers searchers.cpp)
+install(TARGETS searchers DESTINATION bin)
