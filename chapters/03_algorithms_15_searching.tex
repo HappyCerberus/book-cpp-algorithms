@@ -90,7 +90,7 @@ The \cpp{std::search} algorithm will return the first instance, and \cpp{std::fi
 
 \subsubsection{Searchers}
 
-Since C++17, we also can specify custom searchers for the search algorithm. Apart from the basic one, the standard implements Boyer-Moore and Boyer-Moore-Horspool string searchers that offer different best-case, worst-case and average complexity.
+Since \CC17, we also can specify custom searchers for the search algorithm. Apart from the basic one, the standard implements Boyer-Moore and Boyer-Moore-Horspool string searchers that offer different best-case, worst-case and average complexity.
 
 \begin{box-note}
 \footnotesize Example of using \cpp{std::search} with custom searchers.
@@ -98,26 +98,19 @@ Since C++17, we also can specify custom searchers for the search algorithm. Apar
 \cppfile{code_examples/algorithms/searchers_code.h}
 \end{box-note}
 
-\subsection{count, count\_if}
+\subsection{\texorpdfstring{\cpp{std::count}, \cpp{std::count_if}}{\texttt{std::count}, \texttt{std::count\_if}}}
 
-The std::count and std::count\_if algorithms count the number of matching elements.
+The \cpp{std::count} and \cpp{std::count_if} algorithms count the number of matching elements.
 
 \cppversions{\texttt{count, count\_if}}{\CC98}{\CC20}{\CC17}{\CC20}
-
-\constraints{\texttt{input\_range}}{\texttt{forward\_range}}{\texttt{operator==} (\texttt{count})}{\texttt{unary\_predicate} (\texttt{count\_if})}
+\constraints{\texttt{input\_range}}{\texttt{forward\_range}}{\texttt{operator==}}{\texttt{unary\_predicate}}
 
 The element searched for can be specified using a value or a predicate.
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data = { 1, 2, 3, 2, 1, 2, 3, 2, 1 };
-auto one_cnt = std::count(data.begin(), data.end(), 1);
-// one_cnt == 3
-
-auto even_cnt = std::count_if(data.begin(), data.end(), 
-                              [](int v) { return v % 2 == 0; });
-// even_cnt == 4
-\end{cppcode}
+\footnotesize Example of using \cpp{std::count} and \cpp{std::count\_if}.
+\tcblower
+\cppfile{code_examples/algorithms/count_code.h}
 \end{box-note}
 
 \subsection{equal, mismatch}
