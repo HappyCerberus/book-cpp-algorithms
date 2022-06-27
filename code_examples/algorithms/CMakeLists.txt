@@ -111,3 +111,6 @@ install(TARGETS count DESTINATION bin)
 
 add_executable(equal equal.cpp)
 install(TARGETS equal DESTINATION bin)
+
+add_executable(mismatch mismatch.cpp)
+install(TARGETS mismatch DESTINATION bin)
