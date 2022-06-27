@@ -105,3 +105,6 @@ install(TARGETS search DESTINATION bin)
 
 add_executable(searchers searchers.cpp)
 install(TARGETS searchers DESTINATION bin)
+
+add_executable(count count.cpp)
+install(TARGETS count DESTINATION bin)
