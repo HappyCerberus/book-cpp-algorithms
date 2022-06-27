@@ -90,3 +90,9 @@ install(TARGETS find DESTINATION bin)
 
 add_executable(find_if find_if.cpp)
 install(TARGETS find_if DESTINATION bin)
+
+add_executable(adjacent_find adjacent_find.cpp)
+install(TARGETS adjacent_find DESTINATION bin)
+
+add_executable(search_n search_n.cpp)
+install(TARGETS search_n DESTINATION bin)
