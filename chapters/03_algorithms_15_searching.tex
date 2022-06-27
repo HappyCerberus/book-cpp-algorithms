@@ -105,21 +105,41 @@ The \cpp{std::count} and \cpp{std::count_if} algorithms count the number of matc
 \cppversions{\texttt{count, count\_if}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{input\_range}}{\texttt{forward\_range}}{\texttt{operator==}}{\texttt{unary\_predicate}}
 
-The element searched for can be specified using a value or a predicate.
+The element searched for can be specified using a value (\cpp{std::count}) or a predicate (\cpp{std::count_if}).
 
 \begin{box-note}
-\footnotesize Example of using \cpp{std::count} and \cpp{std::count\_if}.
+\footnotesize Example of using \cpp{std::count} and \cpp{std::count_if}.
 \tcblower
 \cppfile{code_examples/algorithms/count_code.h}
 \end{box-note}
 
-\subsection{equal, mismatch}
+\subsection{\texorpdfstring{\cpp{std::equal}, \cpp{std::mismatch}}{\texttt{std::equal}, \texttt{std::mismatch}}}
+
+The \cpp{std::equal} algorithm provides an equality comparison for ranges.
+
+\cppversions{\texttt{equal}}{\CC98}{\CC20}{\CC17}{\CC20}
+\constraints{\texttt{(input\_range, input\_iterator)}}{\texttt{(forward\_range, forward\_iterator)}}{\texttt{operator==}}{\texttt{binary\_predicate}}
+
+\begin{box-note}
+\footnotesize Example of using \cpp{std::equal}.
+\tcblower
+\cppfile{code_examples/algorithms/equal_code.h}
+\end{box-note}
+
 
 In a previous article, we discussed lexicographical comparisons using std::lexicographical\_compare and std::lexicographical\_compare\_three\_way. The std::equal and std::mismatch algorithms provide a simpler equality comparison, with std::equal returning a simple boolean and std::mismatch returning a pair of iterators denoting the mismatching elements.
 
-\cppversions{\texttt{equal, mismatch}}{\CC98}{\CC20}{\CC17}{\CC20}
-
+\cppversions{\texttt{equal}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{(input\_range, input\_iterator)}}{\texttt{(forward\_range, forward\_iterator)}}{\texttt{operator==}}{\texttt{binary\_predicate}}
+
+
+
+\cppversions{\texttt{mismatch}}{\CC98}{\CC20}{\CC17}{\CC20}
+\constraints{\texttt{(input\_range, input\_iterator)}}{\texttt{(forward\_range, forward\_iterator)}}{\texttt{operator==}}{\texttt{binary\_predicate}}
+
+
+
+
 \constraints{\texttt{(input\_range, input\_range)} since \CC14}{(forward\_range, forward\_range)}{\texttt{operator==}}{\texttt{binary\_predicate}}
 
 The default operator== can be replaced by a binary predicate for both algorithms.
