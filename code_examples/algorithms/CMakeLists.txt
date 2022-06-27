@@ -96,3 +96,6 @@ install(TARGETS adjacent_find DESTINATION bin)
 
 add_executable(search_n search_n.cpp)
 install(TARGETS search_n DESTINATION bin)
+
+add_executable(find_first_of find_first_of.cpp)
+install(TARGETS find_first_of DESTINATION bin)
