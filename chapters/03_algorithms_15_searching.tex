@@ -64,7 +64,6 @@ Note that \cpp{std::search_n} is one exception to the \cpp{_n} naming scheme.
 Using \cpp{std::find_if}, we can easily search for a category of elements. However, sometimes it is more convenient to list the elements we are looking for exhaustively.
 
 \cppversions{\texttt{find\_first\_of}}{\CC98}{\CC20}{\CC17}{\CC20}
-
 \constraints{\texttt{(input\_range, forward\_range)}}{\texttt{(forward\_range, forward\_range)}}{\texttt{operator==}}{\texttt{binary\_predicate}}
 
 Note that we are shifting from linear search to $O(m*n)$ time complexity since, for each element of the first range, we need to compare it to all elements in the second range (worst case).
@@ -75,28 +74,18 @@ Note that we are shifting from linear search to $O(m*n)$ time complexity since, 
 \cppfile{code_examples/algorithms/find_first_of_code.h}
 \end{box-note}
 
-\subsection{search, find\_end}
+\subsection{\texorpdfstring{\cpp{std::search}, \cpp{std::find_end}}{\texttt{std::search}, \texttt{std::find\_end}}}
 
-Finally, we arrive at algorithms that search for a sub-sequence in a sequence.
+Both \cpp{std::search} and \cpp{std::find_end} algorithms search for a sub-sequence in a sequence.
+The \cpp{std::search} algorithm will return the first instance, and \cpp{std::find_end} will return the last.
 
 \cppversions{\texttt{search, find\_end}}{\CC98}{\CC20}{\CC17}{\CC20}
-
-\constraints{\texttt{(forward\_range, forward\_range)}}{}{\texttt{operator==}}{\texttt{binary\_predicate}}
-
-The std::search returns the first instance of the sub-sequence, and std::find\_end returns the last instance of the sub-sequence.
+\constraints{\texttt{(forward\_range, forward\_range)}}{\texttt{(forward\_range, forward\_range)}}{\texttt{operator==}}{\texttt{binary\_predicate}}
 
 \begin{box-note}
-\begin{cppcode}
-std::string haystack = "abbabba";
-std::string needle = "bba";
-auto it1 = std::search(haystack.begin(), haystack.end(), 
-                       needle.begin(), needle.end());
-// it1..end == "bbabba"
-
-auto it2 = std::find_end(haystack.begin(), haystack.end(), 
-                         needle.begin(), needle.end());
-// it2..end == "bba"
-\end{cppcode}
+\footnotesize Example of using \cpp{std::search} and \cpp{std::find_end}.
+\tcblower
+\cppfile{code_examples/algorithms/search_code.h}
 \end{box-note}
 
 \subsubsection{Searchers}
