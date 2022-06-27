@@ -59,24 +59,20 @@ The interface to \cpp{std::search_n} can be a bit confusing. The algorithm accep
 
 Note that \cpp{std::search_n} is one exception to the \cpp{_n} naming scheme.
 
-\subsection{find\_first\_of}
+\subsection{\texorpdfstring{\cpp{std::find_first_of}}{\texttt{std::find\_first\_of}}}
 
-Using std::find\_if, we can easily search for a category of elements. However, sometimes it is more convenient to list the elements we are looking for exhaustively.
+Using \cpp{std::find_if}, we can easily search for a category of elements. However, sometimes it is more convenient to list the elements we are looking for exhaustively.
 
 \cppversions{\texttt{find\_first\_of}}{\CC98}{\CC20}{\CC17}{\CC20}
 
 \constraints{\texttt{(input\_range, forward\_range)}}{\texttt{(forward\_range, forward\_range)}}{\texttt{operator==}}{\texttt{binary\_predicate}}
 
-Note that we are shifting from linear search to O(m*n) time complexity since, for each element of the first range, we need to compare it to all elements in the second range (worst case).
+Note that we are shifting from linear search to $O(m*n)$ time complexity since, for each element of the first range, we need to compare it to all elements in the second range (worst case).
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> haystack = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-std::vector<int> needles = { 7, 5, 3 };
-auto it = std::find_first_of(haystack.begin(), haystack.end(), 
-                             needles.begin(), needles.end());
-// *it == 3, i.e. haystack[2]
-\end{cppcode}
+\footnotesize Example of using \cpp{std::find_first_of}.
+\tcblower
+\cppfile{code_examples/algorithms/find_first_of_code.h}
 \end{box-note}
 
 \subsection{search, find\_end}
