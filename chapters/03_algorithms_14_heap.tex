@@ -23,6 +23,16 @@ The \cpp{std::make_heap} algorithm reorders elements in the given range such tha
 \cppfile{code_examples/algorithms/make_heap_code.h}
 \end{box-note}
 
+The \cpp{std::push_heap} and \cpp{std::pop_heap} algorithms simulate push and pop operations for the max-heap data structure. However, because they operate on top of a range, they cannot manipulate the underlying data structure. Therefore, they use the last element of the range as the input/output.
+
+The \cpp{std::push_heap} algorithm will insert the last element of the range into the heap, and \cpp{std::pop_heap} will extract the maximum element to the last position of the range. As previously mentioned, both operations have logarithmic complexity.
+
+\begin{box-note}
+\footnotesize Example of using \cpp{std::push_heap} and \cpp{std::pop_heap}.
+\tcblower
+\cppfile{code_examples/algorithms/push_heap_code.h}
+\end{box-note}
+
 \subsection{\texorpdfstring{\cpp{std::sort_heap}}{\texttt{std::sort\_heap}}}
 
 \cppversions{\texttt{sort\_heap}}{\CC98}{\CC20}{N/A}{\CC20}
