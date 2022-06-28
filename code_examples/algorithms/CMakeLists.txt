@@ -120,3 +120,6 @@ install(TARGETS equal_range DESTINATION bin)
 
 add_executable(make_heap make_heap.cpp)
 install(TARGETS make_heap DESTINATION bin)
+
+add_executable(push_heap push_heap.cpp)
+install(TARGETS push_heap DESTINATION bin)
