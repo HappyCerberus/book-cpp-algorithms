@@ -123,3 +123,6 @@ install(TARGETS make_heap DESTINATION bin)
 
 add_executable(push_heap push_heap.cpp)
 install(TARGETS push_heap DESTINATION bin)
+
+add_executable(sort_heap sort_heap.cpp)
+install(TARGETS sort_heap DESTINATION bin)
