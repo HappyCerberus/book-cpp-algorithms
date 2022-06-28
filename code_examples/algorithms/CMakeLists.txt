@@ -117,3 +117,6 @@ install(TARGETS mismatch DESTINATION bin)
 
 add_executable(equal_range equal_range.cpp)
 install(TARGETS equal_range DESTINATION bin)
+
+add_executable(make_heap make_heap.cpp)
+install(TARGETS make_heap DESTINATION bin)
