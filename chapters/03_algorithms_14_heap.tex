@@ -35,8 +35,18 @@ The \cpp{std::push_heap} algorithm will insert the last element of the range int
 
 \subsection{\texorpdfstring{\cpp{std::sort_heap}}{\texttt{std::sort\_heap}}}
 
+The \cpp{std::sort_heap} will reorder the elements in a heap into a sorted order. Note that this is the same as repeatedly calling \cpp{std::pop_heap}; hence the algorithm has $O(n*logn)$ complexity.
+
 \cppversions{\texttt{sort\_heap}}{\CC98}{\CC20}{N/A}{\CC20}
 \constraints{\texttt{random\_access\_range}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+\begin{box-note}
+\footnotesize Example of using \cpp{std::sort_heap}.
+\tcblower
+\cppfile{code_examples/algorithms/sort_heap_code.h}
+\end{box-note}
+
+\subsection{---}
 
 % mention complexity
 
