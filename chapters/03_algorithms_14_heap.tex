@@ -46,6 +46,46 @@ The \cpp{std::sort_heap} will reorder the elements in a heap into a sorted order
 \cppfile{code_examples/algorithms/sort_heap_code.h}
 \end{box-note}
 
+\subsection{\texorpdfstring{\cpp{std::is_heap}, \cpp{std::is_heap_until}}{\texttt{std::is\_heap}, \texttt{std::is\_heap\_until}}}
+
+The \cpp{std::is_heap} and \cpp{std::is_heap_until} algorithms check the heap invariant.
+
+\cppversions{\texttt{is\_heap}}{\CC11}{\CC20}{N/A}{\CC20}
+\cppversions{\texttt{is\_heap\_until}}{\CC11}{\CC20}{N/A}{\CC20}
+
+\constraints{\texttt{random\_access\_range}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+The two algorithms follow the same logic as \cpp{std::is_sorted} and \cpp{std::is_sorted_until}, returning a boolean and an iterator to the first out-of-order element respectively.
+
+\begin{box-note}
+\footnotesize Example of using \cpp{std::is_heap} and \cpp{std::is_heap_until}.
+\tcblower
+\cppfile{code_examples/algorithms/is_heap_code.h}
+\end{box-note}
+
+
+The two test algorithms check the heap invariant. Max heap is a binary tree, where each child is equal to or less than the parent element. The is\_heap variant returns a boolean, where the is\_heap\_until returns an iterator denoting the leading part of the range, which satisfies the max heap invariant.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+assert(!std::is_heap(data.begin(), data.end()));
+assert(std::is_heap_until(data.begin(), data.end()) == std::next(data.begin()));
+
+std::make_heap(data.begin(), data.end());
+
+assert(std::is_heap(data.begin(), data.end()));
+assert(std::is_heap_until(data.begin(), data.end()) == data.end());
+\end{cppcode}
+\end{box-note}
+
+Before applying make\_heap, only the first element is in the correct heap order (parent of 2 is 1, which violates the max heap invariant). Therefore, is\_heap returns false (line 3) and is\_heap\_until returns an iterator to the second element (line 4).
+
+After applying make\_heap, the entire range is in heap order, is\_heap returns true (line 8), and is\_heap\_until returns the end of range iterator (line 9).
+
+Notably, is\_heap(begin, is\_heap\_until(begin, end)) will always return true.
+
 \subsection{---}
 
 % mention complexity
@@ -105,28 +145,3 @@ When using the heap algorithms, we need to manually manage the underlying data s
 
 Our example does not utilize std::make\_heap, as we start from an empty range, which is a valid heap.
 
-\cppversions{\texttt{is\_heap, is\_heap\_until}}{\CC11}{\CC20}{N/A}{\CC20}
-
-\constraints{\texttt{random\_access\_range}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
-
-The two test algorithms check the heap invariant. Max heap is a binary tree, where each child is equal to or less than the parent element. The is\_heap variant returns a boolean, where the is\_heap\_until returns an iterator denoting the leading part of the range, which satisfies the max heap invariant.
-
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> data = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-
-assert(!std::is_heap(data.begin(), data.end()));
-assert(std::is_heap_until(data.begin(), data.end()) == std::next(data.begin()));
-
-std::make_heap(data.begin(), data.end());
-
-assert(std::is_heap(data.begin(), data.end()));
-assert(std::is_heap_until(data.begin(), data.end()) == data.end());
-\end{cppcode}
-\end{box-note}
-
-Before applying make\_heap, only the first element is in the correct heap order (parent of 2 is 1, which violates the max heap invariant). Therefore, is\_heap returns false (line 3) and is\_heap\_until returns an iterator to the second element (line 4).
-
-After applying make\_heap, the entire range is in heap order, is\_heap returns true (line 8), and is\_heap\_until returns the end of range iterator (line 9).
-
-Notably, is\_heap(begin, is\_heap\_until(begin, end)) will always return true.
