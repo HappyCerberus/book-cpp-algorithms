@@ -1,11 +1,31 @@
-\section{Heap}
+\section{Heap data structure}
 
-\subsection{Heap data structure}
+The standard offers a convenient wrapper for a max-heap data structure through \cpp{std::priority_queue}.
+However, when using \cpp{std::priority_queue}, we lose access to the underlying data, which might be inconvenient.
 
-The standard offers a convenient wrapper for a max heap data structure through std::priority\_queue. However, when using std::priority\_queue, we lose access to the underlying data, which might be inconvenient.
+\subsection{\texorpdfstring{\cpp{std::make_heap}, \cpp{std::push_heap}, \cpp{std::pop_heap}}{\texttt{std::make\_heap}, \texttt{std::push\_heap}, \texttt{std::pop\_heap}}}
 
-\cppversions{\texttt{make\_heap, push\_heap, pop\_heap, sort\_heap}}{\CC98}{\CC20}{N/A}{\CC20}
+A Heap data structure is a binary tree where each element satisfies the heap property: the value at the parent is greater or equal to the value of its children.
 
+When discussing the heap algorithms, we will be referring to an array representation of the heap, where the children of the element at index $i$ are elements at indexes $2i+1$ and $2i+2$.
+
+The valuable property of a heap is that it can be constructed in linear time and then provide logarithmic complexity for extracting the maximum value and inserting new values into the heap.
+
+\cppversions{\texttt{make\_heap}}{\CC98}{\CC20}{N/A}{\CC20}
+\cppversions{\texttt{push\_heap, pop\_heap}}{\CC98}{\CC20}{N/A}{\CC20}
+\constraints{\texttt{random\_access\_range}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+The \cpp{std::make_heap} algorithm reorders elements in the given range such that the elements maintain the max-heap property, that is, the element at index $i$ compares greater or equal to the elements at indexes $2i+1$ and $2i+2$.
+
+\begin{box-note}
+\footnotesize Example of using \cpp{std::make_heap} to construct a max-heap and a min-heap (using a custom comparator).
+\tcblower
+\cppfile{code_examples/algorithms/make_heap_code.h}
+\end{box-note}
+
+\subsection{\texorpdfstring{\cpp{std::sort_heap}}{\texttt{std::sort\_heap}}}
+
+\cppversions{\texttt{sort\_heap}}{\CC98}{\CC20}{N/A}{\CC20}
 \constraints{\texttt{random\_access\_range}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
 % mention complexity
