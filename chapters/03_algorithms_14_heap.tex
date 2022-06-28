@@ -63,30 +63,21 @@ The two algorithms follow the same logic as \cpp{std::is_sorted} and \cpp{std::i
 \cppfile{code_examples/algorithms/is_heap_code.h}
 \end{box-note}
 
+\subsection{Comparison with \texorpdfstring{\cpp{std::priority_queue}}{\texttt{std::priority\_queue}}}
 
-The two test algorithms check the heap invariant. Max heap is a binary tree, where each child is equal to or less than the parent element. The is\_heap variant returns a boolean, where the is\_heap\_until returns an iterator denoting the leading part of the range, which satisfies the max heap invariant.
+As mentioned at the beginning of this section, the heap algorithms provide effectively the same functionality as \cpp{std::priority_queue}. To demonstrate the differences, let's look at two versions of a topk algorithm: an algorithm that takes a range and returns the top k elements in sorted order as a \cpp{std::vector}.
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-
-assert(!std::is_heap(data.begin(), data.end()));
-assert(std::is_heap_until(data.begin(), data.end()) == std::next(data.begin()));
-
-std::make_heap(data.begin(), data.end());
-
-assert(std::is_heap(data.begin(), data.end()));
-assert(std::is_heap_until(data.begin(), data.end()) == data.end());
-\end{cppcode}
+\footnotesize Example of implementing a topk algorithm using a \cpp{priority_queue}.
+\tcblower
+\cppfile{code_examples/extras/priority_queue_queue_code.h}
 \end{box-note}
 
-Before applying make\_heap, only the first element is in the correct heap order (parent of 2 is 1, which violates the max heap invariant). Therefore, is\_heap returns false (line 3) and is\_heap\_until returns an iterator to the second element (line 4).
-
-After applying make\_heap, the entire range is in heap order, is\_heap returns true (line 8), and is\_heap\_until returns the end of range iterator (line 9).
-
-Notably, is\_heap(begin, is\_heap\_until(begin, end)) will always return true.
-
-\subsection{---}
+\begin{box-note}
+\footnotesize Example of implementing a topk algorithm using heap algorithms.
+\tcblower
+\cppfile{code_examples/extras/priority_queue_heap_code.h}
+\end{box-note}
 
 % mention complexity
 
