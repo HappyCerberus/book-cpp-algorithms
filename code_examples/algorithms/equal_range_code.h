@@ -1,16 +1,5 @@
-std::vector<int> first = { 1, 2, 3, 4, 5 };
-std::vector<int> second = { 1, 2, 3, 4, 5, 6 };
+std::vector<int> data{1, 2, 3, 4, 5, 6, 6, 6, 7, 8, 9};
 
-bool test1 = std::equal(first.begin(), first.end(), second.begin());
-// test1 == true, cannot detect mismatch in number of elements
-
-bool test2 = std::equal(first.begin(), first.end(), 
-	second.begin(), second.end());
-// test2 == false, different number of elements -> not equal.
-
-auto pair_it = std::mismatch(first.begin(), first.end(),
-	second.begin(), second.end());
-// pair_it.first == first.end()
-// *pair_it.second == 6
-
-
+auto [lb, ub] = std::equal_range(data.begin(), data.end(), 6);
+// std::distance(data.begin(), lb) == 5, *lb == 6
+// std::distance(data.begin(), ub) == 8, *ub == 7

@@ -135,3 +135,6 @@ install(TARGETS lower_bound DESTINATION bin)
 
 add_executable(lower_bound_set lower_bound_set.cpp)
 install(TARGETS lower_bound_set DESTINATION bin)
+
+add_executable(equal_with_range equal_with_range.cpp)
+install(TARGETS equal_with_range DESTINATION bin)
