@@ -129,3 +129,6 @@ install(TARGETS sort_heap DESTINATION bin)
 
 add_executable(is_heap is_heap.cpp)
 install(TARGETS is_heap DESTINATION bin)
+
+add_executable(lower_bound lower_bound.cpp)
+install(TARGETS lower_bound DESTINATION bin)
