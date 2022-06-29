@@ -28,7 +28,7 @@ The \cpp{std::lower_bound} and \cpp{std::upper_bound} algorithms offer boundary 
 \cppfile{code_examples/algorithms/lower_bound_code.h}
 \end{box-note}
 
-While the algorithms will operate on any \cpp{forward_range}, the logarithmic divide and conquer behavior is only available for \cpp{random_access_range}. Data structures like \cpp{std::set}, \cpp{std::multiset}, \cpp{std::map} and \cpp{std::multimap} offer their $O(logn)$ implementations of lower and upper bound as methods.
+While the algorithms will operate on any \cpp{forward_range}, the logarithmic divide and conquer behaviour is only available for \cpp{random_access_range}. Data structures like \cpp{std::set}, \cpp{std::multiset}, \cpp{std::map} and \cpp{std::multimap} offer their $O(logn)$ implementations of lower and upper bound as methods.
 
 \begin{box-note}
 \footnotesize Example of using \cpp{lower_bound} and \cpp{upper_bound} methods on a \cpp{std::multiset}.
@@ -38,25 +38,18 @@ While the algorithms will operate on any \cpp{forward_range}, the logarithmic di
 
 \subsection{\texorpdfstring{\cpp{std::equal_range}}{\texttt{std::equal\_range}}}
 
-A combination of lower\_bound and upper\_bound is equal\_range that returns both bounds.
+The \cpp{std::equal_range} algorithm returns both lower and upper bounds for the given value.
 
 \cppversions{\texttt{equal\_range}}{\CC98}{\CC20}{N/A}{\CC20}
-
 \constraints{\texttt{forward\_range}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
-We could simulate equal\_range by calling both lower\_bound and upper\_bound for the same value.
+Because the lower bound returns the first element for which \texttt{elem >= value} and the upper bound returns the first element for which \texttt{value < elem}, the result is a range \texttt{[lb, ub)} of elements equal to the value.
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data{1, 2, 3, 4, 5, 6, 6, 6, 7, 8, 9};
-
-auto [lb, ub] = std::equal_range(data.begin(), data.end(), 6);
-// std::distance(data.begin(), lb) == 5, *lb == 6
-// std::distance(data.begin(), ub) == 8, *ub == 7
-\end{cppcode}
+\footnotesize Example of using \cpp{std::equal_range}.
+\tcblower
+\cppfile{code_examples/algorithms/equal_range.h}
 \end{box-note}
-
-The bracket syntax (if you are not familiar with it) is structured bindings from C++17. Structured bindings allow us to decompose the std::pair returned by equal\_range into two named variables.
 
 \subsection{partition\_point, binary\_search}
 
