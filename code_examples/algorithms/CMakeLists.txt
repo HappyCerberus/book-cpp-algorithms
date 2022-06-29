@@ -132,3 +132,6 @@ install(TARGETS is_heap DESTINATION bin)
 
 add_executable(lower_bound lower_bound.cpp)
 install(TARGETS lower_bound DESTINATION bin)
+
+add_executable(lower_bound_set lower_bound_set.cpp)
+install(TARGETS lower_bound_set DESTINATION bin)
