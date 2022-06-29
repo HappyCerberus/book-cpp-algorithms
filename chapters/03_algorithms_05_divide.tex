@@ -8,7 +8,7 @@ Divide and conquer algorithms allow the lookup of bounds based on strict weak or
 
 \subsection{\texorpdfstring{\cpp{std::lower_bound}, \cpp{std::upper_bound}}{\texttt{std::lower\_bound}, \texttt{std::upper\_bound}}}
 
-The \cpp{std::lower_bound} and \cpp{std::upper_bound} algorithms offer boundary search with logarithmic complexity.
+The \cpp{std::lower_bound} and \cpp{std::upper_bound} algorithms offer boundary search with logarithmic complexity (for random access ranges.
 
 \cppversions{\texttt{lower\_bound}}{\CC98}{\CC20}{N/A}{\CC20}
 \cppversions{\texttt{upper\_bound}}{\CC98}{\CC20}{N/A}{\CC20}
@@ -22,61 +22,21 @@ The \cpp{std::lower_bound} and \cpp{std::upper_bound} algorithms offer boundary 
     \item if no such element exists, both algorithms return the end iterator
 \end{itemize}
 
-
-
 \begin{box-note}
-\footnotesize Example of using \cpp{std::lower_bound} and \cpp{std::upper_bound} to divide a sorted range into three parts: lower than bottom threshold, in between bottom and upper threshold and higher than upper threshold.
+\footnotesize Example of using \cpp{std::lower_bound} and \cpp{std::upper_bound} to divide a sorted range into three parts: lower than the bottom threshold, between the bottom and upper threshold and higher than the upper threshold.
 \tcblower
 \cppfile{code_examples/algorithms/lower_bound_code.h}
 \end{box-note}
 
-\begin{box-note}
-\begin{cppcode}
-struct ExamResult {
-    std::string student_name;
-    uint16_t score;
-};
-
-const std::vector<ExamResult>& get_results();
-
-int main() {
-    const std::vector<ExamResult>& results = get_results();
-
-    auto lb = std::ranges::lower_bound(results, 49, {}, &ExamResult::score);
-    auto ub = std::ranges::upper_bound(results, 99, {}, &ExamResult::score);
- 
-    for (auto it = results.begin(); it != lb; it++) {
-        // Process fails, upto 48
-    }
-    
-    for (auto it = lb; it != ub; it++) {
-        // Process passes, 49-99
-    }
-    
-    for (auto it = ub; it != results.end(); it++) {
-        // Process with honors, 100+
-    }
-}
-\end{cppcode}
-\end{box-note}
-
-If you read the previous chapter, this piece of code might look familiar since we used std::partition for very similar behaviour. The main difference is that we are working with an immutable range (line 9) that we expect to be already in sorted order (in this case, for score). When we use both lower\_bound and upper\_bound, the resulting sub-range will represent the closed range of values, in this case [49,99] (lines 11, 12).
-
-The logarithmic behaviour is only available for random-access ranges. Using lower\_bound or upper\_bound on std::set, std::multiset, std::map, or std::multimap will result in linear search.
-
-Therefore, all these containers provided their $O(logn)$ implementations of lower and upper bound in the form of methods.
+While the algorithms will operate on any \cpp{forward_range}, the logarithmic divide and conquer behavior is only available for \cpp{random_access_range}. Data structures like \cpp{std::set}, \cpp{std::multiset}, \cpp{std::map} and \cpp{std::multimap} offer their $O(logn)$ implementations of lower and upper bound as methods.
 
 \begin{box-note}
-\begin{cppcode}
-std::multiset<int> data{1, 2, 3, 4, 5, 6, 6, 6, 7, 8, 9};
-
-auto lb = data.lower_bound(6);
-// std::distance(data.begin(), lb) == 5, *lb == 6
-
-auto ub = data.upper_bound(6);
-// std::distance(data.begin(), ub) == 8, *ub == 7
-\end{cppcode}
+\footnotesize Example of using \cpp{lower_bound} and \cpp{upper_bound} methods on a \cpp{std::multiset}.
+\tcblower
+\cppfile{code_examples/algorithms/lower_bound_set_code.h}
 \end{box-note}
+
+\subsection{\texorpdfstring{\cpp{std::equal_range}}{\texttt{std::equal\_range}}}
 
 A combination of lower\_bound and upper\_bound is equal\_range that returns both bounds.
 
