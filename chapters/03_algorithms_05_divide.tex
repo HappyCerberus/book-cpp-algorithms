@@ -1,30 +1,34 @@
-\section{Divide and Conquer}
+\section{Divide and conquer}
 
+Divide and conquer algorithms offer a great mix of performance and functionality.
 
-
-While hash-based containers give us the ability to look up any element in O(1) average time, this approach has two drawbacks. Firstly, we can only look up a specific element, and if that element is not present in the container, we get a simple lookup failure. Secondly, our type needs to be hashable.
+While we can utilize hash-based containers to lookup any specific element in $O(1)$ amortized time, this approach has two drawbacks. Firstly, we can only look up a specific element; if that element is not present in the container, we get a simple lookup failure. Secondly, our type must be hashable, and the hash function must be reasonably fast.
 
 Divide and conquer algorithms allow the lookup of bounds based on strict weak ordering and work even when the container’s specific value is not present. Additionally, since we are working with a sorted container, we can easily access neighbouring values once we have determined a boundary.
 
-If you didn’t read previous chapter in the series, a strict weak ordering is an ordering that satisfies these constraints: is ireflexive: $\neg f(a,a)$, anti-symetric: $f(a,b) \Rightarrow \neg f(b,a)$, and transitive: $(f(a,b) \wedge f(b,c)) \Rightarrow f(a,c)$.
+\subsection{\texorpdfstring{\cpp{std::lower_bound}, \cpp{std::upper_bound}}{\texttt{std::lower\_bound}, \texttt{std::upper\_bound}}}
 
-\subsection{lower\_bound, upper\_bound, equal\_range}
-
-C++ offers three bound search algorithms.
+The \cpp{std::lower_bound} and \cpp{std::upper_bound} algorithms offer boundary search with logarithmic complexity.
 
 \cppversions{\texttt{lower\_bound}}{\CC98}{\CC20}{N/A}{\CC20}
 \cppversions{\texttt{upper\_bound}}{\CC98}{\CC20}{N/A}{\CC20}
-
 \constraints{\texttt{forward\_range}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
-The algorithms differ in which bound they are searching for:
+\noindent The two algorithms differ in which bound they return:
 
 \begin{itemize}
-    \item \texttt{lower\_bound} returns the first element that is not less than the provided value
-    \item \texttt{upper\_bound} returns the first element that is greater than the provided value
+    \item the \cpp{std::lower_bound} returns the first element for which \texttt{elem < value} returns false (i.e. first element for which \texttt{elem >= value})
+    \item the \cpp{std::upper_bound} returns the first element for which \texttt{value < elem}
+    \item if no such element exists, both algorithms return the end iterator
 \end{itemize}
 
-If no such element exists, both algorithms return the end iterator.
+
+
+\begin{box-note}
+\footnotesize Example of using \cpp{std::lower_bound} and \cpp{std::upper_bound} to divide a sorted range into three parts: lower than bottom threshold, in between bottom and upper threshold and higher than upper threshold.
+\tcblower
+\cppfile{code_examples/algorithms/lower_bound_code.h}
+\end{box-note}
 
 \begin{box-note}
 \begin{cppcode}
