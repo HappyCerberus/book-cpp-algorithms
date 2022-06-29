@@ -138,3 +138,6 @@ install(TARGETS lower_bound_set DESTINATION bin)
 
 add_executable(equal_with_range equal_with_range.cpp)
 install(TARGETS equal_with_range DESTINATION bin)
+
+add_executable(partition_point  partition_point.cpp)
+install(TARGETS partition_point DESTINATION bin)
