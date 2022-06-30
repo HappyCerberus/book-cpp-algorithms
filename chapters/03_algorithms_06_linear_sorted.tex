@@ -1,28 +1,19 @@
 \section{Linear operations on sorted ranges}
 
-\subsection{includes}
+In this section, we will discuss algorithms operating on sorted ranges in linear time. The same functionality on unsorted ranges would require algorithms operating in quadratic time.
 
-The first linear algorithm we will talk about is std::includes. This algorithm determines whether one range is a sub-range of another. Since we are working on sorted ranges, std::includes runs in linear time.
+\subsection{\texorpdfstring{\cpp{std::includes}}{\texttt{std::includes}}}
+
+The \cpp{std::includes} algorithm will determine whether one range (all elements) is contained within another range.
 
 \cppversions{\texttt{includes}}{\CC98}{\CC20}{\CC17}{\CC20}
-
 \constraints{\texttt{(input\_range, input\_range)}}{\texttt{forward\_range, forward\_range)}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
-Here we check whether the input text contains all the lowercase English letters.
-
 \begin{box-note}
-\begin{cppcode}
-std::vector<char> letters('z'-'a'+1,'\0');
-std::iota(letters.begin(), letters.end(), 'a');
-
-std::string input = "the quick brown fox jumps over the lazy dog";
-std::ranges::sort(input);
-
-assert(std::ranges::includes(input, letters));
-\end{cppcode}
+\footnotesize Example of using \cpp{std::includes} to check whether a string contains all English (lower-case) letters.
+\tcblower
+\cppfile{code_examples/algorithms/includes_code.h}
 \end{box-note}
-
-First, we generate the list of English letters programmatically using another algorithm std::iota (line 2). The iota algorithm generates consecutively increasing values to fill the given range. Because of this, we preallocate the vector to 26 elements (line 1).
 
 \subsection{merge, inplace\_merge}
 
