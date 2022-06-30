@@ -1,0 +1,53 @@
+
+\section{Set operations}
+
+\subsection{set\_difference, set\_symmetric\_difference, set\_union, set\_intersection}
+
+The last group of algorithms that require sorted ranges are set operations.
+
+\cppversions{\texttt{set\_difference}}{\CC98}{\CC20}{\CC17}{\CC20}
+\cppversions{\texttt{set\_symmetric\_difference}}{\CC98}{\CC20}{\CC17}{\CC20}
+\cppversions{\texttt{set\_union}}{\CC98}{\CC20}{\CC17}{\CC20}
+\cppversions{\texttt{set\_intersection}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+All the set operations work in the same way, processing two input ranges and copying results into the result range, with the following semantics:
+
+\begin{description}
+   \item[\texttt{set\_difference}] elements that are present in the first range, but not the second
+   \item[\texttt{set\_symmetric\_difference}] elements that are present in only one of the ranges, but not both
+   \item[\texttt{set\_union}] elements that are present in either of the ranges
+   \item[\texttt{set\_intersection}] elements that are present in both ranges
+\end{description}
+
+We also need to talk about the behaviour for equal elements. If we have m such elements in the first range and n such elements in the second range, the resulting range will contain:
+
+
+\begin{description}
+   \item[\texttt{set\_difference}] $max(m-n,0)$ elements
+   \item[\texttt{set\_symmetric\_difference}] $abs(m-n)$, that is: if $m>n$, $m-n$ elements will be copied from the first range; otherwise, $n-m$ elements will be copied from the second range
+   \item[\texttt{set\_union}] $max(m,n)$, first $m$ elements will be copied from the first range, followed by $max(n-m,0)$ elements from the second range
+   \item[\texttt{set\_intersection}] $min(m,n)$, elements will be copied from the first range
+\end{description}
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data1{1, 2, 5};
+std::vector<int> data2{2, 4, 6};
+
+std::vector<int> difference;
+std::ranges::set_difference(data1, data2, std::back_inserter(difference));
+// difference == {1, 5}
+
+std::vector<int> symmetric;
+std::ranges::set_symmetric_difference(data1, data2, std::back_inserter(symmetric));
+// symmetric == {1, 4, 5, 6}
+
+std::vector<int> set_union;
+std::ranges::set_union(data1, data2, std::back_inserter(set_union));
+// set_union == {1, 2, 4, 5, 6}
+
+std::vector<int> intersection;
+std::ranges::set_intersection(data1, data2, std::back_inserter(intersection));
+// intersection == {2}
+\end{cppcode}
+\end{box-note}
