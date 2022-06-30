@@ -7,12 +7,29 @@ In this section, we will discuss algorithms operating on sorted ranges in linear
 The \cpp{std::includes} algorithm will determine whether one range (all elements) is contained within another range.
 
 \cppversions{\texttt{includes}}{\CC98}{\CC20}{\CC17}{\CC20}
-\constraints{\texttt{(input\_range, input\_range)}}{\texttt{forward\_range, forward\_range)}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+\constraints{\texttt{(input\_range, input\_range)}}{\texttt{(forward\_range, forward\_range)}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
 \begin{box-note}
 \footnotesize Example of using \cpp{std::includes} to check whether a string contains all English (lower-case) letters.
 \tcblower
 \cppfile{code_examples/algorithms/includes_code.h}
+\end{box-note}
+
+The example uses \cpp{std::iota} to generate the lower-case letters (line 2), which requires the destination vector to be pre-allocated (line 1).
+
+\subsection{\texorpdfstring{\cpp{std::merge}}{\texttt{std::merge}}}
+
+The \cpp{std::merge} algorithm merges two sorted ranges, with the output written to a third range which cannot overlap with either of the input ranges.
+
+\cppversions{\texttt{merge}}{\CC98}{\CC20}{\CC17}{\CC20}
+\constraints{\texttt{(input\_range, input\_range) -> output\_iterator}}{\texttt{(forward\_range, forward\_range) -> forward\_iterator}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+The merge operation is stable. Equal elements from the first range will be ordered before equal elements from the second range.
+
+\begin{box-note}
+\footnotesize Example of using \cpp{std::merge}.
+\tcblower
+\cppfile{code_examples/algorithms/merge_code.h}
 \end{box-note}
 
 \subsection{merge, inplace\_merge}
