@@ -58,40 +58,31 @@ Despite the naming, \cpp{std:partition_point} works very similarly to \cpp{std::
 \cppversions{\texttt{partition\_point}}{\CC11}{\CC20}{N/A}{\CC20}
 \constraints{\texttt{forward\_range}}{}{N/A}{\texttt{unary\_predicate}}
 
-Partition point will return the first element that does not satisfy the provided predicate. This algorithm only requires the range to be partitioned (with respect to the predicate).
+\cpp{std::partition_point} will return the first element that does not satisfy the provided predicate. This algorithm only requires the range to be partitioned (with respect to the predicate).
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data{1, 2, 3, 4, 5, 6, 7, 8, 9};
-auto pp = std::partition_point(data.begin(), data.end(), 
-                                [](int v) { return v < 5; });
-// *pp == 5
-\end{cppcode}
+\footnotesize Example of using \cpp{std::partition_point}.
+\tcblower
+\cppfile{code_examples/algorithms/partition_point_code.h}
 \end{box-note}
 
-\subsection{partition\_point, binary\_search}
+\subsection{\texorpdfstring{\cpp{std::binary_search}}{\texttt{std::binary\_search}}}
 
-Finally, binary search serves as a presence check, returning boolean indicating whether the request value is present in the sorted range or not.
+The \cpp{std::binary_search} provides a presence check, returning a boolean indicating whether the requested value is present in the sorted range or not.
 
 \cppversions{\texttt{binary\_search}}{\CC98}{\CC20}{N/A}{\CC20}
-
 \constraints{\texttt{forward\_range}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
-While functionally identical to calling equal\_range and checking whether the returned range is empty, binary\_search will generally be faster. This is because the binary\_search algorithm must be implemented as a single search, while equal\_range is permitted two.
+Using \cpp{std::binary_search} is equivalent to calling \cpp{std::equal_range} and checking whether the returned is non-empty; however, \cpp{std::binary_search} offers a single lookup performance, where \cpp{std::equal_range} does two lookups to determine the lower and upper bounds.
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data{1, 2, 3, 4, 5, 6, 7, 8, 9};
-
-auto [lb, ub] = std::ranges::equal_range(data, 5);
-bool exists = std::ranges::binary_search(data, 5);
-assert((lb != ub) && exists);
-\end{cppcode}
+\footnotesize Example of using \cpp{std::binary_search} with an equivalent check using \cpp{std::equal_range}.
+\tcblower
+\cppfile{code_examples/algorithms/binary_search_code.h}
 \end{box-note}
 
-Since the number five is present in the range, equal\_range will return a non-empty range, and binary\_search will return TRUE.
 
-\subsection{C standard library: bsearch}
+\subsection{\texorpdfstring{\cpp{bsearch} - C standard library}{\texttt{bsearch} - C standard library}}
 
 From the C standard library, C++ inherits bsearch. This algorithm returns one of the elements equal to the provided key, or nullptr if none such element is found.
 
