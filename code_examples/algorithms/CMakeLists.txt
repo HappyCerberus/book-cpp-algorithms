@@ -141,3 +141,6 @@ install(TARGETS equal_with_range DESTINATION bin)
 
 add_executable(partition_point  partition_point.cpp)
 install(TARGETS partition_point DESTINATION bin)
+
+add_executable(binary_search binary_search.cpp)
+install(TARGETS binary_search DESTINATION bin)
