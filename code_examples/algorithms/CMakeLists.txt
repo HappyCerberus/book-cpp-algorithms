@@ -163,3 +163,6 @@ install(TARGETS merge_par DESTINATION bin)
 
 add_executable(inplace_merge inplace_merge.cpp)
 install(TARGETS inplace_merge DESTINATION bin)
+
+add_executable(unique unique.cpp)
+install(TARGETS unique DESTINATION bin)
