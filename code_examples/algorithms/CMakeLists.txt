@@ -160,3 +160,6 @@ install(TARGETS merge DESTINATION bin)
 
 add_executable(merge_par merge_par.cpp)
 install(TARGETS merge_par DESTINATION bin)
+
+add_executable(inplace_merge inplace_merge.cpp)
+install(TARGETS inplace_merge DESTINATION bin)
