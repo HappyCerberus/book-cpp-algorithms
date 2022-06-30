@@ -34,44 +34,26 @@ The merge operation is stable. Equal elements from the first range will be order
 
 The parallel version requires the output to be a forward range (represented by a \cpp{forward_iterator}). Therefore, we cannot use wrappers like \cpp{std::back_inserter} and must preallocate the output range to sufficient capacity.
 
-
-
-\subsection{merge, inplace\_merge}
-
-Another operation that is feasible in linear time is merging two sorted ranges.
-
-\cppversions{\texttt{merge}}{\CC98}{\CC20}{\CC17}{\CC20}
-
-\constraints{\texttt{(input\_range, input\_range)}}{\texttt{(forward\_range, forward\_range)}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
-
-
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data1{1, 2, 3, 4, 5, 6};
-std::vector<int> data2{3, 4, 5, 6, 7, 8};
-
-std::vector<int> out(data1.size()+data2.size(), 0);
-std::merge(std::execution::par_unseq,
-    data1.begin(), data1.end(),
-    data2.begin(), data2.end(),
-    out.begin());
-\end{cppcode}
+\footnotesize Example of parallel \cpp{std::merge}.
+\tcblower
+\cppfile{code_examples/algorithms/merge_par_code.h}
 \end{box-note}
+
+\subsection{\texorpdfstring{\cpp{std::inplace_merge}}{\texttt{std::inplace\_merge}}}
+
+The \cpp{std::inplace_merge} algorithm merges two consecutive sub-ranges.
 
 \cppversions{\texttt{inplace\_merge}}{\CC98}{N/A}{\CC17}{\CC20}
+\constraints{\texttt{(bidirectional\_range, bidirectional\_iterator)}}{\texttt{(bidirectional\_range, bidirectional\_iterator)}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
-\constraints{\texttt{(bidirectional\_range, bidirectional\_iterator)}}{}{\texttt{operator<}}{\texttt{inplace\_merge}}
-
-Because merge forbids the input and output ranges from overlapping, we have an alternative inplace\_merge that serves this use case.
+When using the iterator-based interface, the middle iterator (i.e. the iterator to the first element of the second sub-range) is the second argument.
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> range{1, 3, 5, 2, 4, 6};
-std::inplace_merge(range.begin(), range.begin()+3, range.end());
-// range == { 1, 2, 3, 4, 5, 6 }
-\end{cppcode}
+\footnotesize Example of using \cpp{std::inplace_merge}.
+\tcblower
+\cppfile{code_examples/algorithms/inplace_merge_code.h}
 \end{box-note}
-
 \subsection{unique, unique\_copy}
 
 The std::unique algorithm removes consecutive duplicate values. The typical use case is in conjunction with a sorted range. However, this is not a requirement of std::unique.
