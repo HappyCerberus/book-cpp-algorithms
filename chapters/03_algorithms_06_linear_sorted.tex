@@ -32,6 +32,10 @@ The merge operation is stable. Equal elements from the first range will be order
 \cppfile{code_examples/algorithms/merge_code.h}
 \end{box-note}
 
+The parallel version requires the output to be a forward range (represented by a \cpp{forward_iterator}). Therefore, we cannot use wrappers like \cpp{std::back_inserter} and must preallocate the output range to sufficient capacity.
+
+
+
 \subsection{merge, inplace\_merge}
 
 Another operation that is feasible in linear time is merging two sorted ranges.
@@ -40,28 +44,6 @@ Another operation that is feasible in linear time is merging two sorted ranges.
 
 \constraints{\texttt{(input\_range, input\_range)}}{\texttt{(forward\_range, forward\_range)}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
-The result of the merge operation is stored using the provided output iterator. Note that the output range is not permitted to overlap with either of the input ranges.
-
-The merge operation is stable. Equal elements from the first range will be ordered before equal elements from the second range.
-
-\begin{box-note}
-\begin{cppcode}
-struct LabeledValue {
-    int value;
-    std::string label;
-};
-
-std::vector<LabeledValue> data1{{1, "first"}, {2, "first"}, {3, "first"}};
-std::vector<LabeledValue> data2{{0, "second"}, {2, "second"}, {4, "second"}};
-
-std::vector<LabeledValue> result;
-std::ranges::merge(data1, data2, std::back_inserter(result),
-  [](const auto& left, const auto& right) { return left.value < right.value; });
-// result == {0, second}, {1, first}, {2, first}, {2, second}, {3, first}, {4, second}
-\end{cppcode}
-\end{box-note}
-
-The parallel version requires the output to be a forward range (represented by a forward\_iterator). Therefore, we cannot use wrappers like std::back\_inserter and must preallocate the output range to sufficient capacity.
 
 \begin{box-note}
 \begin{cppcode}
