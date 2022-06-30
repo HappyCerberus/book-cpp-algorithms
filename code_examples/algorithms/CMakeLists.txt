@@ -166,3 +166,6 @@ install(TARGETS inplace_merge DESTINATION bin)
 
 add_executable(unique unique.cpp)
 install(TARGETS unique DESTINATION bin)
+
+add_executable(unique_copy unique_copy.cpp)
+install(TARGETS unique_copy DESTINATION bin)
