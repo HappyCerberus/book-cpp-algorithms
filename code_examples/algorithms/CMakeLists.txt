@@ -142,5 +142,12 @@ install(TARGETS equal_with_range DESTINATION bin)
 add_executable(partition_point  partition_point.cpp)
 install(TARGETS partition_point DESTINATION bin)
 
-add_executable(binary_search binary_search.cpp)
-install(TARGETS binary_search DESTINATION bin)
+# TODO (doesn't compile on GCC 11)
+#add_executable(binary_search binary_search.cpp)
+#install(TARGETS binary_search DESTINATION bin)
+
+add_executable(bsearch bsearch.cpp)
+install(TARGETS bsearch DESTINATION bin)
+
+add_executable(bsearch_alternatives bsearch_alternatives.cpp)
+install(TARGETS bsearch_alternatives DESTINATION bin)
