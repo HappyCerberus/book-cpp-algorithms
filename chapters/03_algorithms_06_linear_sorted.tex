@@ -54,26 +54,20 @@ When using the iterator-based interface, the middle iterator (i.e. the iterator 
 \tcblower
 \cppfile{code_examples/algorithms/inplace_merge_code.h}
 \end{box-note}
-\subsection{unique, unique\_copy}
+
+\subsection{\texorpdfstring{\cpp{std::unique}, \cpp{std::unique_copy}}{\texttt{std::unique}, \texttt{std::unique\_copy}}}
 
 The std::unique algorithm removes consecutive duplicate values. The typical use case is in conjunction with a sorted range. However, this is not a requirement of std::unique.
 
 \cppversions{\texttt{unique}}{\CC98}{\CC20}{\CC17}{\CC20}
-
 \constraints{\texttt{forward\_range}}{}{\texttt{operator==}}{\texttt{binary\_predicate}}
 
-Because unique works in-place and cannot resize the underlying range, it leaves the end of the range with unspecified values and returns an iterator to the beginning of this sub-range (or the sub-range in case of the range version).
+Because unique works in-place and cannot resize the underlying range, it leaves the end of the range with unspecified values and returns an iterator to the beginning of this sub-range.
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data{1, 1, 2, 2, 3, 4, 5, 6, 6, 6};
-auto it = std::unique(data.begin(), data.end());
-// Range version: auto it = std::ranges::unique(data).begin();
-
-// data == {1, 2, 3, 4, 5, 6, unspec, unspec, unspec, unspec}
-data.resize(std::distance(data.begin(), it));
-// data == {1, 2, 3, 4, 5, 6}
-\end{cppcode}
+\footnotesize Example of using \cpp{std::unique}.
+\tcblower
+\cppfile{code_examples/algorithms/unique_code.h}
 \end{box-note}
 
 \cppversions{\texttt{unique\_copy}}{\CC98}{\CC20}{\CC17}{\CC20}
