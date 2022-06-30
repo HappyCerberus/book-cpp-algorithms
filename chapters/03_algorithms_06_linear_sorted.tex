@@ -60,7 +60,7 @@ When using the iterator-based interface, the middle iterator (i.e. the iterator 
 The std::unique algorithm removes consecutive duplicate values. The typical use case is in conjunction with a sorted range. However, this is not a requirement of std::unique.
 
 \cppversions{\texttt{unique}}{\CC98}{\CC20}{\CC17}{\CC20}
-\constraints{\texttt{forward\_range}}{}{\texttt{operator==}}{\texttt{binary\_predicate}}
+\constraints{\texttt{forward\_range}}{\texttt{forward\_range}}{\texttt{operator==}}{\texttt{binary\_predicate}}
 
 Because unique works in-place and cannot resize the underlying range, it leaves the end of the range with unspecified values and returns an iterator to the beginning of this sub-range.
 
@@ -70,17 +70,13 @@ Because unique works in-place and cannot resize the underlying range, it leaves 
 \cppfile{code_examples/algorithms/unique_code.h}
 \end{box-note}
 
-\cppversions{\texttt{unique\_copy}}{\CC98}{\CC20}{\CC17}{\CC20}
+The \cpp{std::unique_copy} is a variant of std::unique that outputs the unique values to a second range.
 
+\cppversions{\texttt{unique\_copy}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{input\_range -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{\texttt{operator==}}{\texttt{binary\_predicate}}
 
-The copy version of unique instead outputs the unique values to an output range represented by an iterator.
-
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data{1, 1, 2, 2, 3, 4, 5, 6, 6, 6};
-std::vector<int> out;
-std::ranges::unique_copy(data, std::back_inserter(out));
-// out == {1, 2, 3, 4, 5, 6}
-\end{cppcode}
+\footnotesize Example of using \cpp{std::unique_copy}.
+\tcblower
+\cppfile{code_examples/algorithms/unique_copy_code.h}
 \end{box-note}
