@@ -154,3 +154,6 @@ install(TARGETS bsearch_alternatives DESTINATION bin)
 
 add_executable(includes includes.cpp)
 install(TARGETS includes DESTINATION bin)
+
+add_executable(merge merge.cpp)
+install(TARGETS merge DESTINATION bin)
