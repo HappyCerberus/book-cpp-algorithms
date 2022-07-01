@@ -73,3 +73,15 @@ The \cpp{std::set_intersection} algorithm produces a range containing elements p
 \constraints{\texttt{(input\_range, input\_range) -> output\_iterator}}{\texttt{(forward\_range, forward\_range) -> forward\_iterator}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
 For equivalent elements, where the first range contains $M$ such elements and the second range contains $N$ such elements, the result will contain the first \cpp{std::min(M,N)} elements from the first range.
+
+\begin{box-note}
+\footnotesize Example of using \cpp{std::set_intersection}.
+\tcblower
+\cppfile{code_examples/algorithms/set_intersection_code.h}
+\end{box-note}
+
+\begin{box-note}
+\footnotesize Example demonstrating \cpp{std::set_intersection} behaviour when equivalent elements are present.
+\tcblower
+\cppfile{code_examples/algorithms/set_intersection_equal_code.h}
+\end{box-note}
