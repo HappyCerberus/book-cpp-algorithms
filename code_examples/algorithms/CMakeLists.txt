@@ -181,3 +181,9 @@ install(TARGETS set_symmetric_difference DESTINATION bin)
 
 add_executable(set_symmetric_difference_equal set_symmetric_difference_equal.cpp)
 install(TARGETS set_symmetric_difference_equal DESTINATION bin)
+
+add_executable(set_union set_union.cpp)
+install(TARGETS set_union DESTINATION bin)
+
+add_executable(set_union_equal set_union_equal.cpp)
+install(TARGETS set_union_equal DESTINATION bin)
