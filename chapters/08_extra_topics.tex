@@ -1,0 +1,57 @@
+\chapter{Extras}
+
+\section{A short arithmetic detour}
+
+The algorithms in the <numeric> header can have sharp edges. This mainly has to do with the way C++ handles mixed numerical types and how template deduction works. For example, the following is an easy mistake to make:
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<double> data{1.1, 2.2, 3.3, 4.4, 5.5};
+auto result = std::accumulate(data.begin(), data.end(), 0);
+// result == 15 (actual sum 16.5)
+\end{cppcode}
+\end{box-note}
+
+Because we are passing a 0 as the initial value of the accumulator, which is a constant of type int, the accumulator ends up as int. Each fold operation then adds an integer and a double, resulting in a floating-point value. However, it immediately stores it in an integer variable, truncating the value.
+
+If you want to avoid this problem, you need to be familiar with literal suffixes:
+
+% TODO: include this information directly in the book, instead of the original links.
+\begin{itemize}
+    \item integer literal suffixes
+    \item floating-point literal suffixes
+    \item fixed-size integer literal macros
+\end{itemize}
+
+The second problem arises when mixing different integer types, particularly signed and unsigned integers. Again, as long as you do not mix types, you will not run into issues, but remember that the types that matter are the element types, the initial accumulator value and the functor arguments and return type.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<unsigned> data{1, std::numeric_limits<unsigned>::max()/2};
+auto ok = std::accumulate(data.begin(), data.end(), 0u, 
+                          [](auto acc, auto el) { return acc + el; });
+// Always OK, matching types.
+
+auto impl = std::accumulate(data.begin(), data.end(), 0, 
+                            [](auto acc, auto el) { return acc + el; });
+// Implementation defined:
+// acc is int
+// in acc + el: acc promoted to unsigned, result is unsigned
+
+// if an unsigned value cannot be represented by the target singed variable
+// the behavior is implementation defined
+
+auto maybe = std::accumulate(data.begin(), data.end(), 0L, 
+                             [](auto acc, auto el) { return acc + el; });
+// OK as long as sizeof(long) > sizeof(unsigned)
+// acc is long
+// in acc + el: el is promoted to long
+
+// if sizeof(long) > sizeof(unsigned), the long can represent all 
+// values of unsigned, therefore OK
+\end{cppcode}
+\end{box-note}
+
+These are arguably very synthetic examples and shouldn’t appear in production codebases.
+
+If you are interested in more details about integer conversions and promotions, there is an excellent cheatsheet from hackingcpp on this topic.

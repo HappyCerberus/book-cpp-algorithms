@@ -1,0 +1,38 @@
+\section{Boolean reductions}
+
+\subsection{all\_of, any\_of, none\_of}
+
+Finally, we switch back to the <algorithm> header, where we have three boolean reductions.
+
+\cppversions{\texttt{all\_of, any\_of, none\_of}}{\CC11}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{input\_range}}{\texttt{forward\_range}}{N/A}{\texttt{unary\_predicate}}
+
+The algorithms follow the expected boolean logic.
+
+\begin{tabular}{c c c c c}
+\hline
+& all true & all false & mixed & empty \\
+\hline
+\texttt{all\_of} & true & false & false & true \\
+\hline
+\texttt{any\_of} & true & false & true & false \\
+\hline
+\texttt{none\_of} & false & true & false & true \\
+\hline
+\end{tabular}
+
+Note that any\_of requires a positive presence; it only returns true if there is at least one element for which the predicate returns true and returns false on an empty range.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{-2, 0, 2, 4, 6, 8};
+auto is_even = [](int v) { return v % 2 == 0; };
+auto is_odd = [](int v) { return v % 2 != 0; };
+auto is_negative = [](int v) { return std::signbit(v); };
+
+assert(std::ranges::all_of(data, is_even));
+assert(std::ranges::any_of(data, is_negative));
+assert(std::ranges::none_of(data, is_odd));
+\end{cppcode}
+\end{box-note}
