@@ -193,3 +193,9 @@ install(TARGETS set_intersection DESTINATION bin)
 
 add_executable(set_intersection_equal set_intersection_equal.cpp)
 install(TARGETS set_intersection_equal DESTINATION bin)
+
+add_executable(accumulate accumulate.cpp)
+install(TARGETS accumulate DESTINATION bin)
+
+add_executable(accumulate_right accumulate_right.cpp)
+install(TARGETS accumulate_right DESTINATION bin)
