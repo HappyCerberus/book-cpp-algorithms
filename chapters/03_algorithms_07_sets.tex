@@ -25,7 +25,7 @@ For equivalent elements, where the first range contains $M$ such elements and th
 
 \subsection{\texorpdfstring{\cpp{std::set_symmetric_difference}}{\texttt{std::set\_symmetric\_difference}}}
 
-The \cpp{std::set_symetric_difference} produces a range containing elements only present in one of the ranges, but not both.
+The \cpp{std::set_symetric_difference} algorithm produces a range containing elements only present in one of the ranges, but not both.
 
 \cppversions{\texttt{set\_sym\dots diff\dots}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{(input\_range, input\_range) -> output\_iterator}}{\texttt{(forward\_range, forward\_range) -> forward\_iterator}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
@@ -44,53 +44,32 @@ For equivalent elements, where the first range contains $M$ such elements and th
 \cppfile{code_examples/algorithms/set_symmetric_difference_equal_code.h}
 \end{box-note}
 
-\subsection{set\_union, set\_intersection}
+\subsection{\texorpdfstring{\cpp{std::set_union}}{\texttt{std::set\_union}}}
 
-The last group of algorithms that require sorted ranges are set operations.
-
-
+The \cpp{std::set_union} algorithm produces a range containing elements present in either of the ranges.
 
 \cppversions{\texttt{set\_union}}{\CC98}{\CC20}{\CC17}{\CC20}
-\cppversions{\texttt{set\_intersection}}{\CC98}{\CC20}{\CC17}{\CC20}
+\constraints{\texttt{(input\_range, input\_range) -> output\_iterator}}{\texttt{(forward\_range, forward\_range) -> forward\_iterator}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
-All the set operations work in the same way, processing two input ranges and copying results into the result range, with the following semantics:
-
-\begin{description}
-   \item[\texttt{set\_difference}] elements that are present in the first range, but not the second
-   \item[\texttt{set\_symmetric\_difference}] elements that are present in only one of the ranges, but not both
-   \item[\texttt{set\_union}] elements that are present in either of the ranges
-   \item[\texttt{set\_intersection}] elements that are present in both ranges
-\end{description}
-
-We also need to talk about the behaviour for equal elements. If we have m such elements in the first range and n such elements in the second range, the resulting range will contain:
-
-
-\begin{description}
-   \item[\texttt{set\_difference}] $max(m-n,0)$ elements
-   \item[\texttt{set\_symmetric\_difference}] $abs(m-n)$, 
-   \item[\texttt{set\_union}] $max(m,n)$, first $m$ elements will be copied from the first range, followed by $max(n-m,0)$ elements from the second range
-   \item[\texttt{set\_intersection}] $min(m,n)$, elements will be copied from the first range
-\end{description}
+For equivalent elements, where the first range contains $M$ such elements and the second range contains $N$ such elements, the result will contain $M$ elements from the first range, followed by the last \cpp{std::max(N-M,0)} elements from the second range.
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data1{1, 2, 5};
-std::vector<int> data2{2, 4, 6};
-
-std::vector<int> difference;
-std::ranges::set_difference(data1, data2, std::back_inserter(difference));
-// difference == {1, 5}
-
-std::vector<int> symmetric;
-std::ranges::set_symmetric_difference(data1, data2, std::back_inserter(symmetric));
-// symmetric == {1, 4, 5, 6}
-
-std::vector<int> set_union;
-std::ranges::set_union(data1, data2, std::back_inserter(set_union));
-// set_union == {1, 2, 4, 5, 6}
-
-std::vector<int> intersection;
-std::ranges::set_intersection(data1, data2, std::back_inserter(intersection));
-// intersection == {2}
-\end{cppcode}
+\footnotesize Example of using \cpp{std::set_union}.
+\tcblower
+\cppfile{code_examples/algorithms/set_union_code.h}
 \end{box-note}
+
+\begin{box-note}
+\footnotesize Example demonstrating \cpp{std::set_union} behaviour when equivalent elements are present.
+\tcblower
+\cppfile{code_examples/algorithms/set_union_equal_code.h}
+\end{box-note}
+
+\subsection{\texorpdfstring{\cpp{std::set_intersection}}{\texttt{std::set\_intersection}}}
+
+The \cpp{std::set_intersection} algorithm produces a range containing elements present in both of the ranges.
+
+\cppversions{\texttt{set\_intersection}}{\CC98}{\CC20}{\CC17}{\CC20}
+\constraints{\texttt{(input\_range, input\_range) -> output\_iterator}}{\texttt{(forward\_range, forward\_range) -> forward\_iterator}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+For equivalent elements, where the first range contains $M$ such elements and the second range contains $N$ such elements, the result will contain the first \cpp{std::min(M,N)} elements from the first range.
