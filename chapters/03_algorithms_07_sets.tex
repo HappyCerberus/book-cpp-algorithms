@@ -9,7 +9,7 @@ The \cpp{std::set_difference} algorithm produces a range containing elements pre
 \cppversions{\texttt{set\_difference}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{(input\_range, input\_range) -> output\_iterator}}{\texttt{(forward\_range, forward\_range) -> forward\_iterator}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
-For equivalent elements, where the first range contains $M$ such elements and the second range contains $N$ such elements, the result will contain the last $std::max(M-N, 0)$ such elements from the first range.
+For equivalent elements, where the first range contains $M$ such elements and the second range contains $N$ such elements, the result will contain the last \cpp{std::max(M-N, 0)} such elements from the first range.
 
 \begin{box-note}
 \footnotesize Example of using \cpp{std::set_difference}.
@@ -23,13 +23,33 @@ For equivalent elements, where the first range contains $M$ such elements and th
 \cppfile{code_examples/algorithms/set_difference_equal_code.h}
 \end{box-note}
 
+\subsection{\texorpdfstring{\cpp{std::set_symmetric_difference}}{\texttt{std::set\_symmetric\_difference}}}
 
-\subsection{set\_difference, set\_symmetric\_difference, set\_union, set\_intersection}
+The \cpp{std::set_symetric_difference} produces a range containing elements only present in one of the ranges, but not both.
+
+\cppversions{\texttt{set\_sym\dots diff\dots}}{\CC98}{\CC20}{\CC17}{\CC20}
+\constraints{\texttt{(input\_range, input\_range) -> output\_iterator}}{\texttt{(forward\_range, forward\_range) -> forward\_iterator}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+For equivalent elements, where the first range contains $M$ such elements and the second range contains $N$ such elements, the result will contain the last \cpp{std::abs(M-N)} such elements from the corresponding range. That is, if $M>N$, $M-N$ elements will be copied from the first range; otherwise, $N-M$ elements will be copied from the second range.
+
+\begin{box-note}
+\footnotesize Example of using \cpp{std::set_symmetric_difference}.
+\tcblower
+\cppfile{code_examples/algorithms/set_symmetric_difference_code.h}
+\end{box-note}
+
+\begin{box-note}
+\footnotesize Example demonstrating \cpp{std::set_symmetric_difference} behaviour when equivalent elements are present.
+\tcblower
+\cppfile{code_examples/algorithms/set_symmetric_difference_equal_code.h}
+\end{box-note}
+
+\subsection{set\_union, set\_intersection}
 
 The last group of algorithms that require sorted ranges are set operations.
 
 
-\cppversions{\texttt{set\_sym\dots diff\dots}}{\CC98}{\CC20}{\CC17}{\CC20}
+
 \cppversions{\texttt{set\_union}}{\CC98}{\CC20}{\CC17}{\CC20}
 \cppversions{\texttt{set\_intersection}}{\CC98}{\CC20}{\CC17}{\CC20}
 
@@ -47,7 +67,7 @@ We also need to talk about the behaviour for equal elements. If we have m such e
 
 \begin{description}
    \item[\texttt{set\_difference}] $max(m-n,0)$ elements
-   \item[\texttt{set\_symmetric\_difference}] $abs(m-n)$, that is: if $m>n$, $m-n$ elements will be copied from the first range; otherwise, $n-m$ elements will be copied from the second range
+   \item[\texttt{set\_symmetric\_difference}] $abs(m-n)$, 
    \item[\texttt{set\_union}] $max(m,n)$, first $m$ elements will be copied from the first range, followed by $max(n-m,0)$ elements from the second range
    \item[\texttt{set\_intersection}] $min(m,n)$, elements will be copied from the first range
 \end{description}
