@@ -1,12 +1,35 @@
-
 \section{Set operations}
+
+The group of set algorithms simulates different set operations on two sorted ranges.
+
+\subsection{\texorpdfstring{\cpp{std::set_difference}}{\texttt{std::set\_difference}}}
+
+The \cpp{std::set_difference} algorithm produces a range containing elements present in the first range but not in the second range.
+
+\cppversions{\texttt{set\_difference}}{\CC98}{\CC20}{\CC17}{\CC20}
+\constraints{\texttt{(input\_range, input\_range) -> output\_iterator}}{\texttt{(forward\_range, forward\_range) -> forward\_iterator}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
+
+For equivalent elements, where the first range contains $M$ such elements and the second range contains $N$ such elements, the result will contain the last $std::max(M-N, 0)$ such elements from the first range.
+
+\begin{box-note}
+\footnotesize Example of using \cpp{std::set_difference}.
+\tcblower
+\cppfile{code_examples/algorithms/set_difference_code.h}
+\end{box-note}
+
+\begin{box-note}
+\footnotesize Example demonstrating \cpp{std::set_difference} behaviour when equivalent elements are present.
+\tcblower
+\cppfile{code_examples/algorithms/set_difference_equal_code.h}
+\end{box-note}
+
 
 \subsection{set\_difference, set\_symmetric\_difference, set\_union, set\_intersection}
 
 The last group of algorithms that require sorted ranges are set operations.
 
-\cppversions{\texttt{set\_difference}}{\CC98}{\CC20}{\CC17}{\CC20}
-\cppversions{\texttt{set\_symmetric\_difference}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\cppversions{\texttt{set\_sym\dots diff\dots}}{\CC98}{\CC20}{\CC17}{\CC20}
 \cppversions{\texttt{set\_union}}{\CC98}{\CC20}{\CC17}{\CC20}
 \cppversions{\texttt{set\_intersection}}{\CC98}{\CC20}{\CC17}{\CC20}
 
