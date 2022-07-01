@@ -187,3 +187,9 @@ install(TARGETS set_union DESTINATION bin)
 
 add_executable(set_union_equal set_union_equal.cpp)
 install(TARGETS set_union_equal DESTINATION bin)
+
+add_executable(set_intersection set_intersection.cpp)
+install(TARGETS set_intersection DESTINATION bin)
+
+add_executable(set_intersection_equal set_intersection_equal.cpp)
+install(TARGETS set_intersection_equal DESTINATION bin)
