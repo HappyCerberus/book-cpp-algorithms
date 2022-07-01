@@ -169,3 +169,9 @@ install(TARGETS unique DESTINATION bin)
 
 add_executable(unique_copy unique_copy.cpp)
 install(TARGETS unique_copy DESTINATION bin)
+
+add_executable(set_difference set_difference.cpp)
+install(TARGETS set_difference DESTINATION bin)
+
+add_executable(set_difference_equal set_difference_equal.cpp)
+install(TARGETS set_difference_equal DESTINATION bin)
