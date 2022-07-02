@@ -36,25 +36,17 @@ The \cpp{std::inner_product} algorithm is a left fold over two ranges. The pairs
 The default version uses \cpp{operator*} for the reduction and \cpp{operator+} for the fold operation.
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> heights{1, 2, 3, 4, 5};
-std::vector<int> widths{2, 3, 4, 5, 6};
-auto total_area = std::inner_product(heights.begin(), heights.end(), widths.begin(), 0);
-// total_area == 70
-\end{cppcode}
+\footnotesize Example of using \cpp{std::inner_product}.
+\tcblower
+\cppfile{code_examples/algorithms/inner_product_code.h}
 \end{box-note}
 
-Naturally, we can also use inner\_product with a single range, for example, to calculate the sum of absolute differences between consecutive elements:
+Because the algorithm only uses the ranges as input, there is no issue with overlapping ranges.
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data{6, 4, 3, 7, 2, 1};
-auto sum_of_diffs = std::inner_product(data.begin(), std::prev(data.end()), 
-                                       std::next(data.begin()), 
-                                       0, std::plus<>{}, 
-                                       [](int left, int right) { return std::abs(left-right); });
-// sum_of_diffs == 13
-\end{cppcode}
+\footnotesize Example of using \cpp{std::inner_product} on a single range to calculate sum of absolute differences between elements.
+\tcblower
+\cppfile{code_examples/algorithms/inner_product_one_code.h}
 \end{box-note}
 
 \subsection{partial\_sum}
