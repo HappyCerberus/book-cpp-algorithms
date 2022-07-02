@@ -202,3 +202,6 @@ install(TARGETS accumulate_right DESTINATION bin)
 
 add_executable(inner_product inner_product.cpp)
 install(TARGETS inner_product DESTINATION bin)
+
+add_executable(inner_product_one inner_product_one.cpp)
+install(TARGETS inner_product_one DESTINATION bin)
