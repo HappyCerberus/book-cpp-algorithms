@@ -49,25 +49,17 @@ Because the algorithm only uses the ranges as input, there is no issue with over
 \cppfile{code_examples/algorithms/inner_product_one_code.h}
 \end{box-note}
 
-\subsection{partial\_sum}
+\subsection{\texorpdfstring{\cpp{std::partial_sum}}{\texttt{std::partial_sum}}}
 
-The partial\_sum algorithm is a bit of an outlier here, as it’s not a strict reduction algorithm. Instead, it computes partial sums on the given range. The nth generated element is the sum of the first n elements from the source range.
+The \cpp{std::partial_sum} algorithm operates as a left fold. However, it doesn't reduce the range into a single value. Instead, the algorithm writes each partial result to the output range.
 
 \cppversions{\texttt{partial\_sum}}{\CC98}{\CC20}{N/A}{N/A}
-
 \constraints{\texttt{input\_range -> output\_iterator}}{}{\texttt{operator+}}{\texttt{binary\_functor}}
 
-The output iterator is permitted to be the input ranges’ begin iterator. The default operation is the binary plus, and a custom functor is not permitted to modify elements or invalidate iterators.
+The output iterator is permitted to be the input ranges’ begin iterator.
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data(6, 1);
-// data == {1, 1, 1, 1, 1, 1}
-std::partial_sum(data.begin(), data.end(), data.begin());
-// data == {1, 2, 3, 4, 5, 6}
-
-std::vector<int> out;
-std::partial_sum(data.begin(), data.end(), std::back_inserter(out), std::multiplies<>{});
-// out == {1, 2, 6, 24, 120, 720}
-\end{cppcode}
+\footnotesize Example of using \cpp{std::partial_sum}.
+\tcblower
+\cppfile{code_examples/algorithms/partial_sum_code.h}
 \end{box-note}
