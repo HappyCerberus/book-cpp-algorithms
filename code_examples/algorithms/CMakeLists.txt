@@ -199,3 +199,6 @@ install(TARGETS accumulate DESTINATION bin)
 
 add_executable(accumulate_right accumulate_right.cpp)
 install(TARGETS accumulate_right DESTINATION bin)
+
+add_executable(inner_product inner_product.cpp)
+install(TARGETS inner_product DESTINATION bin)
