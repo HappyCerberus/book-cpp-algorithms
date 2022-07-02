@@ -6,7 +6,7 @@ Because of the strictly linear operation, none of the left-fold algorithms suppo
 
 \subsection{\texorpdfstring{\cpp{std::accumulate}}{\texttt{std::accumulate}}}
 
-The \cpp{std::accumulate} algorithm is the single-range left-fold. The default version accumulates using \cpp{operator+}.
+The \cpp{std::accumulate} algorithm is the single-range left-fold.
 
 \cppversions{\texttt{accumulate}}{\CC98}{\CC20}{N/A}{N/A}
 \constraints{\texttt{input\_range}}{}{\texttt{operator +}}{\texttt{binary\_functor}}
@@ -26,30 +26,14 @@ Note that the algorithm accepts an initial value that also dictates the accumula
 \cppfile{code_examples/algorithms/accumulate_right_code.h}
 \end{box-note}
 
+\subsection{\texorpdfstring{\cpp{std::inner_product}}{\texttt{std::inner\_product}}}
 
-\subsection{inner\_product}
-
-
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> data{1, 2, 3, 4, 5};
-auto left = std::accumulate(data.begin(), data.end(), 0, [](int acc, int el) {
-    return acc / 2 + el;
-});
-auto right = std::accumulate(data.rbegin(), data.rend(), 0, [](int acc, int el) {
-    return acc / 2 + el;
-});
-// left == 8, right == 3
-\end{cppcode}
-\end{box-note}
-
-By adding another range and a join operation, we arrive at inner\_product. The left fold operation changes to accumulator = op(accumulator, join(elem1, elem2)), where elem1 comes from the first range and elem2 from the second range.
+The \cpp{std::inner_product} algorithm is a left fold over two ranges. The pairs of elements are first reduced and then accumulated.
 
 \cppversions{\texttt{inner\_product}}{\CC98}{\CC20}{N/A}{N/A}
+\constraints{\texttt{(input\_range, input\_iterator)}}{}{\cpp{operator *}, \cpp{operator +}}{\texttt{(binary\_functor, binary\_functor)}}
 
-\constraints{\texttt{(input\_range, input\_iterator)}}{}{\texttt{operator *, operator +}}{\texttt{(binary\_functor, binary\_functor)}}
-
-The default version uses operator+ for the accumulation and operator* for the join. If specified, neither functor is permitted to modify the elements or invalidate iterators.
+The default version uses \cpp{operator*} for the reduction and \cpp{operator+} for the fold operation.
 
 \begin{box-note}
 \begin{cppcode}
