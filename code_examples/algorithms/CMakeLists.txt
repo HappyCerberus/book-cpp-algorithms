@@ -229,3 +229,6 @@ install(TARGETS transform_inclusive DESTINATION bin)
 
 add_executable(all_of all_of.cpp)
 install(TARGETS all_of DESTINATION bin)
+
+add_executable(generate generate.cpp)
+install(TARGETS generate DESTINATION bin)
