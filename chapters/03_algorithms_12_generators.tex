@@ -14,16 +14,25 @@ The \cpp{std::generate} algorithm fills a range by consecutively assigning the r
 The generator provided to \cpp{std::generate} can be a non-regular function since \cpp{std::generate} guarantees strict left-to-right evaluation.
 
 \begin{box-note}
-\footnotesize Example of using std::fill and std::generate.
+\footnotesize Example of using \cpp{std::fill} and \cpp{std::generate}.
 \tcblower
 \cppfile{code_examples/algorithms/generate_code.h}
 \end{box-note}
 
-
 \subsection{\texorpdfstring{\cpp{std::fill_n}, \cpp{std::generate_n}}{\texttt{std::fill\_n}, \texttt{std::generate\_n}}}
 
+The \cpp{std::fill_n} and \cpp{std::generate_n} are variants of \cpp{std::fill} and \cpp{std::generate} that operate on ranges specified using the start iterator and number of elements. This behaviour allows the algorithms to be used with iterator adapters, such as \cpp{std::back_inserter}.
 
 \cppversions{\texttt{fill\_n, generate\_n}}{\CC98}{\CC20}{\CC17}{\CC20}
+\constraints{\texttt{output\_iterator}}{\texttt{forward\_iterator}}{N/A}{\texttt{generator}}
+
+\begin{box-note}
+\footnotesize Example of using \cpp{std::fill_n} and \cpp{std::generate_n}.
+\tcblower
+\cppfile{code_examples/algorithms/fill_n_code.h}
+\end{box-note}
+
+
 
 \subsection{iota}
 
@@ -50,46 +59,3 @@ std::ranges::transform(std::views::iota(1, 10), std::views::iota(5),
 \end{box-note}
 
 Here we take advantage of the finite view constructor std::views::iota(1,10) to establish the output size (line 7), which allows us to use the infinite view std::views::iota(5) for the second parameter. Functionally, we could swap even the second view for a finite one. However, this would impose an additional (and unnecessary) boundary check.
-
-\subsection{fill, fill\_n, generate, generate\_n}
-
-
-
-The std::fill algorithm fills the designated range with the provided value, and std::generate fills the designated range with values resulting from successive invocations of the provided invocable.
-
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> data(5, 0);
-std::fill(data.begin(), data.end(), 11);
-// data == (11, 11, 11, 11, 11)
-
-std::ranges::generate(data, []() { return 5; });
-// data == (5, 5, 5, 5, 5)
-
-// iota-like
-std::ranges::generate(data, [i = 0]() mutable { return i++; });
-// data == (0, 1, 2, 3, 4)
-\end{cppcode}
-\end{box-note}
-
-The iota-like behaviour (line 9) is possible because the standard guarantees successive (left-to-right) invocations of the provided invocable.
-
-When working with ranges that do not support random access, it might be slow or impossible to provide the end of the range iterator. The standard offers variants of fill and generate where the range is specified using a begin iterator and the number of elements to cover this case.
-
-
-
-\constraints{\texttt{output\_iterator}}{\texttt{forward\_iterator}}{}{}
-
-Other than the change in how a range is specified, these variants have identical behaviour to the baseline algorithms.
-
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> data;
-std::fill_n(std::back_inserter(data), 5, 11);
-// data == (11, 11, 11, 11, 11)
-
-data.clear();
-std::ranges::generate_n(std::back_inserter(data), 5, []() { return 5; });
-// data == (5, 5, 5, 5, 5)
-\end{cppcode}
-\end{box-note}
