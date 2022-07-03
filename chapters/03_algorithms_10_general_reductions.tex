@@ -1,16 +1,26 @@
 \section{General reductions}
 
+Left folds offer a great guarantee of strict left-to-right evaluation, allowing high flexibility for the fold operation.
+
+However, when we work with operations that are associative $op(a, op(b,c)) == op(op(a,b),c)$ and commutative $op(a,b) == op(b,a)$, it really doesn’t matter what permutation of elements and order of operations we evaluate, we will always arrive at the same result.
+
+This is why with the parallel support in C++17, we also received a batch of generalized reduction algorithms that reduce elements in unspecified order and permutation.
+
+\subsection{\texorpdfstring{\cpp{std::reduce}}{\texttt{std::reduce}}}
+
+The \cpp{std::reduce} algorithm is a generalized version of \cpp{std::accumulate}. That is, it reduces a range by applying the provided accumulation operation to the elements in unspecified order and permutation.
+
+\cppversions{\texttt{reduce}}{\CC17}{\CC20}{\CC17}{N/A}
+\constraints{\texttt{input\_range}}{\texttt{forward\_range}}{\texttt{std::plus<>()}}{\texttt{binary\_functor}}
+
+Note that while we have access to a sequenced execution policy (\cpp{std::execution::seq}), this does not make \cpp{std::reduce} sequenced in a left-fold sense.
+
+
+
 \subsection{reduce, transform\_reduce}
-
-The previous algorithms we talked about are all left folds. They evaluate strictly linearly from left to right, which removes any potential for parallel execution.
-
-However, when we work with operations that are associative op(a, op(b,c)) == op(op(a,b),c) and commutative op(a,b) == op(b,a), it really doesn’t matter what permutation of elements and order of operations we evaluate, we will always arrive at the same result.
 
 In C++17, along with the other parallel algorithms, we have received reduce, inclusive\_scan and exclusive\_scan, which are relaxed versions of accumulate, inner\_product and partial\_sum that require an associative and commutative operation to produce deterministic results.
 
-\cppversions{\texttt{reduce}}{\CC17}{\CC20}{\CC17}{N/A}
-
-\constraints{\texttt{input\_range}}{\texttt{forward\_range}}{\texttt{std::plus<>()}}{\texttt{binary\_functor}}
 
 On top of the accumulate equivalents, we get one more overload that does away with the initial accumulator value, reducing the aforementioned numerical problems.
 
