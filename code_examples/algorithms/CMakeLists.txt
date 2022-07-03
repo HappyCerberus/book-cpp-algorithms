@@ -232,3 +232,6 @@ install(TARGETS all_of DESTINATION bin)
 
 add_executable(generate generate.cpp)
 install(TARGETS generate DESTINATION bin)
+
+add_executable(fill_n fill_n.cpp)
+install(TARGETS fill_n DESTINATION bin)
