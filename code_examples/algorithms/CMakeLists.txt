@@ -208,3 +208,6 @@ install(TARGETS inner_product_one DESTINATION bin)
 
 add_executable(partial_sum partial_sum.cpp)
 install(TARGETS partial_sum DESTINATION bin)
+
+add_executable(reduce reduce.cpp)
+install(TARGETS reduce DESTINATION bin)
