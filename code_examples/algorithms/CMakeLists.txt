@@ -214,3 +214,6 @@ install(TARGETS reduce DESTINATION bin)
 
 add_executable(reduce_noinit reduce_noinit.cpp)
 install(TARGETS reduce_noinit DESTINATION bin)
+
+add_executable(transform_reduce transform_reduce.cpp)
+install(TARGETS transform_reduce DESTINATION bin)
