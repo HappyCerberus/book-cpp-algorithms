@@ -217,3 +217,6 @@ install(TARGETS reduce_noinit DESTINATION bin)
 
 add_executable(transform_reduce transform_reduce.cpp)
 install(TARGETS transform_reduce DESTINATION bin)
+
+add_executable(inclusive_scan inclusive_scan.cpp)
+install(TARGETS inclusive_scan DESTINATION bin)
