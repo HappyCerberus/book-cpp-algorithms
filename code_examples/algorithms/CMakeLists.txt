@@ -223,3 +223,6 @@ install(TARGETS inclusive_scan DESTINATION bin)
 
 add_executable(exclusive_scan exclusive_scan.cpp)
 install(TARGETS exclusive_scan DESTINATION bin)
+
+add_executable(transform_inclusive transform_inclusive.cpp)
+install(TARGETS transform_inclusive DESTINATION bin)
