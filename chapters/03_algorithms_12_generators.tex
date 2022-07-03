@@ -32,15 +32,31 @@ The \cpp{std::fill_n} and \cpp{std::generate_n} are variants of \cpp{std::fill} 
 \cppfile{code_examples/algorithms/fill_n_code.h}
 \end{box-note}
 
+\subsection{\texorpdfstring{\cpp{std::iota}}{\texttt{std::iota}}}
 
+The \cpp{std::iota} generates elements by consecutively assigning the result of applying the prefix \cpp{operator++}, starting with the initial value.
 
-\subsection{iota}
+\cppversions{\texttt{iota}}{\CC11}{\CC20}{N/A}{\CC23}
+\constraints{\texttt{forward\_range}}{}{}{}
+
+\begin{box-note}
+\footnotesize Example of using \cpp{std::iota}.
+\tcblower
+\cppfile{code_examples/algorithms/iota_code.h}
+\end{box-note}
+
+Notably, the \cpp{std::iota} algorithm is also an outlier in the support added with the C++20 standard. The std::iota algorithm did not receive a range version. However, we do have access to an iota view.
+
+\begin{box-note}
+\footnotesize Example of using \cpp{std::iota}.
+\tcblower
+\cppfile{code_examples/algorithms/iota_view_code.h}
+\end{box-note}
+
 
 Iota is an outlier when it comes to C++20 std::ranges support. C++20 introduced the lazy view version std::views::iota, and we will only get the eager range version of the algorithm in C++23.
 
-\cppversions{\texttt{iota}}{\CC11}{\CC20}{N/A}{\CC23}
 
-\constraints{\texttt{forward\_range}}{}{}{}
 
 The std::iota algorithm will generate elements by consecutively applying the prefix increment operator, starting with the initial value.
 
