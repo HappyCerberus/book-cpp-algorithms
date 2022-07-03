@@ -1,0 +1,223 @@
+\section{Copy and move}
+
+\subsection{copy, move, copy\_backwards, move\_backwards}
+
+When copying/moving a range, we need to avoid overwriting the yet to be copied/moved elements from the source range. The standard offers two directions of copying to prevent this issue. We will start with the forward version:
+
+\cppversions{\texttt{copy}}{\CC98}{\CC20}{\CC17}{\CC20}
+\cppversions{\texttt{move}}{\CC11}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{input\_range -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{}{}
+
+The output iterator is not permitted to be within [first, last) (of the input range). Consequently, only the tail of the output range can overlap with the input range.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<std::string> data{ "a", "b", "c", "d", "e", "f"};
+
+std::copy(data.begin(), data.begin()+3, data.begin()+3);
+// data = { "a", "b", "c", "a", "b", "c" }
+
+// Overlapping case:
+std::copy(std::next(data.begin()), data.end(), data.begin());
+// data = { "b", "c", "a", "b", "c", "c" }
+\end{cppcode}
+\end{box-note}
+
+Move operates identically, except it casts each element to an rvalue before the assignment, turning copies into moves.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<std::string> data{ "a", "b", "c", "d", "e", "f"};
+
+std::move(data.begin(), data.begin()+3, data.begin()+3);
+// data = { ?, ?, ?, "a", "b", "c" }
+\end{cppcode}
+\end{box-note}
+
+Significantly, whether std::move will move depends on the underlying element type. If the underlying type is copy-only, std::move will behave identically to std::copy.
+
+\begin{box-note}
+\begin{cppcode}
+struct CopyOnly {
+    CopyOnly() = default;
+    CopyOnly(const CopyOnly&) = default;
+    CopyOnly& operator=(const CopyOnly&) { 
+      std::cout << "Copy assignment.\n";
+      return *this;
+    };
+};
+
+std::vector<CopyOnly> test(6);
+
+std::move(test.begin(), test.begin()+3, test.begin()+3);
+// 3x Copy assignment
+\end{cppcode}
+\end{box-note}
+
+We can also emulate std::move by using the previously mentioned move\_iterator adapter.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<std::string> data{ "a", "b", "c", "d", "e", "f"};
+
+std::copy(std::make_move_iterator(data.begin()), std::make_move_iterator(data.begin()+3), 
+          data.begin()+3);
+// data = { ?, ?, ?, "a", "b", "c" }
+\end{cppcode}
+\end{box-note}
+
+When we need to copy to an overlapping range that isn’t suitable for forward copy, we can use the backward variant that copies in the opposite direction.
+
+\cppversions{\texttt{copy\_backward}}{\CC98}{\CC20}{N/A}{\CC20}
+\cppversions{\texttt{move\_backward}}{\CC11}{\CC20}{N/A}{\CC20}
+
+\constraints{\texttt{bidirectional\_range -> bidirectional\_iterator}}{}{}{}
+
+The output iterator cannot be within (first, last] and will be treated as the end iterator for the destination range, meaning that the algorithm will write the first value to std::prev(end).
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<std::string> data{ "a", "b", "c", "d", "e", "f"};
+
+std::vector<std::string> out(9, "");
+std::copy_backward(data.begin(), data.end(), out.end());
+// "", "", "", "a", "b", "c", "d", "e", "f"
+
+std::copy_backward(data.begin(), std::prev(data.end()), data.end());
+// data = { "a", "a", "b", "c", "d", "e" }
+\end{cppcode}
+\end{box-note}
+
+Similar to fill\_n and generate\_n, the standard also provides a copy\_n variant suitable for non-random-access ranges.
+
+\cppversions{\texttt{copy\_n}}{\CC11}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{input\_iterator -> output\_iterator}}{\texttt{forward\_iterator -> forward\_iterator}}{}{}
+
+The algorithm cannot check whether the requested count is valid and does not go out of bounds, so this burden is on the caller.
+
+\begin{box-note}
+\begin{cppcode}
+std::list<int> data{1, 2, 3, 4, 5, 6, 7, 8, 9};
+std::vector<int> out;
+
+std::copy_n(data.begin(), 5, std::back_inserter(out));
+// out == { 1, 2, 3, 4, 5 }
+\end{cppcode}
+\end{box-note}
+
+\subsection{copy\_if, remove\_copy, remove\_copy\_if}
+
+We can use copy\_if or remove\_copy\_if when we need to select only some of the elements to be copied.
+
+\cppversions{\texttt{copy\_if}}{\CC11}{\CC20}{\CC17}{\CC20}
+\cppversions{\texttt{remove\_copy, remove\_copy\_if}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{input\_range -> output\_range}}{\texttt{forward\_range -> forward\_iterator}}{N/A}{\texttt{unary\_predicate}}
+
+These two algorithms provide the same logic, with opposite semantics: copy\_if will copy elements for which the predicate returns true, and remove\_copy\_if will copy elements for which the predicate returns false. Finally, remove\_copy copies elements that do not match the provided value.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{ 1, 2, 3, 4, 5, 6, 7, 8, 9};
+std::vector<int> even, odd, no_five;
+
+auto is_even = [](int v) { return v % 2 == 0; };
+
+std::ranges::copy_if(data, std::back_inserter(even), is_even);
+// even == { 2, 4, 6, 8 }
+
+std::ranges::remove_copy_if(data, std::back_inserter(odd), is_even);
+// odd == { 1, 3, 5, 7, 9 }
+
+std::ranges::remove_copy(data, std::back_inserter(no_five), 5);
+// no_five == { 1, 2, 3, 4, 6, 7, 8, 9 }
+\end{cppcode}
+\end{box-note}
+
+\subsection{sample}
+
+A different twist on a selective copy is the sample algorithm.
+
+\cppversions{\texttt{sample}}{\CC17}{N/A}{N/A}{\CC20}
+
+\constraints{\texttt{forward\_range -> output\_iterator}}{}{}{}
+\constraints{\texttt{input\_range -> random\_access\_iterator}}{}{}{}
+
+The sample algorithm will copy a random selection of N elements from the source range to the destination range utilising the provided random number generator.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 2, 3, 4, 5, 6, 7, 8, 9};
+std::vector<int> out;
+
+std::sample(data.begin(), data.end(), std::back_inserter(out),
+            5, std::mt19937{std::random_device{}()});
+// e.g. out == {2, 3, 4, 5, 9} (guaranteed ascending, because source range is ascending)
+\end{cppcode}
+\end{box-note}
+
+The two domains of this algorithm are due to the stable nature of the sampling, maintaining the order of elements from the source range.
+
+This feature requires either the input range to be at least a forward range or the destination range needs to be a random-access range.
+
+\subsection{replace\_copy, replace\_copy\_if}
+
+We discussed the replace algorithm in a previous article in the series. The copy variants work identical, replacing values matching a predicate or a provided value. However, the result is output to a destination range instead of the replacement applied in place.
+
+\cppversions{\texttt{replace\_copy, replace\_copy\_if}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{input\_range -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{N/A}{\texttt{unary\_predicate}}
+
+The replace\_copy\_if variant replaces elements for which the predicate returns true. The replace\_copy replaces elements that match the provided value.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 2, 3, 4, 5, 6, 7, 8, 9};
+std::vector<int> out, odd;
+
+std::ranges::replace_copy(data, std::back_inserter(out), 5, 10);
+// out == { 1, 2, 3, 4, 10, 6, 7, 8, 9 }
+
+auto even = [](int v) { return v % 2 == 0; };
+std::ranges::replace_copy_if(data, std::back_inserter(odd), even, -1);
+// odd == { 1, -1, 3, -1, 5, -1, 7, -1, 9 }
+\end{cppcode}
+\end{box-note}
+
+\subsection{reverse\_copy, rotate\_copy}
+
+The last two algorithms from the copiers category change the order of copied elements.
+
+\cppversions{\texttt{reverse\_copy}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{bidirectional\_range -> output\_iterator}}{\texttt{bidirectional\_range -> forward\_iterator}}{}{}
+
+Not to be confused with copy\_backwards, which maintains the original order of elements, reverse\_copy will reverse the order of elements copied.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 2, 3, 4, 5, 6, 7, 8, 9};
+std::vector<int> out;
+
+std::ranges::reverse_copy(data, std::back_inserter(out));
+// out == { 9, 8, 7, 6, 5, 4, 3, 2, 1 }
+\end{cppcode}
+\end{box-note}
+
+\cppversions{\texttt{rotate\_copy}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{(forward\_range, forward\_iterator) -> output\_iterator}}{\texttt{(forward\_range, forward\_iterator) -> forward\_iterator}}{}{}
+
+Following the logic of the rotate algorithm, rotate\_copy will first copy the elements starting from the designated middle element and then follow with the remaining elements from the beginning of the range.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data{1, 2, 3, 4, 5, 6, 7, 8, 9};
+std::vector<int> out;
+
+std::ranges::rotate_copy(data, data.begin()+4, std::back_inserter(out));
+// out == { 5, 6, 7, 8, 9, 1, 2, 3, 4 }
+\end{cppcode}
+\end{box-note}

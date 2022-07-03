@@ -32,15 +32,9 @@ Finally, \cpp{std::none_of} only returns true if no elements that evaluate true 
 \end{tabular}
 \end{center}
 
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> data{-2, 0, 2, 4, 6, 8};
-auto is_even = [](int v) { return v % 2 == 0; };
-auto is_odd = [](int v) { return v % 2 != 0; };
-auto is_negative = [](int v) { return std::signbit(v); };
 
-assert(std::ranges::all_of(data, is_even));
-assert(std::ranges::any_of(data, is_negative));
-assert(std::ranges::none_of(data, is_odd));
-\end{cppcode}
+\begin{box-note}
+\footnotesize Example demonstrating all three boolean reduction algorithms.
+\tcblower
+\cppfile{code_examples/algorithms/all_of_code.h}
 \end{box-note}
