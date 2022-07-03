@@ -211,3 +211,6 @@ install(TARGETS partial_sum DESTINATION bin)
 
 add_executable(reduce reduce.cpp)
 install(TARGETS reduce DESTINATION bin)
+
+add_executable(reduce_noinit reduce_noinit.cpp)
+install(TARGETS reduce_noinit DESTINATION bin)
