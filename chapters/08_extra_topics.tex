@@ -55,3 +55,113 @@ auto maybe = std::accumulate(data.begin(), data.end(), 0L,
 These are arguably very synthetic examples and shouldn’t appear in production codebases.
 
 If you are interested in more details about integer conversions and promotions, there is an excellent cheatsheet from hackingcpp on this topic.
+
+\section{Iterator adapaters}
+
+We have already used the std::back\_inserter many times across the examples in this series, so let's start with inserter adapters.
+
+\subsubsection{back\_inserter, front\_inserter, inserter}
+
+The standard offers three adapters that create instances of back\_insert\_iterator, front\_insert\_iterator and insert\_iterator. When assigned to, these iterators call the corresponding push\_back, push\_front and insert methods on the adapted container.
+
+\begin{box-note}
+\begin{cppcode}
+std::list<int> data;
+auto back = std::back_inserter(data);
+auto front = std::front_inserter(data);
+
+*back = 10;
+// data == { 10 }
+*front = 20;
+// data == { 20, 10 }
+
+auto mid = std::inserter(data, std::next(data.begin()));
+*mid = 5;
+// data == { 20, 5, 10 }
+\end{cppcode}
+\end{box-note}
+
+All inserter iterators model only output iterator concept, therefore cannot be used with algorithms that require forward or bidirectional iterators.
+
+\subsubsection{istream\_iterator, ostream\_iterator}
+
+These two adapters provide iteration over istream and ostream, respectively.
+
+The istream\_iterator will read a value by calling the corresponding operator>> when incremented.
+
+\begin{box-note}
+\begin{cppcode}
+std::stringstream input("10 20 30 40 50");
+auto in = std::istream_iterator<int>(input);
+
+int i = *in; // i == 10
+++in;
+int j = *in; // j == 20
+\end{cppcode}
+\end{box-note}
+
+The ostream\_iterator will write a value by calling the corresponding operator<< when assigned to.
+
+\begin{box-note}
+\begin{cppcode}
+std::stringstream output;
+auto out = std::ostream_iterator<int>(output, ", ");
+
+*out = 10;
+*out = 20;
+// output == "10, 20,"
+\end{cppcode}
+\end{box-note}
+
+The additional parameter for ostream\_iterator specifies the divider added after each element.
+
+The istream\_iterator models an input iterator, and the ostream\_iterator models an output iterator.
+
+\subsubsection{move\_iterator, make\_move\_iterator}
+
+The move\_iterator adapter inherits the iterator category from the adapted iterator but will return an rvalue when dereferenced, thus enabling move semantics.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<std::string> data = { "a", "b", "c" };
+auto it = std::make_move_iterator(data.begin());
+
+std::string str(*it); // move construction
+++it;
+str = *it; // move assignment
+// data == { ?, ?, "c" }
+// str == "b"
+\end{cppcode}
+\end{box-note}
+
+\subsubsection{reverse\_iterator}
+
+We can use the reverse\_iterator adapter for bidirectional iterators to obtain the iterator for the opposite direction.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<int> data = { 1, 2, 3 };
+auto mid = std::reverse_iterator(data.end());
+
+int i = *mid; // i == 3
+++mid;
+int j = *mid; // j == 2
+\end{cppcode}
+\end{box-note}
+
+Note that the reversed iterator maps to the previous element in the source direction. Therefore, when reversing begin or rbegin, the result is rend and end, respectively.
+
+\subsubsection{counted\_iterator}
+
+When working with non-random-access ranges, it is convenient to specify the range using a begin iterator coupled with the number of elements. The counted\_iterator brings this feature to C++20 ranges without the need for specialised algorithm variants like std::fill\_n.
+
+\begin{box-note}
+\begin{cppcode}
+std::list<int> data = { 1, 2, 3, 4, 5 };
+
+std::ranges::fill(std::counted_iterator(data.begin(), 3), std::default_sentinel, 9);
+// data == { 9, 9, 9, 4, 5 }
+\end{cppcode}
+\end{box-note}
+
+The counted\_iterator keeps track of the number of elements, and when the counter reaches zero, the counted\_iterator will compare equal to std::default\_sentinel, signifying the end of the range.
