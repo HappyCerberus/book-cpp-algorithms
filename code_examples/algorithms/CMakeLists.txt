@@ -235,3 +235,6 @@ install(TARGETS generate DESTINATION bin)
 
 add_executable(fill_n fill_n.cpp)
 install(TARGETS fill_n DESTINATION bin)
+
+add_executable(iota iota.cpp)
+install(TARGETS iota DESTINATION bin)
