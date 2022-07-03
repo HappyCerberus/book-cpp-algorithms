@@ -220,3 +220,6 @@ install(TARGETS transform_reduce DESTINATION bin)
 
 add_executable(inclusive_scan inclusive_scan.cpp)
 install(TARGETS inclusive_scan DESTINATION bin)
+
+add_executable(exclusive_scan exclusive_scan.cpp)
+install(TARGETS exclusive_scan DESTINATION bin)
