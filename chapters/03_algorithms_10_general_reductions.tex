@@ -4,11 +4,11 @@ Left folds offer a great guarantee of strict left-to-right evaluation, allowing 
 
 However, when we work with operations that are associative $op(a, op(b,c)) == op(op(a,b),c)$ and commutative $op(a,b) == op(b,a)$, it really doesn’t matter what permutation of elements and order of operations we evaluate, we will always arrive at the same result.
 
-This is why with the parallel support in C++17, we also received a batch of generalized reduction algorithms that reduce elements in unspecified order and permutation.
+This is why with the parallel support in C++17, we also received a batch of generalised reduction algorithms that reduce elements in unspecified order and permutation.
 
 \subsection{\texorpdfstring{\cpp{std::reduce}}{\texttt{std::reduce}}}
 
-The \cpp{std::reduce} algorithm is a generalized version of \cpp{std::accumulate}. That is, it reduces a range by applying the provided accumulation operation to the elements in unspecified order and permutation.
+The \cpp{std::reduce} algorithm is a generalised version of \cpp{std::accumulate}. That is, it reduces a range by applying the provided accumulation operation to the elements in unspecified order and permutation.
 
 \cppversions{\texttt{reduce}}{\CC17}{\CC20}{\CC17}{N/A}
 \constraints{\texttt{input\_range}}{\texttt{forward\_range}}{\texttt{std::plus<>()}}{\texttt{binary\_functor}}
@@ -21,7 +21,7 @@ Note that while we have access to a sequenced execution policy (\cpp{std::execut
 \cppfile{code_examples/algorithms/reduce_code.h}
 \end{box-note}
 
-On top of the std::accumulate equivalents, we get one more overload that does away with the initial accumulator value, which removes the potential for using the wrong literal. Instead, the accumulator will be of the type of the ranges’ elements and will be value initialised.
+On top of the \cpp{std::accumulate} equivalents, we get one more overload that does away with the initial accumulator value, which removes the potential for using the wrong literal. Instead, the accumulator will be of the type of the ranges’ elements and will be value initialised.
 
 \begin{box-note}
 \footnotesize Example of using \cpp{std::reduce} without specifying the initial value of the accumulator.
@@ -29,54 +29,24 @@ On top of the std::accumulate equivalents, we get one more overload that does aw
 \cppfile{code_examples/algorithms/reduce_noinit_code.h}
 \end{box-note}
 
-The initial value of the accumulator will be “Quack”. Adding the other two ducks, we end up with “QuackQuackQuack”.
+The initial value of the accumulator will be “Quack” (line 2). Adding the other two ducks (line 8), we end up with “QuackQuackQuack”.
 
-\subsection{reduce, transform\_reduce}
+\subsection{\texorpdfstring{\cpp{std::transform_reduce}}{\texttt{std::transform\_reduce}}}
 
-In C++17, along with the other parallel algorithms, we have received reduce, inclusive\_scan and exclusive\_scan, which are relaxed versions of accumulate, inner\_product and partial\_sum that require an associative and commutative operation to produce deterministic results.
-
-On top of the accumulate equivalents, we get one more overload that does away with the initial accumulator value, reducing the aforementioned numerical problems.
-
-\begin{box-note}
-\begin{cppcode}
-std::vector<double> data{1.1, 2.2, 3.3, 4.4, 5.5};
-auto result = reduce(data.begin(), data.end());
-// result == 16.5
-\end{cppcode}
-\end{box-note}
-
-The accumulator will be of the type of the ranges’ elements and will be value initialised. So, the accumulator will be type double and initialised to zero in this example.
-
-Of course, this also works for custom types:
-
-\begin{box-note}
-\begin{cppcode}
-struct Duck {
-    std::string sound = "Quack";
-    friend Duck operator+(const Duck& left, const Duck& right) {
-        return {left.sound+right.sound};
-    }
-};
-
-std::vector<Duck> data(2, Duck{});
-Duck final_duck = std::reduce(data.begin(), data.end());
-// final_duck.sound == "QuackQuackQuack"
-\end{cppcode}
-\end{box-note}
-
-The initial value of the accumulator will be “Quack”. Adding the other two ducks, we end up with “QuackQuackQuack”.
-
-The counterpart to inner\_product is transform\_reduce, with additional overloads for the unary case (single range).
+The \cpp{std::transform_reduce} algorithm is the generalised counterpart to \cpp{std::inner_product}. On top of the two-range variant, the algorithm also provides a unary overload.
 
 \cppversions{\texttt{transform\_reduce}}{\CC17}{\CC20}{\CC17}{N/A}
-
-Unary version:
-
 \constraints{\texttt{input\_range}}{\texttt{forward\_range}}{N/A}{\texttt{(binary\_functor, unary\_functor)}}
-
-Binary version:
-
 \constraints{\texttt{(input\_range, input\_iterator)}}{\texttt{(forward\_range, forward\_iterator)}}{\texttt{(std::plus<>(), std::multiplies<>())}}{\texttt{(binary\_functor, binary\_functor)}}
+
+\begin{box-note}
+\footnotesize Example of using the unary version of \cpp{std::transform_reduce} to calculate a sum of squares and the binary version to calculate a sum of elements multiplied by coefficients.
+\tcblower
+\cppfile{code_examples/algorithms/transform_reduce_code.h}
+\end{box-note}
+
+
+In C++17, along with the other parallel algorithms, we have received reduce, inclusive\_scan and exclusive\_scan, which are relaxed versions of accumulate, inner\_product and partial\_sum that require an associative and commutative operation to produce deterministic results.
 
 Same as reduce, provided functors must not modify the elements or invalidate iterators. In addition, the reduction functor must be associative and commutative.
 
