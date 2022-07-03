@@ -15,12 +15,25 @@ The \cpp{std::reduce} algorithm is a generalized version of \cpp{std::accumulate
 
 Note that while we have access to a sequenced execution policy (\cpp{std::execution::seq}), this does not make \cpp{std::reduce} sequenced in a left-fold sense.
 
+\begin{box-note}
+\footnotesize Example of using \cpp{std::reduce} with and without an execution policy.
+\tcblower
+\cppfile{code_examples/algorithms/reduce_code.h}
+\end{box-note}
 
+On top of the std::accumulate equivalents, we get one more overload that does away with the initial accumulator value, which removes the potential for using the wrong literal. Instead, the accumulator will be of the type of the ranges’ elements and will be value initialised.
+
+\begin{box-note}
+\footnotesize Example of using \cpp{std::reduce} without specifying the initial value of the accumulator.
+\tcblower
+\cppfile{code_examples/algorithms/reduce_noinit_code.h}
+\end{box-note}
+
+The initial value of the accumulator will be “Quack”. Adding the other two ducks, we end up with “QuackQuackQuack”.
 
 \subsection{reduce, transform\_reduce}
 
 In C++17, along with the other parallel algorithms, we have received reduce, inclusive\_scan and exclusive\_scan, which are relaxed versions of accumulate, inner\_product and partial\_sum that require an associative and commutative operation to produce deterministic results.
-
 
 On top of the accumulate equivalents, we get one more overload that does away with the initial accumulator value, reducing the aforementioned numerical problems.
 
