@@ -1,28 +1,36 @@
 \section{Boolean reductions}
 
-\subsection{all\_of, any\_of, none\_of}
+When reducing boolean expressions, we can take advantage of the early termination offered by boolean logic. The standard offers a set of three boolean reduction algorithms.
 
-Finally, we switch back to the <algorithm> header, where we have three boolean reductions.
+\subsection{\texorpdfstring{\cpp{std::all_of}, \cpp{std::any_of}, \cpp{std::none_of}}{\texttt{std::all\_of}, \texttt{std::any\_of}, \texttt{std::none\_of}}}
 
-\cppversions{\texttt{all\_of, any\_of, none\_of}}{\CC11}{\CC20}{\CC17}{\CC20}
+The algorithms either require the elements to be convertible to bool or a predicate to be specified.
+
+\cppversions{\texttt{all\_of}}{\CC11}{\CC20}{\CC17}{\CC20}
+\cppversions{\texttt{any\_of}}{\CC11}{\CC20}{\CC17}{\CC20}
+\cppversions{\texttt{none\_of}}{\CC11}{\CC20}{\CC17}{\CC20}
 
 \constraints{\texttt{input\_range}}{\texttt{forward\_range}}{N/A}{\texttt{unary\_predicate}}
 
-The algorithms follow the expected boolean logic.
+The algorithms follow their naming in their behaviour.
+The \cpp{std::all_of} algorithm only returns true if no elements that evaluate to false are present.
+The \cpp{std::any_of} algorithm returns true if at least one element evaluates to true.
+Finally, \cpp{std::none_of} only returns true if no elements that evaluate true are present.
 
-\begin{tabular}{c c c c c}
+\begin{center}
+\footnotesize
+\begin{tabular}{|m{\dimexpr14em}|m{\dimexpr.15\textwidth-2\tabcolsep}|m{\dimexpr.15\textwidth-2\tabcolsep}|m{\dimexpr.15\textwidth-2\tabcolsep}|m{\dimexpr.15\textwidth-2\tabcolsep}|}
 \hline
-& all true & all false & mixed & empty \\
+\rowcolor{black!80} \diagbox[linecolor=white,innerrightsep=2.1em]{\textcolor{white}{algorithm}}{\textcolor{white}{elements}} & \textcolor{white}{all \texttt{true}} & \textcolor{white}{all \texttt{false}} & \textcolor{white}{mixed} & \textcolor{white}{empty} \\
 \hline
-\texttt{all\_of} & true & false & false & true \\
+\texttt{all\_of} & \cpp{true} & \cpp{false} & \cpp{false} & \cpp{true} \\
 \hline
-\texttt{any\_of} & true & false & true & false \\
+\texttt{any\_of} & \cpp{true} & \cpp{false} & \cpp{true} & \cpp{false} \\
 \hline
-\texttt{none\_of} & false & true & false & true \\
+\texttt{none\_of} & \cpp{false} & \cpp{true} & \cpp{false} & \cpp{true} \\
 \hline
 \end{tabular}
-
-Note that any\_of requires a positive presence; it only returns true if there is at least one element for which the predicate returns true and returns false on an empty range.
+\end{center}
 
 \begin{box-note}
 \begin{cppcode}
