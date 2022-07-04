@@ -1,5 +1,38 @@
 \section{Copy and move}
 
+The standard offers a wide range of copy algorithms in roughly three categories: simple copies and moves, selective copies and copies with reordering.
+
+\subsection{\texorpdfstring{\cpp{std::copy}, \cpp{std::move}}{\texttt{std::copy}, \texttt{std::move}}}
+
+The \cpp{std::copy} and \cpp{std::move} algorithms provide a forward copy and move. The direction is important for overlapping ranges, so we do not overwrite the yet-to-be copied elements.
+
+For the forward direction, the output iterator is not permitted to be within \texttt{[first, last)} (of the input range). Consequently, only the tail of the output range can overlap with the input range.
+
+\cppversions{\texttt{copy}}{\CC98}{\CC20}{\CC17}{\CC20}
+\cppversions{\texttt{move}}{\CC11}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{input\_range -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{}{}
+
+\begin{box-note}
+\footnotesize Example of a non-overlapping and permitted overlapping case of \cpp{std::copy}.
+\tcblower
+\cppfile{code_examples/algorithms/copy_code.h}
+\end{box-note}
+
+Move operates identically, except it casts each element to an rvalue before the assignment, turning copies into moves.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<std::string> data{ "a", "b", "c", "d", "e", "f"};
+
+std::move(data.begin(), data.begin()+3, data.begin()+3);
+// data = { ?, ?, ?, "a", "b", "c" }
+\end{cppcode}
+\end{box-note}
+
+
+
+
 \subsection{copy, move, copy\_backwards, move\_backwards}
 
 When copying/moving a range, we need to avoid overwriting the yet to be copied/moved elements from the source range. The standard offers two directions of copying to prevent this issue. We will start with the forward version:
