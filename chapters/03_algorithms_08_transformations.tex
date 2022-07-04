@@ -12,103 +12,28 @@ The most straightforward transformation possible is to apply a transformation fu
 
 \constraints{\texttt{input\_range -> output\_iterator}\newline\texttt{(input\_range, input\_iterator) -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}\newline\texttt{(forward\_range, forward\_iterator) -> forward\_iterator}}{N/A}{\texttt{unary\_functor}\newline\texttt{binary\_functor}}
 
-
 \begin{box-note}
-\footnotesize Example of unary and binary version of \cpp{std::transform}. Note that the output iterator can be the one of the input ranges' begin iterator as on line.
+\footnotesize Example of unary and binary version of \cpp{std::transform}. Note that the output iterator can be one of the input ranges' begin iterator (line 4 and 12).
 \tcblower
 \cppfile{code_examples/algorithms/transform_code.h}
 \end{box-note}
 
+Note that \cpp{std::transform} does not guarantee strict left-to-right evaluation. If that is required, use \cpp{std::for_each} instead.
 
-Since the output range is specified using an iterator, both transform algorithms can operate inline or output to another range.
+\subsection{\texorpdfstring{\cpp{std::adjacent_difference}}{\texttt{std::adjacent\_difference}}}
 
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> data{1, 2, 3, 4, 5, 6, 7, 8};
-std::vector<int> out;
-std::transform(data.begin(), data.end(),
-    std::back_inserter(out), [](int v) { return v*2; });
-// out = {2, 4, 6, 8, 10, 12, 14, 16}
-\end{cppcode}
-\end{box-note}
+The \cpp{std::adjacent_difference} is a numerical algorithm, which might make it seem out of place in this section; however, it is essentially a binary transformation algorithm that operates on adjacent elements of the single source range.
 
-For both variants, the provided functor cannot invalidate iterators or modify elements of either of the ranges. On top of that, neither transform guarantees that the provided functor will be applied strictly left-to-right (which only matters for stateful functors).
-
-These limitations are what sets the unary std::transform apart from std::for\_each.
-
-\begin{box-note}
-\begin{cppcode}
-struct MyStruct {
-    void some_modifying_operation() {}
-};
-
-std::vector<int> data(8, 1);
-std::ranges::for_each(data, [v = 0](int& el) mutable { el = ++v; });
-// data = {1, 2, 3, 4, 5, 6, 7, 8}
-
-// Unspecified result:
-std::ranges::transform(data, data.begin(), [v = 0](int) mutable { return ++v; });
-
-std::vector<MyStruct> db{{}, {}, {}};
-std::ranges::for_each(db, [](auto& el) { el.some_modifying_operation(); });
-
-// INVALID:
-std::ranges::transform(db, db.begin(), 
-    [](MyStruct& el) -> MyStruct& { el.some_modifying_operation(); return el; });
-// Valid, operating on a copy:
-std::ranges::transform(db, db.begin(), 
-    [](MyStruct el) -> MyStruct { el.some_modifying_operation(); return el; });
-\end{cppcode}
-\end{box-note}
-
-The example utilizes mutable lambdas (lines 6 and 10) and generalized lambda capture from C++14 that allows the creation and initialization of variables in the capture section of the lambda.
-
-Transform is also the first algorithm we talked about with a lazy variant. C++20 introduced the concept of views as part of the ranges functionality.
-
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> data{1, 2, 3, 4, 5, 6, 7};
-auto is_even = [](int v) { return v % 2 == 0; };
-
-std::vector<int> out;
-auto even_squares = data
-             | std::ranges::views::filter(is_even) 
-             | std::ranges::views::transform([](int v) { return v*v; });
-
-std::ranges::copy(even_squares, std::back_inserter(out));
-// out = {4, 16, 36}
-\end{cppcode}
-\end{box-note}
-
-I have a separate article on C++20 ranges that also covers Views. The main takeaways here are:
-
-\begin{itemize}
-    \item composing views happens at compile-time; there is no runtime operation happening on line 5
-    \item the even\_squares object is a view itself; it is cheap to copy and move and doesn’t own the data it is viewing
-    \item each component of the view is evaluated lazily; if we read only a single element out of the even\_squares view, the views::filter would be evaluated twice and views::transform only once
-\end{itemize}
-
-\subsection{adjacent\_difference}
-
-Despite the naming, adjacent\_difference is a variant of a binary transform, operating on adjacent elements in a single range.
-
-Unlike transform, adjacent\_difference guarantees left-to-right application. Furthermore, because input ranges permit each element to be read only once, the algorithm internally stores a copy of the last read value (for use as the left operand).
+Unlike \cpp{std::transform}, \cpp{std::adjacent_difference} guarantees left-to-right application. Furthermore, because it operates on input ranges, the algorithm internally stores a copy of the last read value for use as the left operand in the next step.
 
 \cppversions{\texttt{adjacent\_difference}}{\CC98}{\CC20}{\CC17}{N/A}
-
 \constraints{\texttt{input\_range -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{\texttt{operator -}}{\texttt{binary\_functor}}
 
-The default version will calculate the difference of adjacent elements, with the first element copied.
-
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data{2, 4, 8, 16, 32, 64};
-std::adjacent_difference(data.begin(), data.end(), data.begin());
-// 2, 2 (4-2), 4 (8-4), 8 (16-8), 16 (32-16), 32 (64-32)
-\end{cppcode}
+\footnotesize Example of the default version of \cpp{std::adjacent_difference}, which will calculate the difference of adjacent elements, with the first element copied.
+\tcblower
+\cppfile{code_examples/algorithms/adjacent_difference_code.h}
 \end{box-note}
-
-However, since we can choose a different functor (other than std::minus), we can also use std::adjacent\_difference to generate sequences:
 
 \begin{box-note}
 \begin{cppcode}
