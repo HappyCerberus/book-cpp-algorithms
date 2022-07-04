@@ -1,71 +1,21 @@
-\section{Unitialized memory}
+\section{Uninitialized memory algorithms}
 
-The heap and uninitialized memory algorithms represent a niche category in the overall algorithm arsenal, primarily because the standard library offers more convenient alternatives that, on the other hand, offer less control. Therefore, if you desire or need the control, you can use these algorithms as a foundation for your custom implementation.
+The uninitialized memory algorithms are a group of relatively low-level algorithms designed to help when implementing manual memory management. These algorithms provide the functionality to transactionally construct, copy, move and destroy sequences of elements on top of raw memory.
 
+% TODO: note and link the advanced chapter on manual memory management.
 
+\subsection{\texorpdfstring{\cpp{std::construct_at}, \cpp{std::destroy_at}}{\texttt{std::construct\_at}, \texttt{std::destroy\_at}}}
 
-\subsection{Working with uninitialized memory}
-
-The second category of algorithms we will talk about today are algorithms that operate on uninitialized memory. Like the heap algorithms, you should prefer higher-level abstractions (e.g. polymorphic memory resource). However, when working with uninitialized memory, using these algorithms is preferable to implementing all the functionality from scratch.
-
-We first need to start with obtaining a block of uninitialized memory, and there are two valid approaches to that in C++. First, we can allocate an array of char with the appropriate alignment and size. Because char* is permitted to alias any other pointer type, we can reinterpret\_cast the resulting buffer to our desired type.
-
-Alternatively, we can use the global operator new, that since C++17 accepts an alignment parameter and returns a pointer to void. We can then cast this pointer to the desired type using static\_cast.
-
-Here is an example of allocating (and deallocating) space for ten std::string objects using the global operator new:
-
-\begin{box-note}
-\begin{cppcode}
-auto* begin = static_cast<std::string*>(
-                  ::operator new[](sizeof(std::string)*10, 
-                                   static_cast<std::align_val_t>(alignof(std::string))));
-
-::operator delete[](begin, static_cast<std::align_val_t>(alignof(std::string)));
-\end{cppcode}
-\end{box-note}
-
-This example contains a lot of spelling, so let’s step through:
-
-\begin{itemize}
-    \item First, we need sizeof(std::string)*10 bytes, which is the first parameter of the new operator (line 2).
-    \item Whenever allocating raw memory, we must ensure that the alignment requirement of the objects we intend to store in this memory is satisfied.
-    \item To prevent overload resolution collisions, the new operator takes alignment as align\_val\_t instead of the size\_t returned by alignof, so we need to use an additional static\_cast (line3).
-    \item Finally, we must cast the void pointer to the desired element type (line 1).
-    \item When deleting, we need to make sure that we use the matching version (here, the array version) of operator delete and supply alignment following the same logic as previously mentioned.
-\end{itemize}
-
-Here is an example of using a char buffer on the stack:
-
-\begin{box-note}
-\begin{cppcode}
-alignas(alignof(std::string)) char buff[sizeof(std::string)*10];
-auto *begin = reinterpret_cast<std::string*>(buff);
-\end{cppcode}
-\end{box-note}
-
-Because the memory lives on the stack, we do not need a deallocation step.
-
-Importantly, all we have in both snippets of code is raw memory. There are no objects of type std::string created or destroyed. Also, note the difference in static\_cast vs reinterpret\_cast. The static\_cast is for converting between related types (void* is related to all pointer types). The reinterpret\_cast is for converting between unrelated types (char* can alias any other pointer but is not a related type to std::string*).
-
-\subsection{construct\_at, destroy\_at}
-
-The construct\_at and destroy\_at algorithms will construct/destroy a single element at a given address. If additional arguments are specified, construct\_at will forward these to the objects’ constructor.
+The \cpp{std::construct_at} and \cpp{std::destroy_at} algorithms will construct/destroy a single element at a given address. If additional arguments are specified, \cpp{std::construct_at} will forward these to the objects’ constructor.
 
 \cppversions{\texttt{construct\_at}}{\CC20}{\CC20}{N/A}{\CC20}
 \cppversions{\texttt{destroy\_at}}{\CC17}{\CC20}{N/A}{\CC20}
 
 \begin{box-note}
-\begin{cppcode}
-alignas(alignof(std::string)) char mem[sizeof(std::string)];
-auto *ptr = reinterpret_cast<std::string*>(mem);
-
-std::construct_at(ptr, 8, 'X');
-// *ptr == "XXXXXXXX", ptr->length() == 8
-std::destroy_at(ptr);
-\end{cppcode}
+\footnotesize Example of using \cpp{std::create_at} to create a \cpp{std::string} object using the arguments eight and ‘X’, which results in a string filled with eight copies of the X character.
+\tcblower
+\cppfile{code_examples/algorithms/create_at_code.h}
 \end{box-note}
-
-In this example, the construct\_at algorithm creates a std::string object using the arguments eight and ‘X’ (line 4), which results in a string filled with eight copies of the X character.
 
 \subsection{uninitialized\_default\_construct, uninitialized\_value\_construct, uninitialized\_fill, destroy}
 
