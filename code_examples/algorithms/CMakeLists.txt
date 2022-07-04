@@ -242,3 +242,6 @@ install(TARGETS iota DESTINATION bin)
 # TODO Does not compile on GCC 11
 #add_executable(iota_view iota_view.cpp)
 #install(TARGETS iota_view DESTINATION bin)
+
+add_executable(copy copy.cpp)
+install(TARGETS copy DESTINATION bin)
