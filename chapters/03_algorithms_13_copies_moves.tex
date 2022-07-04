@@ -85,31 +85,20 @@ The \cpp{std::remove_copy} algorithm will copy elements that do not match the pr
 \cppfile{code_examples/algorithms/copy_if_code.h}
 \end{box-note}
 
-\subsection{sample}
+\subsection{\texorpdfstring{\cpp{std::sample}}{\texttt{std::sample}}}
 
-A different twist on a selective copy is the sample algorithm.
+The \cpp{std::sample} algorithm is a random selective copy algorithm. The algorithm will copy a random selection of N elements from the source range to the destination range utilising the provided random number generator.
 
 \cppversions{\texttt{sample}}{\CC17}{N/A}{N/A}{\CC20}
+\constraints{\texttt{forward\_range -> output\_iterator}\newline \texttt{input\_range -> random\_access\_iterator}}{}{}{}
 
-\constraints{\texttt{forward\_range -> output\_iterator}}{}{}{}
-\constraints{\texttt{input\_range -> random\_access\_iterator}}{}{}{}
-
-The sample algorithm will copy a random selection of N elements from the source range to the destination range utilising the provided random number generator.
+The two domains of this algorithm are due to the stable nature of the sampling, maintaining the order of elements from the source range. This feature requires either the input range to be at least a forward range or the destination range needs to be a random-access range.
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data{1, 2, 3, 4, 5, 6, 7, 8, 9};
-std::vector<int> out;
-
-std::sample(data.begin(), data.end(), std::back_inserter(out),
-            5, std::mt19937{std::random_device{}()});
-// e.g. out == {2, 3, 4, 5, 9} (guaranteed ascending, because source range is ascending)
-\end{cppcode}
+\footnotesize Example of using \cpp{std::sample}.
+\tcblower
+\cppfile{code_examples/algorithms/sample_code.h}
 \end{box-note}
-
-The two domains of this algorithm are due to the stable nature of the sampling, maintaining the order of elements from the source range.
-
-This feature requires either the input range to be at least a forward range or the destination range needs to be a random-access range.
 
 \subsection{replace\_copy, replace\_copy\_if}
 
