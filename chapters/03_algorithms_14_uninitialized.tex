@@ -57,7 +57,7 @@ The \cpp{std::unitialized_copy} and \cpp{std::unitialized_move} algorithms follo
 The main benefit of using the uninitialized memory algorithms is that they correctly handle transactional behaviour. Transactionality is important in cases where the constructor of an object can throw. If one of the objects fails to construct, the algorithms will correctly roll back by destructing already constructed objects.
 
 \begin{box-note}
-\footnotesize Example demonstrating the roll-back behaviour of \cpp{std::uninitialized_default_construct_n} when the third invocation of the constructor throws. Note that the exception is re-thrown after the partial work is rolled back.
+\footnotesize Example demonstrating the roll-back behaviour of uninitialized algorithms when the third invocation of the constructor throws. Note that the exception is re-thrown after the partial work is rolled back.
 \tcblower
 \cppfile{code_examples/algorithms/transactional_code.h}
 \end{box-note}
