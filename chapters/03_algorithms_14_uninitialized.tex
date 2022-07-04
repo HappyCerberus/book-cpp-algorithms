@@ -31,96 +31,33 @@ The three uninitialized algorithms cover the default initialization, value initi
 \constraints{\texttt{forward\_range\newline forward\_iterator (counted)}}{}{}{} % Cleanup the counted variant situation
 
 \begin{box-note}
-\begin{cppcode}
-alignas(alignof(std::string)) char buffer[sizeof(std::string)*10];
-auto *begin = reinterpret_cast<std::string*>(buffer);
-auto *it = begin;
-
-std::uninitialized_default_construct_n(it, 3);
-it += 3;
-std::uninitialized_fill_n(it, 2, "Hello World!");
-it += 2;
-std::uninitialized_value_construct_n(it, 3);
-it += 3;
-std::uninitialized_fill_n(it, 2, "Bye World!");
-
-// {"", "", "", "Hello World!", "Hello World!", "", "", "", "Bye World!", "Bye World!"}
-
-std::destroy_n(begin, 10);
-\end{cppcode}
+\footnotesize 
+Example demonstrating the use of the counted variants of the uninitialized construction algorithm and the \cpp{std::destroy_n} algorithms. Note that for \cpp{std::string}, there is no difference between default and value construction.
+\tcblower
+\cppfile{code_examples/algorithms/uninitialized_constr_code.h}
 \end{box-note}
 
-For std::string, there is no difference between default and value initialization. In both cases, we end up with an empty string.
+\subsection{\texorpdfstring{\cpp{std::uninitialized_copy}, \cpp{std::uninitalized_move}}{\texttt{std::uninitialized\_copy}, \texttt{std::uninitalized\_move}}}
 
-\subsection{uninitialized\_copy, uninitalized\_move}
+The \cpp{std::unitialized_copy} and \cpp{std::unitialized_move} algorithms follow the behaviour of \cpp{std::copy} and \cpp{std::move} algorithms with the distinction that the destination range is uninitialized memory.
 
 \cppversions{\texttt{uninitialized\_copy}}{\CC98}{N/A}{\CC17}{\CC20}
 \cppversions{\texttt{uninitialized\_move}}{\CC17}{N/A}{\CC17}{\CC20}
 
-\constraints{\texttt{input\_range -> forward\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{}{}
-\constraints{\texttt{input\_iterator -> forward\_iterator}}{\texttt{forward\_iterator -> forward\_iterator}}{}{}
-
-These algorithms follow the logic of copy and move algorithms. However, because the destination range is uninitialized memory, these turn into copy and move constructions instead copy and move assignments.
+\constraints{\texttt{input\_range -> forward\_iterator\newline input\_iterator -> forward\_iterator (counted)}}{\texttt{forward\_range -> forward\_iterator\newline forward\_iterator -> forward\_iterator (counted)}}{}{}
 
 \begin{box-note}
-\begin{cppcode}
-alignas(alignof(std::string)) char buff1[sizeof(std::string)*5];
-alignas(alignof(std::string)) char buff2[sizeof(std::string)*5];
-std::vector<std::string> data = {"hello", "world", "and", "everyone", "else"};
-
-auto *bg1 = reinterpret_cast<std::string*>(buff1);
-std::uninitialized_copy(data.begin(), data.end(), bg1);
-// buff1 == { "hello", "world", "and", "everyone", "else"}
-// data == { "hello", "world", "and", "everyone", "else"}
-std::destroy_n(bg1, 5);
-
-auto *bg2 = reinterpret_cast<std::string*>(buff2);
-std::uninitialized_move(data.begin(), data.end(), bg2); 
-// buff2 == { "hello", "world", "and", "everyone", "else"}
-// data == { ?, ?, ?, ?, ?}
-std::destroy_n(bg2, 5);
-\end{cppcode}
+\footnotesize Example of using \cpp{std::uninitialized_copy} and \cpp{std::uninitialized_move}.
+\tcblower
+\cppfile{code_examples/algorithms/uninitialized_copy_code.h}
 \end{box-note}
 
 \subsubsection{Transactional behaviour}
 
 The main benefit of using the uninitialized memory algorithms is that they correctly handle transactional behaviour. Transactionality is important in cases where the constructor of an object can throw. If one of the objects fails to construct, the algorithms will correctly roll back by destructing already constructed objects.
 
-We can observe this behaviour by constructing a toy type that throws on the third construction:
-
 \begin{box-note}
-\begin{cppcode}
-struct Custom {
-  static int cnt;
-  Custom() { 
-    if (++cnt >= 3)
-      throw std::runtime_error("Deliberate failure."); 
-    std::cout << "Custom()\n";
-  }
-  ~Custom() {
-    std::cout << "~Custom()\n";
-  }
-};
-
-int Custom::cnt = 0;
-
-alignas(alignof(Custom)) char buffer[sizeof(Custom)*10];
-auto *begin = reinterpret_cast<Custom*>(buffer);
-
-try {
-  std::uninitialized_default_construct_n(begin, 10);
-  std::destroy_n(begin, 10); // not reached
-} catch (std::exception& e) {
-  std::cout << e.what() << "\n";
-}
-/* Output:
-Custom()
-Custom()
-~Custom()
-~Custom()
-Deliberate failure.
-*/
-\end{cppcode}
+\footnotesize Example demonstrating the roll-back behaviour of \cpp{std::uninitialized_default_construct_n} when the third invocation of the constructor throws. Note that the exception is re-thrown after the partial work is rolled back.
+\tcblower
+\cppfile{code_examples/algorithms/transactional_code.h}
 \end{box-note}
-
-Because the custom class throws on the constructor’s third call, we will see the std::uninitialized\_default\_construct algorithm create two instances and then immediately destroy two instances of Custom, after which it rethrows the exception.
