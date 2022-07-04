@@ -1,32 +1,24 @@
 \section{Transformation algorithms}
 
-\subsection{transform}
+In this section, we will discuss algorithms that transform ranges by changing the values of elements and removing and re-ordering elements.
 
-The most straightforward transformation possible is to apply a transformation function to each element.
+\subsection{\texorpdfstring{\cpp{std::transform}}{\texttt{std::transform}}}
+
+The most straightforward transformation possible is to apply a transformation function to each element. The \cpp{std::transform} algorithm provides this functionality in unary and binary variants (input from one or two ranges).
 
 \cppversions{\texttt{transform}}{\CC98}{\CC20}{\CC17}{\CC20}
 
 % Mention lazy version
 
-\constraints{\texttt{input\_range -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{N/A}{\texttt{unary\_functor}}
-\constraints{\texttt{(input\_range, input\_iterator) -> output\_iterator}}{\texttt{(forward\_range, forward\_iterator) -> forward\_iterator}}{N/A}{\texttt{binary\_functor}}
+\constraints{\texttt{input\_range -> output\_iterator}\newline\texttt{(input\_range, input\_iterator) -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}\newline\texttt{(forward\_range, forward\_iterator) -> forward\_iterator}}{N/A}{\texttt{unary\_functor}\newline\texttt{binary\_functor}}
 
-The standard library provides both a unary and a binary std::transform.
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data{1, 2, 3, 4, 5, 6, 7, 8};
-std::transform(data.begin(), data.end(),
-               data.begin(), [](int v) { return v*2; });
-// data = {2, 4, 6, 8, 10, 12, 14, 16}
-
-std::vector<int> add{8, 7, 6, 5, 4, 3, 2, 1};
-std::transform(data.begin(), data.end(), add.begin(),
-               data.begin(), [](int left, int right) {
-                  return left+right; });
-// data = {10, 11, 12, 13, 14, 15, 16, 17}
-\end{cppcode}
+\footnotesize Example of unary and binary version of \cpp{std::transform}. Note that the output iterator can be the one of the input ranges' begin iterator as on line.
+\tcblower
+\cppfile{code_examples/algorithms/transform_code.h}
 \end{box-note}
+
 
 Since the output range is specified using an iterator, both transform algorithms can operate inline or output to another range.
 
