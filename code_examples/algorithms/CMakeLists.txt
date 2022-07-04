@@ -311,3 +311,6 @@ install(TARGETS shuffle DESTINATION bin)
 
 add_executable(next_permutation next_permutation.cpp)
 install(TARGETS next_permutation DESTINATION bin)
+
+add_executable(is_permutation is_permutation.cpp)
+install(TARGETS is_permutation DESTINATION bin)
