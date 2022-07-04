@@ -35,28 +35,21 @@ Significantly, whether std::move will move depends on the underlying element typ
 \cppfile{code_examples/algorithms/move_nomove_code.h}
 \end{box-note}
 
+\subsection{\texorpdfstring{\cpp{std::copy_backward}, \cpp{std::move_backward}}{\texttt{std::copy\_backward}, \texttt{std::move\_backward}}}
 
-
-When we need to copy to an overlapping range that isn’t suitable for forward copy, we can use the backward variant that copies in the opposite direction.
+The \cpp{std::copy_backward} and \cpp{std::move_backward} are variants that copy in the opposite direction, starting at the back of the range. Because of this, the head of the output range can now overlap with the input range.
 
 \cppversions{\texttt{copy\_backward}}{\CC98}{\CC20}{N/A}{\CC20}
 \cppversions{\texttt{move\_backward}}{\CC11}{\CC20}{N/A}{\CC20}
 
 \constraints{\texttt{bidirectional\_range -> bidirectional\_iterator}}{}{}{}
 
-The output iterator cannot be within (first, last] and will be treated as the end iterator for the destination range, meaning that the algorithm will write the first value to std::prev(end).
+The output iterator cannot be within \cpp{(first, last]} and will be treated as the end iterator for the destination range, meaning that the algorithm will write the first value to \cpp{std::prev(end)}.
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<std::string> data{ "a", "b", "c", "d", "e", "f"};
-
-std::vector<std::string> out(9, "");
-std::copy_backward(data.begin(), data.end(), out.end());
-// "", "", "", "a", "b", "c", "d", "e", "f"
-
-std::copy_backward(data.begin(), std::prev(data.end()), data.end());
-// data = { "a", "a", "b", "c", "d", "e" }
-\end{cppcode}
+\footnotesize Example of a non-overlapping and permitted overlapping case of \cpp{std::copy_backward}.
+\tcblower
+\cppfile{code_examples/algorithms/copy_backward_code.h}
 \end{box-note}
 
 Similar to fill\_n and generate\_n, the standard also provides a copy\_n variant suitable for non-random-access ranges.
