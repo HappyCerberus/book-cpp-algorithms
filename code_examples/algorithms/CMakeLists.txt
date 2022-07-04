@@ -248,3 +248,6 @@ install(TARGETS copy DESTINATION bin)
 
 add_executable(move move.cpp)
 install(TARGETS move DESTINATION bin)
+
+add_executable(move_nomove move_nomove.cpp)
+# Compile-only
