@@ -269,3 +269,6 @@ install(TARGETS replace_copy DESTINATION bin)
 
 add_executable(reverse_copy reverse_copy.cpp)
 install(TARGETS reverse_copy DESTINATION bin)
+
+add_executable(rotate_copy rotate_copy.cpp)
+install(TARGETS rotate_copy DESTINATION bin)
