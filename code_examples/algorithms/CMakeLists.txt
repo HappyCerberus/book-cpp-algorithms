@@ -260,3 +260,6 @@ install(TARGETS copy_n DESTINATION bin)
 
 add_executable(copy_if copy_if.cpp)
 install(TARGETS copy_if DESTINATION bin)
+
+add_executable(sample sample.cpp)
+install(TARGETS sample DESTINATION bin)
