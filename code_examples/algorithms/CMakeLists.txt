@@ -299,3 +299,6 @@ install(TARGETS remove DESTINATION bin)
 
 add_executable(replace replace.cpp)
 install(TARGETS replace DESTINATION bin)
+
+add_executable(reverse reverse.cpp)
+install(TARGETS reverse DESTINATION bin)
