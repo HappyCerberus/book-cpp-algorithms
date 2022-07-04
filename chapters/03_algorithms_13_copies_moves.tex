@@ -111,28 +111,19 @@ For \cpp{std::replace_copy}, the algorithm will replace elements matching a valu
 \constraints{\texttt{input\_range -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{N/A}{\texttt{unary\_predicate}}
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data{1, 2, 3, 4, 5, 6, 7, 8, 9};
-std::vector<int> out, odd;
-
-std::ranges::replace_copy(data, std::back_inserter(out), 5, 10);
-// out == { 1, 2, 3, 4, 10, 6, 7, 8, 9 }
-
-auto even = [](int v) { return v % 2 == 0; };
-std::ranges::replace_copy_if(data, std::back_inserter(odd), even, -1);
-// odd == { 1, -1, 3, -1, 5, -1, 7, -1, 9 }
-\end{cppcode}
+\footnotesize Example of using \cpp{std::replace_copy} and \cpp{std::replace_copy_if}.
+\tcblower
+\cppfile{code_examples/algorithms/replace_copy_code.h}
 \end{box-note}
 
-\subsection{reverse\_copy, rotate\_copy}
+\subsection{\texorpdfstring{\cpp{std::reverse_copy}}{\texttt{std::reverse\_copy}}}
 
-The last two algorithms from the copiers category change the order of copied elements.
+The \cpp{std::reverse_copy} algorithm copies elements in reverse order.
 
 \cppversions{\texttt{reverse\_copy}}{\CC98}{\CC20}{\CC17}{\CC20}
-
 \constraints{\texttt{bidirectional\_range -> output\_iterator}}{\texttt{bidirectional\_range -> forward\_iterator}}{}{}
 
-Not to be confused with copy\_backwards, which maintains the original order of elements, reverse\_copy will reverse the order of elements copied.
+Not to be confused with the \cpp{std::copy_backwards}, which copies elements in the original order. The \cpp{std::reverse_copy} does not permit the source, and the destination ranges to overlap.
 
 \begin{box-note}
 \begin{cppcode}
@@ -143,6 +134,20 @@ std::ranges::reverse_copy(data, std::back_inserter(out));
 // out == { 9, 8, 7, 6, 5, 4, 3, 2, 1 }
 \end{cppcode}
 \end{box-note}
+
+\subsection{\texorpdfstring{\cpp{std::rotate_copy}}{\texttt{std::rotate\_copy}}}
+
+
+
+The last two algorithms from the copiers category change the order of copied elements.
+
+\cppversions{\texttt{reverse\_copy}}{\CC98}{\CC20}{\CC17}{\CC20}
+
+\constraints{\texttt{bidirectional\_range -> output\_iterator}}{\texttt{bidirectional\_range -> forward\_iterator}}{}{}
+
+Not to be confused with copy\_backwards, which maintains the original order of elements, reverse\_copy will reverse the order of elements copied.
+
+
 
 \cppversions{\texttt{rotate\_copy}}{\CC98}{\CC20}{\CC17}{\CC20}
 
