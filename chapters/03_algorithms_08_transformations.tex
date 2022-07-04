@@ -136,69 +136,13 @@ The \cpp{std::next_permutation} and \cpp{std::prev_permutation} algorithms will 
 
 \subsection{\texorpdfstring{\cpp{std::is_permutation}}{\texttt{std::is\_permutation}}}
 
-Permutation algorithms will generate either the next or previous permutation in lexicographical order.
-
-
-
-Strictly speaking, calling next\_permutation will adjust the order of elements such that it is the next higher value as per std::lexicographical\_compare (using the same functor). If there is no such range, next\_permutation will cycle back to the lowest value and return false.
-
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> data{1, 2, 3};
-do {
-    // iterate over:
-    // 1, 2, 3
-    // 1, 3, 2
-    // 2, 1, 3
-    // 2, 3, 1
-    // 3, 1, 2
-    // 3, 2, 1
-} while (std::next_permutation(data.begin(), data.end()));
-// data = {1, 2, 3}
-\end{cppcode}
-\end{box-note}
-
-When used with a range of booleans, next\_permutation can serve to iterate over all sets of a particular size.
-
-\begin{box-note}
-\begin{cppcode}
-std::vector<std::string> data{"apple", "avocado", "banana", 
-  "cherry", "lemon", "mango", 
-  "orange", "plums", "watermelon"};
-
-std::vector<char> pick(data.size(), false);
-std::fill_n(pick.begin(), 3, true);
-
-do {
-    for (size_t i = 0; i < pick.size(); ++i) {
-        if (pick[i])
-            std::cout << data[i] << ", ";
-    }
-    std::cout << "\n";
-} while (std::prev_permutation(pick.begin(), pick.end(), std::less<bool>()));
-\end{cppcode}
-\end{box-note}
-
-We start with a range filled with false values, setting the first three elements to true (line 6). We then print out the elements corresponding to the TRUE values (line 10). Finally, prev\_permutation will return false once we have cycled back to the initial range with the first three elements set to true (line 14).
-
-Lastly, to check whether one range is a permutation of another, we can use the is\_permutation algorithm.
+The \cpp{std::is_permutation} algorithm is an excellent tool for checking whether two ranges have the same content but not necessarily the same order of elements.
 
 \cppversions{\texttt{is\_permutation}}{\CC11}{\CC20}{\CC17}{\CC20}
-
-\constraints{\texttt{(forward\_range, forward\_range)}}{}{\texttt{operator==}}{\texttt{binary\_predicate}}
-
-The utility of is\_permutation mainly pops up in testing, where we often need to test whether two ranges are piecewise equal but not necessarily in the same order.
+\constraints{\texttt{(forward\_range, forward\_range)}}{\texttt{(forward\_range, forward\_range)}}{\texttt{operator==}}{\texttt{binary\_predicate}}
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data = { 8, 1, 7, 3, 4, 6, 2, 5};
-for (size_t i = 0; i < data.size()-1; ++i)
-    for (size_t j = i+1; j < data.size(); ++j)
-        if (data[i] > data[j])
-            std::swap(data[i], data[j]);
-
-assert(std::ranges::is_sorted(data));
-assert(std::ranges::is_permutation(data, 
-                                   std::vector<int>{1, 2, 3, 4, 5, 6, 7, 8}));
-\end{cppcode}
+\footnotesize Example of using \cpp{std::is_permutation} to validate a simple sort implementation.
+\tcblower
+\cppfile{code_examples/algorithms/is_permutation_code.h}
 \end{box-note}
