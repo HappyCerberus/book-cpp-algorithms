@@ -296,3 +296,6 @@ install(TARGETS adjacent_difference_extra DESTINATION bin)
 
 add_executable(remove remove.cpp)
 install(TARGETS remove DESTINATION bin)
+
+add_executable(replace replace.cpp)
+install(TARGETS replace DESTINATION bin)
