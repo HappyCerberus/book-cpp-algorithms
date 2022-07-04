@@ -274,4 +274,7 @@ add_executable(rotate_copy rotate_copy.cpp)
 install(TARGETS rotate_copy DESTINATION bin)
 
 add_executable(create_at create_at.cpp)
-# Compile-only 
+# Compile-only
+
+add_executable(uninitialized_constr uninitialized_constr.cpp)
+# Compile-only
