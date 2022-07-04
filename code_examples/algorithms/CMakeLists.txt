@@ -278,3 +278,6 @@ add_executable(create_at create_at.cpp)
 
 add_executable(uninitialized_constr uninitialized_constr.cpp)
 # Compile-only
+
+add_executable(uninitialized_copy uninitialized_copy.cpp)
+# Compile-only
