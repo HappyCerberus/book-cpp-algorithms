@@ -4,6 +4,8 @@ The uninitialized memory algorithms are a group of relatively low-level algorith
 
 % TODO: note and link the advanced chapter on manual memory management.
 
+The counted variants of the algorithms are not listed in this section\footnote{The names of these algorithms are particularly long and obnoxious.}. However, note that all algorithms in this section that operate on ranges have a counted variant, where the range is specified using an iterator and number of elements. These variants are used in some of the examples to demonstrate.
+
 \subsection{\texorpdfstring{\cpp{std::construct_at}, \cpp{std::destroy_at}}{\texttt{std::construct\_at}, \texttt{std::destroy\_at}}}
 
 The \cpp{std::construct_at} and \cpp{std::destroy_at} algorithms will construct/destroy a single element at a given address. If additional arguments are specified, \cpp{std::construct_at} will forward these to the objects’ constructor.
@@ -17,16 +19,16 @@ The \cpp{std::construct_at} and \cpp{std::destroy_at} algorithms will construct/
 \cppfile{code_examples/algorithms/create_at_code.h}
 \end{box-note}
 
-\subsection{uninitialized\_default\_construct, uninitialized\_value\_construct, uninitialized\_fill, destroy}
+\subsection{\texorpdfstring{\cpp{std::uninitialized_default_construct},\newline\cpp{std::uninitialized_value_construct},\newline\cpp{std::uninitialized_fill}, \newline\cpp{std::destroy}}{\texttt{std::uninitialized\_default\_construct},\newline\texttt{std::uninitialized_value_construct},\newline\texttt{std::uninitialized_fill}, \newline\texttt{std::destroy}}}
 
-These three algorithms cover the default initialization, value initialization and copy initialization of elements. Destroy provides destruction of objects without deallocating the underlying memory.
+The three uninitialized algorithms cover the default initialization, value initialization and copy initialization of elements. The \cpp{std::destroy} algorithm provides the destruction of elements without deallocating the underlying memory.
 
+\cppversions{\texttt{un\dots default\_construct}}{\CC17}{N/A}{\CC17}{\CC20}
+\cppversions{\texttt{un\dots value\_construct}}{\CC17}{N/A}{\CC17}{\CC20}
 \cppversions{\texttt{uninitialized\_fill}}{\CC98}{N/A}{\CC17}{\CC20}
-\cppversions{\texttt{uninitialized\_default\_construct, uninitialized\_value\_construct, destroy}}{\CC17}{N/A}{\CC17}{\CC20}
+\cppversions{\texttt{destroy}}{\CC17}{N/A}{\CC17}{\CC20}
 
-\constraints{\texttt{forward\_range, forward\_iterator}}{}{}{} % Cleanup the counted variant situation
-
-All these algorithms have counted variants that accept an iterator and the count of elements:
+\constraints{\texttt{forward\_range\newline forward\_iterator (counted)}}{}{}{} % Cleanup the counted variant situation
 
 \begin{box-note}
 \begin{cppcode}
