@@ -290,3 +290,6 @@ install(TARGETS transform DESTINATION bin)
 
 add_executable(adjacent_difference adjacent_difference.cpp)
 install(TARGETS adjacent_difference DESTINATION bin)
+
+add_executable(adjacent_difference_extra adjacent_difference_extra.cpp)
+install(TARGETS adjacent_difference_extra DESTINATION bin)
