@@ -284,3 +284,6 @@ add_executable(uninitialized_copy uninitialized_copy.cpp)
 
 add_executable(transactional transactional.cpp)
 # Compile-only
+
+add_executable(transform transform.cpp)
+install(TARGETS transform DESTINATION bin)
