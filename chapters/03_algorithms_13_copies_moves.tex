@@ -126,41 +126,22 @@ The \cpp{std::reverse_copy} algorithm copies elements in reverse order.
 Not to be confused with the \cpp{std::copy_backwards}, which copies elements in the original order. The \cpp{std::reverse_copy} does not permit the source, and the destination ranges to overlap.
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data{1, 2, 3, 4, 5, 6, 7, 8, 9};
-std::vector<int> out;
-
-std::ranges::reverse_copy(data, std::back_inserter(out));
-// out == { 9, 8, 7, 6, 5, 4, 3, 2, 1 }
-\end{cppcode}
+\footnotesize Example of using \cpp{std::reverse_copy}.
+\tcblower
+\cppfile{code_examples/algorithms/reverse_copy_code.h}
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::rotate_copy}}{\texttt{std::rotate\_copy}}}
 
-
-
-The last two algorithms from the copiers category change the order of copied elements.
-
-\cppversions{\texttt{reverse\_copy}}{\CC98}{\CC20}{\CC17}{\CC20}
-
-\constraints{\texttt{bidirectional\_range -> output\_iterator}}{\texttt{bidirectional\_range -> forward\_iterator}}{}{}
-
-Not to be confused with copy\_backwards, which maintains the original order of elements, reverse\_copy will reverse the order of elements copied.
-
-
+The \cpp{std::rotate_copy} algorithm will copy elements \cpp{[middle, last)}, followed by \cpp{[first, middle)}, which mirrors the behaviour of the \cpp{std::rotate} algorithm.
 
 \cppversions{\texttt{rotate\_copy}}{\CC98}{\CC20}{\CC17}{\CC20}
-
 \constraints{\texttt{(forward\_range, forward\_iterator) -> output\_iterator}}{\texttt{(forward\_range, forward\_iterator) -> forward\_iterator}}{}{}
 
-Following the logic of the rotate algorithm, rotate\_copy will first copy the elements starting from the designated middle element and then follow with the remaining elements from the beginning of the range.
+The input and output ranges cannot overlap.
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data{1, 2, 3, 4, 5, 6, 7, 8, 9};
-std::vector<int> out;
-
-std::ranges::rotate_copy(data, data.begin()+4, std::back_inserter(out));
-// out == { 5, 6, 7, 8, 9, 1, 2, 3, 4 }
-\end{cppcode}
+\footnotesize Example of using \cpp{std::rotate_copy}.
+\tcblower
+\cppfile{code_examples/algorithms/rotate_copy_code.h}
 \end{box-note}
