@@ -95,45 +95,45 @@ C-style arrays and C-style strings can be adapted using \cpp{std::span} and \cpp
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::rotate}}{\texttt{std::rotate}}}
-\subsection{\texorpdfstring{\cpp{std::shuffle}}{\texttt{std::shuffle}}}
 
-\subsection{reverse, rotate, shuffle}
-
-
-
-The rotate algorithm does precisely that, and it rotates the elements in the range such that the designated element is now the first element of the range.
+The \cpp{std::rotate} algorithm rearranges elements in the range from \cpp{[first, middle),[middle, last)} to \cpp{[middle, last),[first, middle)}.
 
 \cppversions{\texttt{rotate}}{\CC11}{\CC20}{\CC17}{\CC20}
-
-\constraints{\texttt{(forward\_range, forward\_iterator)}}{}{}{}
+\constraints{\texttt{(forward\_range, forward\_iterator)}}{\texttt{(forward\_range, forward\_iterator)}}{}{}
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data{1, 2, 3, 4, 5, 6, 7};
-std::rotate(data.begin(), data.begin()+3, data.end());
-// data=4, 5, 6, 7, 1, 2, 3
-\end{cppcode}
+\footnotesize Example of using \cpp{std::rotate}.
+\tcblower
+\cppfile{code_examples/algorithms/rotate_code.h}
 \end{box-note}
+
+\subsection{\texorpdfstring{\cpp{std::shuffle}}{\texttt{std::shuffle}}}
 
 The shuffle algorithm is a successor of the now-defunct random\_shuffle algorithm (deprecated in C++14, removed in C++17) and relies on new random facilities added in C++11.
 
 \cppversions{\texttt{shuffle}}{\CC11}{N/A}{N/A}{\CC20}
-
 \constraints{\texttt{random\_access\_range}}{}{}{}
 
-The random facilities are out of scope for this article. However, shuffle will work with any uniform random bit generator.
+\begin{box-note}
+\footnotesize Example of using \cpp{std::shuffle} to shuffle a deck of cards.
+\tcblower
+\cppfile{code_examples/algorithms/shuffle_code.h}
+\end{box-note}
+
 
 \begin{box-note}
 \begin{cppcode}
-struct Card {
-    unsigned index;
-    
-    friend std::ostream& operator << (std::ostream& s, const Card& card) {
         static constexpr std::array<const char*, 13> ranks = {"Ace", "Two", "Three", 
           "Four", "Five", "Six", "Seven", "Eight", 
           "Nine", "Ten", "Jack", "Queen", "King"};
         static constexpr std::array<const char*, 4> suits = {"Hearts", "Diamonds", 
                                                              "Clubs", "Spades"};
+
+
+struct Card {
+    unsigned index;
+    
+    friend std::ostream& operator << (std::ostream& s, const Card& card) {
 
         if (card.index >= 52)
             throw std::domain_error("Card index has to be in the range 0..51");
