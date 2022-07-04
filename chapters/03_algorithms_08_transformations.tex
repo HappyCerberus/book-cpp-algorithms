@@ -36,74 +36,39 @@ Unlike \cpp{std::transform}, \cpp{std::adjacent_difference} guarantees left-to-r
 \end{box-note}
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data(10, 1);
-std::adjacent_difference(data.begin(), std::prev(data.end()), 
-                         std::next(data.begin()), std::plus<int>());
-// Fibonacci sequence: 1, 1, 2, 3, 5, 8, 13, 21, 34, 55,
-\end{cppcode}
+\footnotesize Example of more inventive use of \cpp{std::adjacent_difference} to generate the Fibonacci sequence.
+\tcblower
+\cppfile{code_examples/algorithms/adjacent_difference_extra_code.h}
 \end{box-note}
 
-Note that the std::next(data.begin()) for the output range is critical here. The adjacent\_difference algorithm will read each element only once and remembers the previously read value for the left argument. The std::next ensures that we generate one element ahead of either argument.
+Note that the \cpp{std::next(data.begin())} for the output range is critical here. The \cpp{std::adjacent_difference} algorithm will read each element only once and remembers the previously read value for the left argument. The \cpp{std::next} ensures that we generate one element ahead of either argument.
 
-\subsection{remove, remove\_if}
+\subsection{\texorpdfstring{\cpp{std::remove}, \cpp{std::remove_if}}{\texttt{std::remove}, \texttt{std::remove\_if}}}
+
+The \cpp{std::remove} and \cpp{std::remove_if} algorithms "remove" elements that match the given value or for which the given predicate evaluates to true.
+
+Because the algorithms cannot resize the underlying range, the removal is achieved by moving the other elements in the range. The algorithms then return an iterator beyond the last not removed element, i.e. the new end iterator.
 
 \cppversions{\texttt{remove, remove\_if}}{\CC98}{\CC20}{\CC17}{\CC20}
-
-\constraints{\texttt{forward\_range}}{}{N/A}{\texttt{unary\_predicate}}
-
-Similar to std::unique, the algorithm cannot resize the range, so it instead returns an iterator to designate the new end.
+\constraints{\texttt{forward\_range}}{\texttt{forward\_range}}{N/A}{\texttt{unary\_predicate}}
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data{1, 2, 3, 4, 5};
-auto it = std::remove(data.begin(), data.end(), 3);
-data.resize(it-data.begin()); // Random Access Ranges only
-// data = {1, 2, 4, 5}
-
-auto is_even = [](int v) { return v % 2 == 0; };
-it = std::remove_if(data.begin(), data.end(), is_even);
-data.erase(it, data.end()); // Erase sub-range
-// data = {1, 5}
-\end{cppcode}
+\footnotesize Example of using \cpp{std::remove} and \cpp{std::remove_if}.
+\tcblower
+\cppfile{code_examples/algorithms/remove_code.h}
 \end{box-note}
 
-This naming schema will be repeated across several algorithms. The base version is always a variant that operates based on a provided value (line 2), the \_if variant relies on a provided predicate (line 7).
+\subsection{\texorpdfstring{\cpp{std::remove}, \cpp{std::remove_if}}{\texttt{std::remove}, \texttt{std::remove\_if}}}
 
-While remove doesn’t have a direct lazy version, we can often replace it with std::views::filter.
-
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> data{1, 2, 3, 4, 5};
-auto is_odd = [](int v) { return v % 2 != 0; };
-for (int v : data | std::ranges::views::filter(is_odd)) {
-    // iterate over 1, 3, 5
-}
-\end{cppcode}
-\end{box-note}
-
-A significant difference is that views::filter changes how the range is iterated and does not modify its actual content of the range.
-
-\subsection{replace, replace\_if}
-
-We can use the replace algorithm to replace values instead of removing them.
+The \cpp{std::replace} and \cpp{std::replace_if} algorithms replace elements that match the given value or for which the given predicate evaluates to true.
 
 \cppversions{\texttt{replace, replace\_if}}{\CC98}{\CC20}{\CC17}{\CC20}
-
-\constraints{\texttt{forward\_range}}{}{N/A}{\texttt{unary\_predicate}}
-
-Following the same naming schema, std::replace replaces elements matching a given value, whereas std::replace\_if replaces elements based on a predicate.
+\constraints{\texttt{forward\_range}}{\texttt{forward\_range}}{N/A}{\texttt{unary\_predicate}}
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data{1, 2, 3, 4, 5, 6, 7};
-std::ranges::replace(data, 4, 0);
-// data={1, 2, 3, 0, 5, 6, 7}
-
-auto is_odd = [](int v) { return v % 2 != 0; };
-std::ranges::replace_if(data, is_odd, -1);
-// data={-1, 2, -1, 0, -1, 6, -1}
-\end{cppcode}
+\footnotesize Example of using \cpp{std::replace} and \cpp{std::replace_if}.
+\tcblower
+\cppfile{code_examples/algorithms/replace_code.h}
 \end{box-note}
 
 \subsection{reverse, rotate, shuffle}
