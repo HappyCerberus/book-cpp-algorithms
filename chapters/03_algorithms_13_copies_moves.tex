@@ -22,83 +22,20 @@ For the forward direction, the output iterator is not permitted to be within \te
 Move operates identically, except it casts each element to an rvalue before the assignment, turning copies into moves.
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<std::string> data{ "a", "b", "c", "d", "e", "f"};
-
-std::move(data.begin(), data.begin()+3, data.begin()+3);
-// data = { ?, ?, ?, "a", "b", "c" }
-\end{cppcode}
-\end{box-note}
-
-
-
-
-\subsection{copy, move, copy\_backwards, move\_backwards}
-
-When copying/moving a range, we need to avoid overwriting the yet to be copied/moved elements from the source range. The standard offers two directions of copying to prevent this issue. We will start with the forward version:
-
-\cppversions{\texttt{copy}}{\CC98}{\CC20}{\CC17}{\CC20}
-\cppversions{\texttt{move}}{\CC11}{\CC20}{\CC17}{\CC20}
-
-\constraints{\texttt{input\_range -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{}{}
-
-The output iterator is not permitted to be within [first, last) (of the input range). Consequently, only the tail of the output range can overlap with the input range.
-
-\begin{box-note}
-\begin{cppcode}
-std::vector<std::string> data{ "a", "b", "c", "d", "e", "f"};
-
-std::copy(data.begin(), data.begin()+3, data.begin()+3);
-// data = { "a", "b", "c", "a", "b", "c" }
-
-// Overlapping case:
-std::copy(std::next(data.begin()), data.end(), data.begin());
-// data = { "b", "c", "a", "b", "c", "c" }
-\end{cppcode}
-\end{box-note}
-
-Move operates identically, except it casts each element to an rvalue before the assignment, turning copies into moves.
-
-\begin{box-note}
-\begin{cppcode}
-std::vector<std::string> data{ "a", "b", "c", "d", "e", "f"};
-
-std::move(data.begin(), data.begin()+3, data.begin()+3);
-// data = { ?, ?, ?, "a", "b", "c" }
-\end{cppcode}
+\footnotesize Example of using \cpp{std::move}.
+\tcblower
+\cppfile{code_examples/algorithms/move_code.h}
 \end{box-note}
 
 Significantly, whether std::move will move depends on the underlying element type. If the underlying type is copy-only, std::move will behave identically to std::copy.
 
 \begin{box-note}
-\begin{cppcode}
-struct CopyOnly {
-    CopyOnly() = default;
-    CopyOnly(const CopyOnly&) = default;
-    CopyOnly& operator=(const CopyOnly&) { 
-      std::cout << "Copy assignment.\n";
-      return *this;
-    };
-};
-
-std::vector<CopyOnly> test(6);
-
-std::move(test.begin(), test.begin()+3, test.begin()+3);
-// 3x Copy assignment
-\end{cppcode}
+\footnotesize Example of using \cpp{std::move} with a copy-only type.
+\tcblower
+\cppfile{code_examples/algorithms/move_nomove_code.h}
 \end{box-note}
 
-We can also emulate std::move by using the previously mentioned move\_iterator adapter.
 
-\begin{box-note}
-\begin{cppcode}
-std::vector<std::string> data{ "a", "b", "c", "d", "e", "f"};
-
-std::copy(std::make_move_iterator(data.begin()), std::make_move_iterator(data.begin()+3), 
-          data.begin()+3);
-// data = { ?, ?, ?, "a", "b", "c" }
-\end{cppcode}
-\end{box-note}
 
 When we need to copy to an overlapping range that isn’t suitable for forward copy, we can use the backward variant that copies in the opposite direction.
 

@@ -165,3 +165,17 @@ std::ranges::fill(std::counted_iterator(data.begin(), 3), std::default_sentinel,
 \end{box-note}
 
 The counted\_iterator keeps track of the number of elements, and when the counter reaches zero, the counted\_iterator will compare equal to std::default\_sentinel, signifying the end of the range.
+
+% TODO: integrate
+% Taken from copy section
+We can also emulate std::move by using the previously mentioned move\_iterator adapter.
+
+\begin{box-note}
+\begin{cppcode}
+std::vector<std::string> data{ "a", "b", "c", "d", "e", "f"};
+
+std::copy(std::make_move_iterator(data.begin()), std::make_move_iterator(data.begin()+3), 
+          data.begin()+3);
+// data = { ?, ?, ?, "a", "b", "c" }
+\end{cppcode}
+\end{box-note}
