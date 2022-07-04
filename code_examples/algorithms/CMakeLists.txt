@@ -252,5 +252,8 @@ install(TARGETS move DESTINATION bin)
 add_executable(move_nomove move_nomove.cpp)
 # Compile-only
 
-add_executable(copy_backward copy_backward)
+add_executable(copy_backward copy_backward.cpp)
 install(TARGETS copy_backward DESTINATION bin)
+
+add_executable(copy_n copy_n.cpp)
+install(TARGETS copy_n DESTINATION bin)
