@@ -52,23 +52,24 @@ The output iterator cannot be within \cpp{(first, last]} and will be treated as 
 \cppfile{code_examples/algorithms/copy_backward_code.h}
 \end{box-note}
 
-Similar to fill\_n and generate\_n, the standard also provides a copy\_n variant suitable for non-random-access ranges.
+\subsection{\texorpdfstring{\cpp{std::copy_n}}{\texttt{std::copy\_n}}}
+
+The \cpp{std::copy_n} algorithm is the counted variant of \cpp{std::copy} that accepts an input range specified using an iterator and the number of elements.
 
 \cppversions{\texttt{copy\_n}}{\CC11}{\CC20}{\CC17}{\CC20}
-
 \constraints{\texttt{input\_iterator -> output\_iterator}}{\texttt{forward\_iterator -> forward\_iterator}}{}{}
 
 The algorithm cannot check whether the requested count is valid and does not go out of bounds, so this burden is on the caller.
 
 \begin{box-note}
-\begin{cppcode}
-std::list<int> data{1, 2, 3, 4, 5, 6, 7, 8, 9};
-std::vector<int> out;
-
-std::copy_n(data.begin(), 5, std::back_inserter(out));
-// out == { 1, 2, 3, 4, 5 }
-\end{cppcode}
+\footnotesize Example of using \cpp{std::copy_n}.
+\tcblower
+\cppfile{code_examples/algorithms/copy_n_code.h}
 \end{box-note}
+
+
+
+
 
 \subsection{copy\_if, remove\_copy, remove\_copy\_if}
 
