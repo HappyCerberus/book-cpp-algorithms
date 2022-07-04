@@ -287,3 +287,6 @@ add_executable(transactional transactional.cpp)
 
 add_executable(transform transform.cpp)
 install(TARGETS transform DESTINATION bin)
+
+add_executable(adjacent_difference adjacent_difference.cpp)
+install(TARGETS adjacent_difference DESTINATION bin)
