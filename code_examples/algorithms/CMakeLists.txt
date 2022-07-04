@@ -302,3 +302,9 @@ install(TARGETS replace DESTINATION bin)
 
 add_executable(reverse reverse.cpp)
 install(TARGETS reverse DESTINATION bin)
+
+add_executable(rotate rotate.cpp)
+install(TARGETS rotate DESTINATION bin)
+
+add_executable(shuffle shuffle.cpp)
+install(TARGETS shuffle DESTINATION bin)
