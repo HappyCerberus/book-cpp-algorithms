@@ -67,37 +67,22 @@ The algorithm cannot check whether the requested count is valid and does not go 
 \cppfile{code_examples/algorithms/copy_n_code.h}
 \end{box-note}
 
+\subsection{\texorpdfstring{\cpp{std::copy_if}, \cpp{std::remove_copy}, \cpp{std::remove_copy_if}}{\texttt{std::copy\_if}, \texttt{std::remove\_copy}, \texttt{std::remove\_copy\_if}}}
 
-
-
-
-\subsection{copy\_if, remove\_copy, remove\_copy\_if}
-
-We can use copy\_if or remove\_copy\_if when we need to select only some of the elements to be copied.
+The \cpp{std::copy_if}, \cpp{std::remove_copy} and \cpp{std::remove_copy_if} are selective copy algorithms.
 
 \cppversions{\texttt{copy\_if}}{\CC11}{\CC20}{\CC17}{\CC20}
-\cppversions{\texttt{remove\_copy, remove\_copy\_if}}{\CC98}{\CC20}{\CC17}{\CC20}
+\cppversions{\texttt{remove\_copy}}{\CC98}{\CC20}{\CC17}{\CC20}
+\cppversions{\texttt{remove\_copy\_if}}{\CC98}{\CC20}{\CC17}{\CC20}
 
 \constraints{\texttt{input\_range -> output\_range}}{\texttt{forward\_range -> forward\_iterator}}{N/A}{\texttt{unary\_predicate}}
 
-These two algorithms provide the same logic, with opposite semantics: copy\_if will copy elements for which the predicate returns true, and remove\_copy\_if will copy elements for which the predicate returns false. Finally, remove\_copy copies elements that do not match the provided value.
+The \cpp{std::remove_copy} algorithm will copy elements that do not match the provided value. The \cpp{std::copy_if} and \cpp{std::remove_copy_if} algorithms will copy elements based on a predicate, with \cpp{std::copy_if} copying elements for which the predicate returns true and \cpp{std::remove_copy_if} copying elements for which the predicate returns false.
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> data{ 1, 2, 3, 4, 5, 6, 7, 8, 9};
-std::vector<int> even, odd, no_five;
-
-auto is_even = [](int v) { return v % 2 == 0; };
-
-std::ranges::copy_if(data, std::back_inserter(even), is_even);
-// even == { 2, 4, 6, 8 }
-
-std::ranges::remove_copy_if(data, std::back_inserter(odd), is_even);
-// odd == { 1, 3, 5, 7, 9 }
-
-std::ranges::remove_copy(data, std::back_inserter(no_five), 5);
-// no_five == { 1, 2, 3, 4, 6, 7, 8, 9 }
-\end{cppcode}
+\footnotesize Example demonstrating differences between \cpp{std::copy_if}, \cpp{std::remove_copy} and \cpp{std::remove_copy_if}.
+\tcblower
+\cppfile{code_examples/algorithms/copy_if_code.h}
 \end{box-note}
 
 \subsection{sample}
