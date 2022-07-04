@@ -245,3 +245,6 @@ install(TARGETS iota DESTINATION bin)
 
 add_executable(copy copy.cpp)
 install(TARGETS copy DESTINATION bin)
+
+add_executable(move move.cpp)
+install(TARGETS move DESTINATION bin)
