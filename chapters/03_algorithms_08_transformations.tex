@@ -71,75 +71,35 @@ The \cpp{std::replace} and \cpp{std::replace_if} algorithms replace elements tha
 \cppfile{code_examples/algorithms/replace_code.h}
 \end{box-note}
 
-\subsection{reverse, rotate, shuffle}
+\subsection{\texorpdfstring{\cpp{std::reverse}}{\texttt{std::reverse}}}
 
-The reverse algorithm provides a straightforward swap-based reversion of a given bi-directional range.
+The \cpp{std::reverse} algorithm will reverse the order of elements in the range by applying \cpp{std::swap} to pairs of elements.
 
 \cppversions{\texttt{reverse}}{\CC98}{\CC20}{\CC17}{\CC20}
+\constraints{\texttt{bidirectional\_range}}{\texttt{bidirectional\_range}}{}{}
 
-\constraints{\texttt{bidirectional\_range}}{}{}{}
-
-While only C++20 introduced the view version of reverse, every bidirectional range natively supports reverse iteration through the rbegin() and rend() variants of begin() and end() iterators.
-
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> data{1, 2, 3, 4, 5, 6, 7};
-std::reverse(data.begin(), data.end());
-// data = {7, 6, 5, 4, 3, 2, 1}
-
-for (auto it = data.rbegin(); it != data.rend(); ++it) {
-    // iterate over: 1, 2, 3, 4, 5, 6, 7
-}
-
-for (auto v : data | std::views::reverse) {
-    // iterate over: 1, 2, 3, 4, 5, 6, 7
-}
-\end{cppcode}
-\end{box-note}
-
-When working with legacy types such as C arrays or strings, reverse iteration can be awkward. However, we can lean on std::span (since C++20) and std::string\_view (since C++17) that both provide bi-directional support.
+Note that using \cpp{std::reverse} is only a reasonable solution if the range must be mutated because bidirectional ranges already support reverse iteration.
 
 \begin{box-note}
-\begin{cppcode}
-int c_array[] = {1, 2, 3, 4, 5, 6, 7};
-auto arr_view = std::span(c_array, sizeof(c_array)/sizeof(int));
-
-for (auto it = arr_view.rbegin(); it != arr_view.rend(); ++it) {
-    // iterate over: {7, 6, 5, 4, 3, 2, 1}
-}
-
-const char* c_string = "No lemon, no melon";
-auto str_view = std::string_view(c_string);
-
-for (auto it = str_view.rbegin(); it != str_view.rend(); ++it) {
-    // iterate over: "nolem on ,nomel oN"
-}
-\end{cppcode}
+\footnotesize Example of using \cpp{std::reverse} and reverse iteration, provided by bidirectional ranges.
+\tcblower
+\cppfile{code_examples/algorithms/reverse_code.h}
 \end{box-note}
 
-The reverse algorithm also gives us an excellent place to demonstrate a more advanced composition of views. For example, the following is a trim view that skips over leading and trailing whitespace:
+C-style arrays and C-style strings can be adapted using \cpp{std::span} and \cpp{std::string_view} to allow reverse iteration.
 
 \begin{box-note}
-\begin{cppcode}
-const char* c_string = "  No lemon, no melon.     ";
-auto str_view = std::string_view(c_string);
-
-auto is_ws = [](char c) { return isspace(c); };
-auto skip_ws = std::views::drop_while(is_ws);
-auto skip_trailing_ws = std::views::reverse | skip_ws | std::views::reverse;
-auto trim = skip_trailing_ws | skip_ws;
-
-std::string out;
-std::ranges::copy(str_view | trim, std::back_inserter(out));
-// out = "No lemon, no melon."
-\end{cppcode}
+\footnotesize Example of using \cpp{std::span} and \cpp{std::string_view} to addapt C-style constructs for reverse iteration.
+\tcblower
+\cppfile{code_examples/extras/span_stringview_code.h}
 \end{box-note}
 
-As with previous examples, no runtime computation is happening on lines 4–7, and the processing is done on-demand as the std::copy algorithm iterates over the composed view (line 10).
+\subsection{\texorpdfstring{\cpp{std::rotate}}{\texttt{std::rotate}}}
+\subsection{\texorpdfstring{\cpp{std::shuffle}}{\texttt{std::shuffle}}}
 
-We start with a predicate that returns true for whitespace characters (line 4). We then utilize the drop\_while view that skips over elements until the predicate returns false (line 5). This is already our one-way trim.
+\subsection{reverse, rotate, shuffle}
 
-To construct a reverse trim, we reverse the range, trim the now leading whitespace and then reverse the range again (line 6). Finally, the full trim is simply a composition of the two partial trim operations.
+
 
 The rotate algorithm does precisely that, and it rotates the elements in the range such that the designated element is now the first element of the range.
 
