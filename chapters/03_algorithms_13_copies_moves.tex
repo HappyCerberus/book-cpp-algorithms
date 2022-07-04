@@ -100,15 +100,15 @@ The two domains of this algorithm are due to the stable nature of the sampling, 
 \cppfile{code_examples/algorithms/sample_code.h}
 \end{box-note}
 
-\subsection{replace\_copy, replace\_copy\_if}
+\subsection{\texorpdfstring{\cpp{std::replace_copy}, \cpp{std::replace_copy_if}}{\texttt{std::replace\_copy}, \texttt{std::replace\_copy\_if}}}
 
-We discussed the replace algorithm in a previous article in the series. The copy variants work identical, replacing values matching a predicate or a provided value. However, the result is output to a destination range instead of the replacement applied in place.
+The \cpp{std::replace_copy} and \cpp{std::replace_copy_if} algorithms operate like \cpp{std::copy}; however, they will copy a provided value instead of specific elements.
 
-\cppversions{\texttt{replace\_copy, replace\_copy\_if}}{\CC98}{\CC20}{\CC17}{\CC20}
+For \cpp{std::replace_copy}, the algorithm will replace elements matching a value for \cpp{std::replace_copy_if} the algorithm will replace elements for which the predicate evaluates to true.
 
+\cppversions{\texttt{replace\_copy}}{\CC98}{\CC20}{\CC17}{\CC20}
+\cppversions{\texttt{replace\_copy\_if}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{input\_range -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{N/A}{\texttt{unary\_predicate}}
-
-The replace\_copy\_if variant replaces elements for which the predicate returns true. The replace\_copy replaces elements that match the provided value.
 
 \begin{box-note}
 \begin{cppcode}
