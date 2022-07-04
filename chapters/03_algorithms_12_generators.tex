@@ -48,30 +48,9 @@ The \cpp{std::iota} generates elements by consecutively assigning the result of 
 Notably, the \cpp{std::iota} algorithm is also an outlier in the support added with the C++20 standard. The std::iota algorithm did not receive a range version. However, we do have access to an iota view.
 
 \begin{box-note}
-\footnotesize Example of using \cpp{std::iota}.
+\footnotesize Example of using both finite and infinite \cpp{std::views::iota}.
 \tcblower
 \cppfile{code_examples/algorithms/iota_view_code.h}
 \end{box-note}
 
-
-Iota is an outlier when it comes to C++20 std::ranges support. C++20 introduced the lazy view version std::views::iota, and we will only get the eager range version of the algorithm in C++23.
-
-
-
-The std::iota algorithm will generate elements by consecutively applying the prefix increment operator, starting with the initial value.
-
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> data(11, 0);
-
-std::iota(data.begin(), data.end(), -5); 
-// data == { -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5 }
-
-std::vector<int> out;
-std::ranges::transform(std::views::iota(1, 10), std::views::iota(5), 
-                       std::back_inserter(out), std::plus<>{});
-// out == { 6, 8, 10, 12, 14, 16, 18, 20, 22 }
-\end{cppcode}
-\end{box-note}
-
-Here we take advantage of the finite view constructor std::views::iota(1,10) to establish the output size (line 7), which allows us to use the infinite view std::views::iota(5) for the second parameter. Functionally, we could swap even the second view for a finite one. However, this would impose an additional (and unnecessary) boundary check.
+Here we take advantage of the finite view constructor \cpp{std::views::iota(1,10)} to establish the output size (line 3), which allows us to use the infinite view \cpp{std::views::iota(5)} for the second parameter. Functionally, we could swap even the second view for a finite one. However, this would impose an additional (and unnecessary) boundary check.
