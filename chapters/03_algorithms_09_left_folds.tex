@@ -5,6 +5,7 @@ Left folds are one of the two big groups of numerical algorithms. Folds operate 
 Because of the strictly linear operation, none of the left-fold algorithms supports a parallel version.
 
 \subsection{\texorpdfstring{\cpp{std::accumulate}}{\texttt{std::accumulate}}}
+\index{\cpp{std::accumulate}}
 
 The \cpp{std::accumulate} algorithm is the single-range left-fold.
 
@@ -27,6 +28,7 @@ Note that the algorithm accepts an initial value that also dictates the accumula
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::inner_product}}{\texttt{std::inner\_product}}}
+\index{\cpp{std::inner_product}}
 
 The \cpp{std::inner_product} algorithm is a left fold over two ranges. The pairs of elements are first reduced and then accumulated.
 
@@ -50,6 +52,7 @@ Because the algorithm only uses the ranges as input, there is no issue with over
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::partial_sum}}{\texttt{std::partial_sum}}}
+\index{\cpp{std::partial_sum}}
 
 The \cpp{std::partial_sum} algorithm operates as a left fold. However, it doesn't reduce the range into a single value. Instead, the algorithm writes each partial result to the output range.
 

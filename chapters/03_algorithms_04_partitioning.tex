@@ -5,6 +5,7 @@ Partition algorithms rearrange elements in the range based on a predicate, such 
 Partitioning comes up often when we need to group elements based on a particular property. You can also think of partitioning as equal to sorting if we would sort based on the values of a boolean property.
 
 \subsection{\texorpdfstring{\cpp{std::partition}}{\texttt{std::partition}}}
+\index{\cpp{std::partition}}
 
 The \cpp{std::partition} algorithm provides the basic partitioning functionality, reordering elements based on a unary predicate. The algorithm returns the partition point, an iterator to the first element for which the predicate returned \cpp{false}.
 
@@ -18,6 +19,7 @@ The \cpp{std::partition} algorithm provides the basic partitioning functionality
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::stable_partition}}{\texttt{std::stable\_partition}}}
+\index{\cpp{std::stable_partition}}
 
 The \cpp{std::partition} algorithm is permitted to rearrange the elements with the only guarantee that elements for which the predicate evaluated to \cpp{true} will precede elements for which the predicate evaluated to \cpp{false}. This behaviour can be undesirable, for example, for UI elements.
 
@@ -34,6 +36,7 @@ The \cpp{std::stable_partition} algorithm adds the guarantee of preserving the r
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::is_partitioned}}{\texttt{std::is\_partitioned}}}
+\index{\cpp{std::is_partitioned}}
 
 The \cpp{std::is_partitioned} algorithm is a linear check returning a boolean denoting whether the ranges elements are partitioned in regards to the predicate.
 
@@ -49,6 +52,7 @@ Note that a sorted range is always partitioned for any possible value (with a di
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::partition_copy}}{\texttt{std::partition\_copy}}}
+\index{\cpp{std::partition_copy}}
 
 The \cpp{std::partition_copy} is a variant of \cpp{std::partition} that, instead of reordering elements, will output the partitioned elements to the two output ranges denoted by two iterators.
 
@@ -62,6 +66,7 @@ The \cpp{std::partition_copy} is a variant of \cpp{std::partition} that, instead
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::nth_element}}{\texttt{std::nth\_element}}}
+\index{\cpp{std::nth_element}}
 
 The \cpp{nth_element} algorithm is a partitioning algorithm that ensures that the element in the nth position is the element that would be in this position if the range was sorted.
 

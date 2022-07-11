@@ -7,6 +7,8 @@ The uninitialized memory algorithms are a group of relatively low-level algorith
 The counted variants of the algorithms are not listed in this section\footnote{The names of these algorithms are particularly long and obnoxious.}. However, note that all algorithms in this section that operate on ranges have a counted variant, where the range is specified using an iterator and number of elements. These variants are used in some of the examples to demonstrate.
 
 \subsection{\texorpdfstring{\cpp{std::construct_at}, \cpp{std::destroy_at}}{\texttt{std::construct\_at}, \texttt{std::destroy\_at}}}
+\index{\cpp{std::construct_at}}
+\index{\cpp{std::destroy_at}}
 
 The \cpp{std::construct_at} and \cpp{std::destroy_at} algorithms will construct/destroy a single element at a given address. If additional arguments are specified, \cpp{std::construct_at} will forward these to the objects’ constructor.
 
@@ -20,6 +22,10 @@ The \cpp{std::construct_at} and \cpp{std::destroy_at} algorithms will construct/
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::uninitialized_default_construct},\newline\cpp{std::uninitialized_value_construct},\newline\cpp{std::uninitialized_fill}, \newline\cpp{std::destroy}}{\texttt{std::uninitialized\_default\_construct},\newline\texttt{std::uninitialized_value_construct},\newline\texttt{std::uninitialized_fill}, \newline\texttt{std::destroy}}}
+\index{\cpp{std::uninitialized_default_construct}}
+\index{\cpp{std::uninitialized_value_construct}}
+\index{\cpp{std::uninitialized_fill}}
+\index{\cpp{std::destroy}}
 
 The three uninitialized algorithms cover the default initialization, value initialization and copy initialization of elements. The \cpp{std::destroy} algorithm provides the destruction of elements without deallocating the underlying memory.
 
@@ -38,6 +44,8 @@ Example demonstrating the use of the counted variants of the uninitialized const
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::uninitialized_copy}, \cpp{std::uninitalized_move}}{\texttt{std::uninitialized\_copy}, \texttt{std::uninitalized\_move}}}
+\index{\cpp{std::uninitialized_copy}}
+\index{\cpp{std::uninitialized_move}}
 
 The \cpp{std::unitialized_copy} and \cpp{std::unitialized_move} algorithms follow the behaviour of \cpp{std::copy} and \cpp{std::move} algorithms with the distinction that the destination range is uninitialized memory.
 

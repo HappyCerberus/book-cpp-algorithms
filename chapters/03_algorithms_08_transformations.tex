@@ -3,6 +3,7 @@
 In this section, we will discuss algorithms that transform ranges by changing the values of elements and removing and re-ordering elements.
 
 \subsection{\texorpdfstring{\cpp{std::transform}}{\texttt{std::transform}}}
+\index{\cpp{std::transform}}
 
 The most straightforward transformation possible is to apply a transformation function to each element. The \cpp{std::transform} algorithm provides this functionality in unary and binary variants (input from one or two ranges).
 
@@ -21,6 +22,7 @@ The most straightforward transformation possible is to apply a transformation fu
 Note that \cpp{std::transform} does not guarantee strict left-to-right evaluation. If that is required, use \cpp{std::for_each} instead.
 
 \subsection{\texorpdfstring{\cpp{std::adjacent_difference}}{\texttt{std::adjacent\_difference}}}
+\index{\cpp{std::adjacent_difference}}
 
 The \cpp{std::adjacent_difference} is a numerical algorithm, which might make it seem out of place in this section; however, it is essentially a binary transformation algorithm that operates on adjacent elements of the single source range.
 
@@ -44,6 +46,8 @@ Unlike \cpp{std::transform}, \cpp{std::adjacent_difference} guarantees left-to-r
 Note that the \cpp{std::next(data.begin())} for the output range is critical here. The \cpp{std::adjacent_difference} algorithm will read each element only once and remembers the previously read value for the left argument. The \cpp{std::next} ensures that we generate one element ahead of either argument.
 
 \subsection{\texorpdfstring{\cpp{std::remove}, \cpp{std::remove_if}}{\texttt{std::remove}, \texttt{std::remove\_if}}}
+\index{\cpp{std::remove}}
+\index{\cpp{std::remove_if}}
 
 The \cpp{std::remove} and \cpp{std::remove_if} algorithms "remove" elements that match the given value or for which the given predicate evaluates to true.
 
@@ -58,7 +62,9 @@ Because the algorithms cannot resize the underlying range, the removal is achiev
 \cppfile{code_examples/algorithms/remove_code.h}
 \end{box-note}
 
-\subsection{\texorpdfstring{\cpp{std::remove}, \cpp{std::remove_if}}{\texttt{std::remove}, \texttt{std::remove\_if}}}
+\subsection{\texorpdfstring{\cpp{std::replace}, \cpp{std::replace_if}}{\texttt{std::replace}, \texttt{std::replace\_if}}}
+\index{\cpp{std::replace}}
+\index{\cpp{std::replace_if}}
 
 The \cpp{std::replace} and \cpp{std::replace_if} algorithms replace elements that match the given value or for which the given predicate evaluates to true.
 
@@ -72,6 +78,7 @@ The \cpp{std::replace} and \cpp{std::replace_if} algorithms replace elements tha
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::reverse}}{\texttt{std::reverse}}}
+\index{\cpp{std::reverse}}
 
 The \cpp{std::reverse} algorithm will reverse the order of elements in the range by applying \cpp{std::swap} to pairs of elements.
 
@@ -95,6 +102,7 @@ C-style arrays and C-style strings can be adapted using \cpp{std::span} and \cpp
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::rotate}}{\texttt{std::rotate}}}
+\index{\cpp{std::rotate}}
 
 The \cpp{std::rotate} algorithm rearranges elements in the range from \cpp{[first, middle),[middle, last)} to \cpp{[middle, last),[first, middle)}.
 
@@ -108,6 +116,7 @@ The \cpp{std::rotate} algorithm rearranges elements in the range from \cpp{[firs
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::shuffle}}{\texttt{std::shuffle}}}
+\index{\cpp{std::shuffle}}
 
 The \cpp{std::shuffle} algorithm is a successor of the now-defunct \cpp{std::random_shuffle} algorithm (deprecated in \CC14, removed in \CC17) and relies on new random facilities added in \CC11.
 
@@ -121,6 +130,8 @@ The \cpp{std::shuffle} algorithm is a successor of the now-defunct \cpp{std::ran
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::next_permutation}, \cpp{std::prev_permutation}}{\texttt{std::next\_permutation}, \texttt{std::prev\_permutation}}}
+\index{\cpp{std::next_permutation}}
+\index{\cpp{std::prev_permutation}}
 
 The \cpp{std::next_permutation} and \cpp{std::prev_permutation} algorithms will rearrange the element so that they are in their next or previous (by lexicographical comparison) permutation. When there is no such ordering, both algorithms will wrap around, but will also return \cpp{false} to notify the caller.
 
@@ -135,6 +146,7 @@ The \cpp{std::next_permutation} and \cpp{std::prev_permutation} algorithms will 
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::is_permutation}}{\texttt{std::is\_permutation}}}
+\index{\cpp{std::is_permutation}}
 
 The \cpp{std::is_permutation} algorithm is an excellent tool for checking whether two ranges have the same content but not necessarily the same order of elements.
 

@@ -22,7 +22,7 @@ The \CC98 standard introduced most of the algorithms. However, it was the \CC11 
 \cppfile{code_examples/introduction/history_cc11_code.h}
 \end{box-note}
 
-The \CC17 standard introduced parallel algorithms that provide an easy way to speed up processing with minimal effort. All you need to do is to specify the desired execution model, and the library will take care of spawning the correct number of threads.
+The \CC17 standard introduced parallel algorithms that provide an easy way to speed up processing with minimal effort. All you need to do is to specify the desired execution model, and the library will take care of parallelizing the execution.
 
 \begin{box-note}
 \footnotesize Example of \cpp{std::for_each}\index{\cpp{std::for_each}} algorithm using unsequenced parallel execution model. Note that counters are now shared state and need to be \cpp{std::atomic}\index{\cpp{std::atomic}} or protected by a \cpp{std::mutex}\index{\cpp{std::mutex}}.
@@ -46,9 +46,9 @@ Algorithms operate on data structures, which poses an issue. How do you abstract
 
 The \CC standard library solution to this problem are iterators and ranges. Iterators encapsulate implementation details of data structure traversal and simultaneously expose a set of operations possible on the given data structure in constant time and space.
 
-A range is then denoted by a pair of iterators, or more generally, since \CC20, an iterator and a sentinel.
+A range is then denoted by a pair of iterators, or more generally, since \CC20, an iterator and a sentinel. In mathematical terms, a pair of iterators \cpp{it1}, \cpp{it2} denotes a range \cpp{[it1, it2)}, that is, the range includes the element referenced by \cpp{it1} and ends before the element referenced by \cpp{it2}.
 
-In mathematical terms, a pair of iterators \cpp{it1}, \cpp{it2} denotes a range \cpp{[it1, it2)}, that is, the range includes the element referenced by \cpp{it1} and ends before the element referenced by \cpp{it2}.
+To reference the entire content of a data structure, we can use the \cpp{begin()} and \cpp{end()} methods that return an iterator to the first element and an iterator one past the last element, respectively. Hence, the range \cpp{[begin, end)} contains all data structure elements.
 
 \begin{box-note}
 \footnotesize Example of specifying a range using two iterators.
@@ -72,13 +72,13 @@ The set of operations that are possible in constant time and space defines the f
     \item[input/output iterator] read/write each element once, advance\\
     \textit{data streams, e.g. writing/reading data to/from a network socket}
     \item[forward iterator] read/write each element repeatedly, advance\\
-    \textit{singly-linked list, e.g. std::forward\_list}
+    \textit{singly-linked list, e.g. std::forward\_list}\index{\cpp{std::forward_list}}
     \item[bidirectional iterator] forward iterator + move back\\
-    \textit{doubly-linked list, e.g. std::list, std::map, std::set}
+    \textit{doubly-linked list, e.g. std::list, std::map, std::set}\index{\cpp{std::list}}\index{\cpp{std::map}}\index{\cpp{std::set}}
     \item[random access iterator] bidirectional iterator + advance and move back by any integer and calculate distance between two iterators\\
-    \textit{multi-array data structures, e.g. std::deque}
+    \textit{multi-array data structures, e.g. std::deque}\index{\cpp{std::deque}}
     \item[contiguous iterator] random access iterator + the storage of elements is contiguous\\
-    \textit{arrays}
+    \textit{arrays, e.g. std::vector}\index{\cpp{std::vector}}
 \end{description}
 
 \begin{box-note}
@@ -101,21 +101,21 @@ Counted variants of algorithms accept the range specified using the start iterat
 
 Since \CC20 we also have access to \cpp{std::counted_iterator} adapter, which will only work with the range versions of algorithms.\\
 
-\noindent Examples: \cpp{std::for_each_n}, \cpp{std::copy_n}\\
+\noindent Examples: \cpp{std::for_each_n}, \cpp{std::copy_n}\\\index{\cpp{std::for_each_n}}\index{\cpp{std::copy_n}}
 
-\noindent Note: while \cpp{std::search_n} does follow the naming, it does not follow the same semantics. The \texttt{\_n} here refers to the number of instances of the searched element.
+\noindent Note: while \cpp{std::search_n} does follow the naming, it does not follow the same semantics. The \texttt{\_n} here refers to the number of instances of the searched element.\index{\cpp{std::search_n}}
 
 \subsection{Copy variants "\texttt{\_copy}"}
 
 Copy variants of in-place algorithms that output the result through the provided iterator. The copy behaviour allows this variant to operate on immutable ranges.\\
 
-\noindent Examples: \cpp{std::remove_copy}, \cpp{std::partial_sort_copy}
+\noindent Examples: \cpp{std::remove_copy}, \cpp{std::partial_sort_copy}\index{\cpp{std::remove_copy}}\index{\cpp{std::partial_sort_copy}}
 
 \subsection{Predicate variants "\texttt{\_if}"}
 
 Predicate variants of algorithms use a predicate to determine a "match" instead of comparing against a value. The standard also has one instance of \texttt{\_if\_not} variant that inverts the predicate logic (\cpp{false} is treated as a match).\\
 
-\noindent Examples: \cpp{std::find_if}, \cpp{std::replace_if}
+\noindent Examples: \cpp{std::find_if}, \cpp{std::replace_if}\index{\cpp{std::find_if}}\index{\cpp{std::replace_if}}
 
 \subsection{Restrictions on invocable}
 

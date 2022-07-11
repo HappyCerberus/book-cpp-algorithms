@@ -3,6 +3,8 @@
 The standard offers a wide range of copy algorithms in roughly three categories: simple copies and moves, selective copies and copies with reordering.
 
 \subsection{\texorpdfstring{\cpp{std::copy}, \cpp{std::move}}{\texttt{std::copy}, \texttt{std::move}}}
+\index{\cpp{std::copy}}
+\index{\cpp{std::move}}
 
 The \cpp{std::copy} and \cpp{std::move} algorithms provide a forward copy and move. The direction is important for overlapping ranges, so we do not overwrite the yet-to-be copied elements.
 
@@ -36,6 +38,8 @@ Significantly, whether std::move will move depends on the underlying element typ
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::copy_backward}, \cpp{std::move_backward}}{\texttt{std::copy\_backward}, \texttt{std::move\_backward}}}
+\index{\cpp{std::copy_backward}}
+\index{\cpp{std::move_backward}}
 
 The \cpp{std::copy_backward} and \cpp{std::move_backward} are variants that copy in the opposite direction, starting at the back of the range. Because of this, the head of the output range can now overlap with the input range.
 
@@ -53,6 +57,7 @@ The output iterator cannot be within \cpp{(first, last]} and will be treated as 
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::copy_n}}{\texttt{std::copy\_n}}}
+\index{\cpp{std::copy_n}}
 
 The \cpp{std::copy_n} algorithm is the counted variant of \cpp{std::copy} that accepts an input range specified using an iterator and the number of elements.
 
@@ -68,6 +73,9 @@ The algorithm cannot check whether the requested count is valid and does not go 
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::copy_if}, \cpp{std::remove_copy}, \cpp{std::remove_copy_if}}{\texttt{std::copy\_if}, \texttt{std::remove\_copy}, \texttt{std::remove\_copy\_if}}}
+\index{\cpp{std::copy_if}}
+\index{\cpp{std::remove_copy}}
+\index{\cpp{std::remove_copy_if}}
 
 The \cpp{std::copy_if}, \cpp{std::remove_copy} and \cpp{std::remove_copy_if} are selective copy algorithms.
 
@@ -86,6 +94,7 @@ The \cpp{std::remove_copy} algorithm will copy elements that do not match the pr
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::sample}}{\texttt{std::sample}}}
+\index{\cpp{std::sample}}
 
 The \cpp{std::sample} algorithm is a random selective copy algorithm. The algorithm will copy a random selection of N elements from the source range to the destination range utilising the provided random number generator.
 
@@ -101,6 +110,8 @@ The two domains of this algorithm are due to the stable nature of the sampling, 
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::replace_copy}, \cpp{std::replace_copy_if}}{\texttt{std::replace\_copy}, \texttt{std::replace\_copy\_if}}}
+\index{\cpp{std::replace_copy}}
+\index{\cpp{std::replace_copy_if}}
 
 The \cpp{std::replace_copy} and \cpp{std::replace_copy_if} algorithms operate like \cpp{std::copy}; however, they will copy a provided value instead of specific elements.
 
@@ -117,6 +128,7 @@ For \cpp{std::replace_copy}, the algorithm will replace elements matching a valu
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::reverse_copy}}{\texttt{std::reverse\_copy}}}
+\index{\cpp{std::reverse_copy}}
 
 The \cpp{std::reverse_copy} algorithm copies elements in reverse order.
 
@@ -132,6 +144,7 @@ Not to be confused with the \cpp{std::copy_backwards}, which copies elements in 
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::rotate_copy}}{\texttt{std::rotate\_copy}}}
+\index{\cpp{std::rotate_copy}}
 
 The \cpp{std::rotate_copy} algorithm will copy elements \cpp{[middle, last)}, followed by \cpp{[first, middle)}, which mirrors the behaviour of the \cpp{std::rotate} algorithm.
 

@@ -29,6 +29,7 @@ If on top of having the ability to specialize, we also want default behaviour as
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::swap}}{\texttt{std::swap}}}
+\index{\cpp{std::swap}}
 
 The non-range version of \cpp{std::swap} will swap the values of the two parameters using a three-step move-swap. Users can provide a more optimized implementation as friend functions on their type.
 
@@ -58,6 +59,7 @@ The C++20 rangified version of swap removes this complexity, and it will:
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::iter_swap}}{\texttt{std::iter\_swap}}}
+\index{\cpp{std::iter_swap}}
 
 The \cpp{std::iter_swap} is an indirect swap, swapping values behind two forward iterators.
 
@@ -80,11 +82,11 @@ The range version extends the functionality to other dereferenceable objects.
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::swap_ranges}}{\texttt{std::swap\_ranges}}}
+\index{\cpp{std::swap_ranges}}
 
 The \cpp{std::swap_ranges} algorithm exchanges elements between two non-overlapping ranges (potentially from the same container).
 
 \cppversions{\texttt{swap\_ranges}}{\CC98}{\CC20}{\CC17}{\CC20}
-
 
 \begin{box-note}
 \footnotesize Example of swapping the first three elements of an array with the last three elements using \cpp{std::swap_ranges}. Note the reversed order of elements due to the use of \cpp{rbegin}.

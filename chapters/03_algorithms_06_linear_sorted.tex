@@ -3,6 +3,7 @@
 In this section, we will discuss algorithms operating on sorted ranges in linear time. The same functionality on unsorted ranges would require algorithms operating in quadratic time.
 
 \subsection{\texorpdfstring{\cpp{std::includes}}{\texttt{std::includes}}}
+\index{\cpp{std::includes}}
 
 The \cpp{std::includes} algorithm will determine whether one range (all elements) is contained within another range.
 
@@ -18,6 +19,7 @@ The \cpp{std::includes} algorithm will determine whether one range (all elements
 The example uses \cpp{std::iota} to generate the lower-case letters (line 2), which requires the destination vector to be pre-allocated (line 1).
 
 \subsection{\texorpdfstring{\cpp{std::merge}}{\texttt{std::merge}}}
+\index{\cpp{std::merge}}
 
 The \cpp{std::merge} algorithm merges two sorted ranges, with the output written to a third range which cannot overlap with either of the input ranges.
 
@@ -41,6 +43,7 @@ The parallel version requires the output to be a forward range (represented by a
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::inplace_merge}}{\texttt{std::inplace\_merge}}}
+\index{\cpp{std::inplace_merge}}
 
 The \cpp{std::inplace_merge} algorithm merges two consecutive sub-ranges.
 
@@ -56,6 +59,8 @@ When using the iterator-based interface, the middle iterator (i.e. the iterator 
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::unique}, \cpp{std::unique_copy}}{\texttt{std::unique}, \texttt{std::unique\_copy}}}
+\index{\cpp{std::unique}}
+\index{\cpp{std::unique_copy}}
 
 The std::unique algorithm removes consecutive duplicate values. The typical use case is in conjunction with a sorted range. However, this is not a requirement of std::unique.
 

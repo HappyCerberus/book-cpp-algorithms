@@ -7,11 +7,12 @@ Before we start, we will use the \cpp{std::for_each} and \cpp{std::for_each_n} a
 \begin{enumerate}[label=\protect\circled{\arabic*}]
     \item The presentation of each algorithm will start with a short description.
     \item The margin will contain information about the history of the algorithm: which C++ standard introduced it and whether it has constexpr, parallel and range variants and including versions of the standard that introduced them.
-    \item Following that will be the description of constraints. Algorithms that do not operate inline are denoted using an arrow: \cpp{input_range -> output_range}.
+    \item Following that will be the description of constraints. Algorithms that write data to a distinct output range are denoted with an arrow: \cpp{input_range -> output_range}.
     \item Finally, each description will conclude with one or more examples with explanations.
 \end{enumerate}
 
 \subsection{\texorpdfstring{\cpp{std::for_each}}{\texttt{std::for\_each}}}
+\index{\cpp{std::for_each}}
 
 \circled{1} The \cpp{std::for_each} algorithm applies the provided invocable to each element of the range in order. If the underlying range is mutable, the invocable is permitted to change the state of elements but cannot invalidate iterators.
 
@@ -68,6 +69,7 @@ Second, the range version can provide a more concise and explicit syntax in some
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::for_each_n}}{\texttt{std::for\_each\_n}}}
+\index{\cpp{std::for_each_n}}
 
 \circled{1} The \cpp{std::for_each_n} algorithm applies the provided invocable to each element of the range specified using an iterator and the number of elements. If the underlying range is mutable, the invocable is permitted to change the state of elements but cannot invalidate iterators.
 

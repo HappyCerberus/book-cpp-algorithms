@@ -4,6 +4,9 @@ The standard offers a convenient wrapper for a max-heap data structure through \
 However, when using \cpp{std::priority_queue}, we lose access to the underlying data, which might be inconvenient.
 
 \subsection{\texorpdfstring{\cpp{std::make_heap}, \cpp{std::push_heap}, \cpp{std::pop_heap}}{\texttt{std::make\_heap}, \texttt{std::push\_heap}, \texttt{std::pop\_heap}}}
+\index{\cpp{std::make_heap}}
+\index{\cpp{std::push_heap}}
+\index{\cpp{std::pop_heap}}
 
 A Heap data structure is a binary tree where each element satisfies the heap property: the value at the parent is greater or equal to the value of its children.
 
@@ -34,6 +37,7 @@ The \cpp{std::push_heap} algorithm will insert the last element of the range int
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::sort_heap}}{\texttt{std::sort\_heap}}}
+\index{\cpp{std::sort_heap}}
 
 The \cpp{std::sort_heap} will reorder the elements in a heap into a sorted order. Note that this is the same as repeatedly calling \cpp{std::pop_heap}; hence the algorithm has $O(n*logn)$ complexity.
 
@@ -47,6 +51,8 @@ The \cpp{std::sort_heap} will reorder the elements in a heap into a sorted order
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::is_heap}, \cpp{std::is_heap_until}}{\texttt{std::is\_heap}, \texttt{std::is\_heap\_until}}}
+\index{\cpp{std::is_heap}}
+\index{\cpp{std::is_heap_until}}
 
 The \cpp{std::is_heap} and \cpp{std::is_heap_until} algorithms check the heap invariant.
 
@@ -64,6 +70,7 @@ The two algorithms follow the same logic as \cpp{std::is_sorted} and \cpp{std::i
 \end{box-note}
 
 \subsection{Comparison with \texorpdfstring{\cpp{std::priority_queue}}{\texttt{std::priority\_queue}}}
+\index{\cpp{std::priority_queue}}
 
 As mentioned at the beginning of this section, the heap algorithms provide effectively the same functionality as \cpp{std::priority_queue}. To demonstrate the differences, let's look at two versions of a topk algorithm: an algorithm that takes a range and returns the top k elements in sorted order as a \cpp{std::vector}.
 

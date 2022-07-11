@@ -3,6 +3,8 @@
 The C++ standard offers three types of generators: fill with copies of a value, fill with results of invoking a generator functor and fill with sequentially increasing values.
 
 \subsection{\texorpdfstring{\cpp{std::fill}, \cpp{std::generate}}{\texttt{std::fill}, \texttt{std::generate}}}
+\index{\cpp{std::fill}}
+\index{\cpp{std::generate}}
 
 The \cpp{std::fill} algorithm fills a range by consecutively assigning the given value to each element.
 The \cpp{std::generate} algorithm fills a range by consecutively assigning the result of the provided generator.
@@ -20,6 +22,8 @@ The generator provided to \cpp{std::generate} can be a non-regular function sinc
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::fill_n}, \cpp{std::generate_n}}{\texttt{std::fill\_n}, \texttt{std::generate\_n}}}
+\index{\cpp{std::fill_n}}
+\index{\cpp{std::generate_n}}
 
 The \cpp{std::fill_n} and \cpp{std::generate_n} are variants of \cpp{std::fill} and \cpp{std::generate} that operate on ranges specified using the start iterator and number of elements. This behaviour allows the algorithms to be used with iterator adapters, such as \cpp{std::back_inserter}.
 
@@ -33,6 +37,7 @@ The \cpp{std::fill_n} and \cpp{std::generate_n} are variants of \cpp{std::fill} 
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::iota}}{\texttt{std::iota}}}
+\index{\cpp{std::iota}}
 
 The \cpp{std::iota} generates elements by consecutively assigning the result of applying the prefix \cpp{operator++}, starting with the initial value.
 

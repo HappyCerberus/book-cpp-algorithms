@@ -1,6 +1,7 @@
 \section{Sorting}
 Before we talk about sorting, we need to discuss what the standard requires for types to be comparable—specifically, the \cpp{strict_weak_ordering} required by sorting algorithms.
 
+\index{\cpp{strict_weak_ordering}}
 Implementing a \cpp{strict_weak_ordering} for a custom type at minimum requires providing an overload of \cpp{operator<} with the following behaviour:
 
 \begin{itemize}
@@ -27,8 +28,12 @@ The type returned for the spaceship operator is the common comparison category t
     \item \cpp{std::weak_ordering}
     \item \cpp{std::partial_ordering}
 \end{itemize}
+\index{\cpp{std::strong_ordering}}
+\index{\cpp{std::weak_ordering}}
+\index{\cpp{std::partial_ordering}}
 
 \subsection{\texorpdfstring{\cpp{std::lexicographical_compare}}{\texttt{std::lexicographical\_compare}}}
+\index{\cpp{std::lexicographical_compare}}
 
 Lexicographical \texttt{strict\_weak\_ordering} for ranges is exposed through the \texttt{std::lexicographical\_compare} algorithm.
 
@@ -51,6 +56,7 @@ Because the standard containers already offer a built-in lexicographical compari
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::lexicographical_compare_three_way}}{\texttt{std::lexicographical\_compare\_three\_way}}}
+\index{\cpp{std::lexicographical_compare_three_way}}
 
 The \texttt{std::lexicographical\_compare\_three\_way} is the spaceship operator equivalent to \texttt{std::lexicographical\_compare}. It returns one of \texttt{std::strong\_ordering}, \texttt{std::weak\_ordering} or \texttt{std::partial\_ordering} types, depending on the type returned by the elements' spaceship operator.
 
@@ -64,6 +70,7 @@ The \texttt{std::lexicographical\_compare\_three\_way} is the spaceship operator
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::sort}}{\texttt{std::sort}}}
+\index{\cpp{std::sort}}
 
 The \cpp{std::sort} algorithm is the canonical $O(n*logn)$ sort (typically implemented as intro-sort).
 
@@ -89,6 +96,7 @@ With C++20, we can take advantage of projections to sort by a method or member:
 Before C++14, you would have to fully specify the type of the comparator, i.e. \cpp{std::greater<double>{}}. The type erased variant \cpp{std::greater<>{}} relies on type deduction to determine the parameter types. Projections accept an unary invocable, including pointers to members and member functions.
 
 \subsection{\texorpdfstring{\cpp{std::stable_sort}}{\texttt{std::stable\_sort}}}
+\index{\cpp{std::stable_sort}}
 
 The \cpp{std::sort} is free to re-arrange equivalent elements, which can be undesirable when re-sorting an already sorted range. The \cpp{std::stable_sort} provides the additional guarantee of preserving the relative order of equal elements.
 
@@ -104,6 +112,7 @@ If additional memory is available, stable\_sort remains $O(n*logn)$. However, if
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::is_sorted}}{\texttt{std::is\_sorted}}}
+\index{\cpp{std::is_sorted}}
 
 The \cpp{std::is_sorted} algorithm is a linear check returning a boolean denoting whether the ranges elements are in non-descending order.
 
@@ -117,6 +126,7 @@ The \cpp{std::is_sorted} algorithm is a linear check returning a boolean denotin
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::is_sorted_until}}{\texttt{std::is\_sorted\_until}}}
+\index{\cpp{std::is_sorted_until}}
 
 The \cpp{std::is_sorted_until} algorithm returns the first out-of-order element in the given range, thus denoting a sorted sub-range.
 
@@ -133,6 +143,7 @@ Note that because of the behaviour of \cpp{std::is_sorted_until}, the following 
 \small\cpp{std::is_sorted(r.begin(), std::is_sorted_until(r.begin(), r.end()))}
 
 \subsection{\texorpdfstring{\cpp{std::partial_sort}}{\texttt{std::partial\_sort}}}
+\index{\cpp{std::partial_sort}}
 
 The \cpp{std::partial_sort} algorithm reorders the range's elements such that the leading sub-range is in the same order it would when fully sorted. However, the algorithm leaves the rest of the range in an unspecified order.
 
@@ -149,6 +160,7 @@ The benefit of using a partial sort is faster runtime — approximately $O(n*log
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::partial_sort_copy}}{\texttt{std::partial\_sort\_copy}}}
+\index{\cpp{std::partial_sort_copy}}
 
 The \cpp{std::partial_sort_copy} algorithm has the same behaviour as \cpp{std::partial_sort}; however, it does not operate inline. Instead, the algorithm writes the results to a second range.
 
@@ -164,6 +176,7 @@ The consequence of writing output to a second range is that the source range doe
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{qsort}}{\texttt{qsort}} - C standard library}
+\index{\cpp{qsort}}
 
 Because the C standard library is part of the C++ standard library, we also have access to \cpp{qsort}.
 

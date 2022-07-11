@@ -23,6 +23,9 @@ In rare cases, we can force constness on a mutable entity. If the constness is u
 Please remember that when using casts like \cpp{const_cast}, you effectively override the compiler's judgment. Therefore it is entirely up to you to ensure that the given cast is valid.
 
 \subsection{\texorpdfstring{\cpp{std::min}, \cpp{std::max}, \cpp{std::minmax}}{\texttt{std::min}, \texttt{std::max}, \texttt{std::minmax}}}
+\index{\cpp{std::min}}
+\index{\cpp{std::max}}
+\index{\cpp{std::minmax}}
 
 The basic versions of \cpp{std::min}, \cpp{std::max} and \cpp{std::minmax} operate on two elements, accepting their arguments by const-reference and returning by const-reference. Unfortunately, as mentioned earlier, this creates a constness problem, and we also must be careful to capture the result by value when passing in temporary objects.
 
@@ -54,6 +57,7 @@ The C++14 and C++20 standards introduced additional variants of the min-max algo
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::clamp}}{\texttt{std::clamp}}}
+\index{\cpp{std::clamp}}
 
 The \cpp{std::clamp} algorithm takes three arguments, the value, the minimum and the maximum bound and will clamp the value between the provided minimum and maximum:
 
@@ -73,8 +77,10 @@ Because the algorithm accepts its arguments by const reference and returns a con
 \cppfile{code_examples/algorithms/clamp_code.h}
 \end{box-note}
 
-
 \subsection{\texorpdfstring{\cpp{std::min_element}, \cpp{std::max_element}, \cpp{std::minmax_element}}{\texttt{std::min\_element}, \texttt{std::max\_element}, \texttt{std::minmax\_element}}}
+\index{\cpp{std::min_element}}
+\index{\cpp{std::max_element}}
+\index{\cpp{std::minmax_element}}
 
 The element versions of min-max algorithms operate on ranges and, instead of returning by const-reference or value, return an iterator to the minimum or maximum elements.
 

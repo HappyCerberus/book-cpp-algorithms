@@ -7,6 +7,8 @@ While we can utilize hash-based containers to lookup any specific element in $O(
 Divide and conquer algorithms allow the lookup of bounds based on strict weak ordering and work even when the container’s specific value is not present. Additionally, since we are working with a sorted container, we can easily access neighbouring values once we have determined a boundary.
 
 \subsection{\texorpdfstring{\cpp{std::lower_bound}, \cpp{std::upper_bound}}{\texttt{std::lower\_bound}, \texttt{std::upper\_bound}}}
+\index{\cpp{std::lower_bound}}
+\index{\cpp{std::upper_bound}}
 
 The \cpp{std::lower_bound} and \cpp{std::upper_bound} algorithms offer boundary search with logarithmic complexity (for random access ranges.
 
@@ -37,6 +39,7 @@ While the algorithms will operate on any \cpp{forward_range}, the logarithmic di
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::equal_range}}{\texttt{std::equal\_range}}}
+\index{\cpp{std::equal_range}}
 
 The \cpp{std::equal_range} algorithm returns both lower and upper bounds for the given value.
 
@@ -52,6 +55,7 @@ Because the lower bound returns the first element for which \texttt{elem >= valu
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::partition_point}}{\texttt{std::partition\_point}}}
+\index{\cpp{std::partition_point}}
 
 Despite the naming, \cpp{std:partition_point} works very similarly to \cpp{std::upper_bound}, however instead of searching for a particular value, it searches using a predicate.
 
@@ -67,6 +71,7 @@ Despite the naming, \cpp{std:partition_point} works very similarly to \cpp{std::
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::binary_search}}{\texttt{std::binary\_search}}}
+\index{\cpp{std::binary_search}}
 
 The \cpp{std::binary_search} provides a presence check, returning a boolean indicating whether the requested value is present in the sorted range or not.
 
@@ -82,6 +87,7 @@ Using \cpp{std::binary_search} is equivalent to calling \cpp{std::equal_range} a
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{bsearch} - C standard library}{\texttt{bsearch} - C standard library}}
+\index{\cpp{std::bsearch}}
 
 From the C standard library, C++ inherits \cpp{bsearch}. This algorithm returns one of the elements equal to the provided key, or \cpp{nullptr} if none such element is found.
 
