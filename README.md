@@ -2,7 +2,9 @@
 
 This repository contains the LaTeX source and C++ code samples for the book "A Complete Guide to Standard C++ Algorithms".
 
-![Book Cover](static/book_cover.png)
+[Latest PDF release (v0.1.1)](https://github.com/HappyCerberus/book-cpp-algorithms/releases/download/v0.1.1/book_with_cover_v0.1.1.pdf)
+
+[![Book Cover](static/book_cover.png)](https://github.com/HappyCerberus/book-cpp-algorithms/releases/download/v0.1.1/book_with_cover_v0.1.1.pdf)
 
 ## Changelog
 
