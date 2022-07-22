@@ -35,37 +35,21 @@ Range algorithms formally define a range as an iterator and a sentinel pair. Mov
 
 Apart from simplifying certain use cases, sentinels also allow for infinite ranges and potential performance improvements.
 
+\begin{box-note}
+\footnotesize Example of an infinite range when the data guarantees termination. Using \cpp{std::unreachable_sentinel} causes the boundary check to be optimized-out, removing one comparison from the loop.
+\tcblower
+\cppfile{code_examples/ranges/infinite_code.h}
+\end{box-note}
 
+We can only use this approach when we have a contextual guarantee that the algorithm will terminate without going out of bounds. However, this removes one of the few instances when algorithms couldn't perform as well as handwritten code.
 
 And finally, with the introduction of the range, algorithms now provide range overloads, leading to more concise and easier-to-read code.
 
 
 
+
+
 \section{TODO}
-
-
-
-The fundamental change here is that end() no longer needs to return the same type as begin(). The returned sentinel only needs to be comparable to the iterator type returned by begin().
-
-
-
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> dt = { 1, 2, 3, 4, 5, 6, 7, 8, 9};
-std::ranges::shuffle(dt, std::mt19937(std::random_device()()));
-auto pos = std::ranges::find(dt.begin(), 
-                             std::unreachable_sentinel,
-                             7);
-std::ranges::copy(dt.begin(), ++pos, 
-                  std::ostream_iterator<int>(std::cout, ","));
-\end{cppcode}
-\end{box-note}
-
-The std::unreachable\_sentinel always returns false when compared to an iterator. The compiler will therefore optimize out the boundary check it != end since this expression is then always true.
-
-We can only use this trick when we have a contextual guarantee that the algorithm will terminate without going out of bounds, but it brings algorithms on par with hand-written code.
-
-
 
 \begin{box-note}
 \begin{cppcode}
