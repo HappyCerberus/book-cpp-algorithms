@@ -1,16 +1,30 @@
 \chapter{Introduction to Ranges}
 
-C++20 Ranges, also known as STL v2, effectively replaces existing STL algorithms and facilities. In this article, I will guide you through the changes that Ranges introduce, talk about Views, which are a new composable approach to algorithms and show examples of FizzBuzz using three different methods, all utilizing some aspects of Ranges.
+The \CC20 standard introduced the Ranges library (a.k.a. STLv2), which effectively replaces existing algorithms and facilities.
+In this chapter, we will go over the main changes.
 
-Note, however, that Ranges are one of the features that landed in C++20 in a half-baked state. C++23 should bring us much closer to comprehensive support. Some of the examples will therefore use the range v3 library.
+Note that Ranges are one of the features that landed in \CC20 in a partial state.
+Despite \CC23 introducing plenty of additional features, we already know that many features will still not make it into \CC23.
 
-\section{Ranges vs old STL}
+\section{Reliance on concepts}
 
-As already mentioned, ranges are a drop-in replacement for STL. However, they introduce both internal and user-facing changes that overall improve their usefulness.
+The standard has always described what is required of each argument passed to an algorithm. However, this description was purely informative, and the language did not offer first-class tools to enforce these requirements. Because of this, the error messages were often confusing.
 
-\subsection{Concepts}
+Concepts are a new C++20 language feature that permits library implementors to constrain the arguments of generic code. Concepts are beyond the scope of this book; however, there are two consequences worth noting.
 
-Ranges rely on concepts to specify what types of parameters can participate in each overload. Therefore, making a mistake when using ranges will lead to shorter and more to the point error messages.
+First, the definitions of all concepts are now part of the standard library, e.g. you can look up what exactly it means for a type to be a \cpp{random_access_range} and also use these concepts to constrain your code.
+
+// example
+
+Second, error messages now reference unsatisfied constraints.
+
+// example
+
+
+
+
+
+\section{TODO}
 
 A typical example is trying to sort a std::list. Unfortunately, this is an easy mistake to make if you are new to C++.
 
