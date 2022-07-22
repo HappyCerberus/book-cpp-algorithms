@@ -14,46 +14,40 @@ Concepts are a new C++20 language feature that permits library implementors to c
 
 First, the definitions of all concepts are now part of the standard library, e.g. you can look up what exactly it means for a type to be a \cpp{random_access_range} and also use these concepts to constrain your code.
 
-// example
+\begin{box-note}
+\footnotesize Example of using standard concepts in user code. The function accepts any random access range as the first argument and an output iterator with the same underlying type as the second argument.
+\tcblower
+\cppfile{code_examples/ranges/concepts_code.h}
+\end{box-note}
 
-Second, error messages now reference unsatisfied constraints.
+Second, error messages now reference unsatisfied constraints instead of reporting an error deep in the library implementation.
 
-// example
+\begin{minted}[fontsize=\footnotesize]{cpp}
+note: candidate: 'template<class _Iter, class _Sent, class _Comp, class _Proj>
+    requires (random_access_iterator<_Iter>)
+\end{minted}
+
+\section{Notion of a Range}
+
+Non-range algorithms have always operated strictly using iterators. Conceptually, the range of elements has been defined by two iterators \cpp{[first, last)} or when working with all elements from a standard data structure \cpp{[begin, end)}.
+
+Range algorithms formally define a range as an iterator and a sentinel pair. Moving the sentinel to a different type unlocks the potential to simplify code where an end iterator doesn't naturally map to an element. The standard offers two default sentinel types, \cpp{std::default_sentinel} and \cpp{std::unreachable_sentinel}.
+
+Apart from simplifying certain use cases, sentinels also allow for infinite ranges and potential performance improvements.
 
 
+
+And finally, with the introduction of the range, algorithms now provide range overloads, leading to more concise and easier-to-read code.
 
 
 
 \section{TODO}
 
-A typical example is trying to sort a std::list. Unfortunately, this is an easy mistake to make if you are new to C++.
 
-\begin{box-note}
-\begin{cppcode}
-#include <iostream>
-#include <ranges>
-#include <list>
-#include <algorithm>
-int main() {
-    std::list<int> dt = {1, 4, 2, 3};
-    std::ranges::sort(dt.begin(), dt.end());
-    std::ranges::copy(dt.begin(), dt.end(), 
-        std::ostream_iterator<int>(std::cout, ","));
-}
-\end{cppcode}
-\end{box-note}
-
-Instead of receiving a confusing error about the minus operator, we now get the exact problem as the first error:
-
-\begin{verbatim}
-include/c++/12.0.0/bits/ranges_algo.h:1810:14: note: because 'std::_List_iterator<int>' does not satisfy 'random_access_iterator'
-\end{verbatim}
-
-We can inspect the concepts defined by the Ranges library, as these are part of the standard. For example, the concept of a range is very straightforward, and it simply mandates that the expressions std::ranges::begin(rng) and std::ranges::end(rng) are valid. If you want to read up on concepts, check out my concepts guide.
 
 The fundamental change here is that end() no longer needs to return the same type as begin(). The returned sentinel only needs to be comparable to the iterator type returned by begin().
 
-Apart from simplifying certain use cases, it also allows for infinite ranges and potential performance improvement.
+
 
 \begin{box-note}
 \begin{cppcode}
@@ -71,7 +65,7 @@ The std::unreachable\_sentinel always returns false when compared to an iterator
 
 We can only use this trick when we have a contextual guarantee that the algorithm will terminate without going out of bounds, but it brings algorithms on par with hand-written code.
 
-And finally, with the introduction of the range concept, we can also save up on writing and use the range accepting variants of algorithms.
+
 
 \begin{box-note}
 \begin{cppcode}
