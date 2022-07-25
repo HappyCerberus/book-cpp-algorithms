@@ -9,3 +9,6 @@ install(TARGETS rangified DESTINATION bin)
 
 # Not-checked
 # projection_code.h
+
+add_executable(projected_type projected_type.cpp)
+install(TARGETS projected_type DESTINATION bin)
