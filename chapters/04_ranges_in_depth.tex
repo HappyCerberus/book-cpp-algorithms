@@ -45,6 +45,18 @@ We can only use this approach when we have a contextual guarantee that the algor
 
 And finally, with the introduction of the range, algorithms now provide range overloads, leading to more concise and easier-to-read code.
 
+\begin{box-note}
+\footnotesize Example of using the range overload of \cpp{std::sort}.
+\tcblower
+\cppfile{code_examples/ranges/rangified_code.h}
+\end{box-note}
+
+\section{Projections}
+
+Each range algorithm comes with an additional argument, the projection.
+The projection is effectively a baked-in transform operation applied before an element is passed into the main functor.
+
+The projection can be any invocable, which includes member pointers.
 
 
 
