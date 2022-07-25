@@ -58,23 +58,27 @@ The projection is effectively a baked-in transform operation applied before an e
 
 The projection can be any invocable, which includes member pointers.
 
+\begin{box-note}
+\footnotesize Example of using a projection to sort elements of a range based on a computed value from an element method.
+\tcblower
+\cppfile{code_examples/ranges/projection_code.h}
+\end{box-note}
 
-
-
-\section{TODO}
+Because the projection result is only used for the main functor, it does not modify the output of the algorithm except for \cpp{std::ranges::transform}.
 
 \begin{box-note}
-\begin{cppcode}
-std::vector<int> dt = {1, 4, 2, 3};
-std::ranges::sort(dt);
-\end{cppcode}
+\footnotesize Example of the difference between \cpp{std::ranges::copy_if}, which uses the projection result for the predicate and \cpp{std::ranges::transform}, which uses the projection result as the input for the transformation function (therefore making it affect the output type).
+\tcblower
+\cppfile{code_examples/ranges/projection_type_code.h}
 \end{box-note}
+
 
 \subsection{Projections}
 
 A massive new feature that, on the surface, seems trivial is the support for projections. A projection is a unary invocable that is applied to every element.
 
 This often completely removes the need to write complex lambdas, and when it doesn’t, it simplifies them significantly. An invocable is an extension of callable and also accepts member pointers.
+
 
 \begin{box-note}
 \begin{cppcode}
