@@ -6,3 +6,6 @@ add_executable(infinite infinite.cpp)
 
 add_executable(rangified rangified.cpp)
 install(TARGETS rangified DESTINATION bin)
+
+# Not-checked
+# projection_code.h
