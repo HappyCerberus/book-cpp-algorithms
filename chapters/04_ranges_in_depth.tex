@@ -86,29 +86,22 @@ Borrowed ranges are ranges that "borrow" their elements from another range. Prim
 \cppfile{code_examples/ranges/dangling_code.h}
 \end{box-note}
 
-\subsection{Projections}
-
-
-\subsection{The small stuff}
-
-One last “small” feature I wanted to mention here is the prevention of dangling iterators. Mainly because even if you don’t care for it, you might find use-cases for this particular pattern in your codebase.
+User types can declare themselves as borrowed ranges by specializing the \cpp{enable_borrowed_range} constant.
 
 \begin{box-note}
-\begin{cppcode}
-auto good = "1234567890";
-auto sep1 = std::ranges::find(std::string_view(good), '0');
-std::cout << *sep1 << "\n";
-auto bad = 1234567890;
-auto sep2 = std::ranges::find(std::to_string(bad), '0');
-std::cout << *sep2 << "\n";
-\end{cppcode}
+\footnotesize Example demonstrating declaring MyView as a borrowed range.
+\tcblower
+\cppfile{code_examples/ranges/borrowed_optin_code.h}
 \end{box-note}
+
+To opt-in your ranges to work as temporaries, you need to specialize the enable\_borrowed\_range constant:
+
 
 You might recognize the problem here. If we weren’t using range variants of the algorithms, the “bad” variant would crash at runtime. However, with ranges, this code will not compile. When a range-based algorithm is invoked with a temporary range that owns its elements, the algorithm will return a special iterator std::ranges::dangling.
 
 Note that the first variant with a std::string\_view will still work just fine. String view is a type of range that doesn’t own its elements, and its iterators are freestanding (they don’t depend on the instance of string\_view), so it is perfectly valid to pass such temporary into a range-based algorithm.
 
-To opt-in your ranges to work as temporaries, you need to specialize the enable\_borrowed\_range constant:
+
 
 \begin{box-note}
 \begin{cppcode}
