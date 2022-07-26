@@ -12,3 +12,6 @@ install(TARGETS rangified DESTINATION bin)
 
 add_executable(projected_type projected_type.cpp)
 install(TARGETS projected_type DESTINATION bin)
+
+add_executable(dangling dangling.cpp)
+install(TARGETS dangling DESTINATION bin)
