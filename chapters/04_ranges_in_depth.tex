@@ -69,54 +69,25 @@ Because the projection result is only used for the main functor, it does not mod
 \begin{box-note}
 \footnotesize Example of the difference between \cpp{std::ranges::copy_if}, which uses the projection result for the predicate and \cpp{std::ranges::transform}, which uses the projection result as the input for the transformation function (therefore making it affect the output type).
 \tcblower
-\cppfile{code_examples/ranges/projection_type_code.h}
+\cppfile{code_examples/ranges/projected_type_code.h}
 \end{box-note}
 
+\section{Dangling iterator protection}
+
+Because range versions of algorithms provide overloads that accept entire ranges, they open the potential for dangling iterators when users pass in a temporary range.
+
+However, for some ranges, passing in a temporary is not an issue. To distinguish these two cases and to prevent dangling iterators, the range library has the concepts of a borrowed range and a special type \cpp{std::ranges::dangling}.
+
+Borrowed ranges are ranges that "borrow" their elements from another range. Primary examples are \cpp{std::string_view} and \cpp{std::span}. For borrowed ranges, the lifetime of the elements is not tied to the lifetime of the range itself.
+
+\begin{box-note}
+\footnotesize Example demonstrating the different handling for a borrowed range \cpp{std::string_view} and a \cpp{std::string}.
+\tcblower
+\cppfile{code_examples/ranges/dangling_code.h}
+\end{box-note}
 
 \subsection{Projections}
 
-A massive new feature that, on the surface, seems trivial is the support for projections. A projection is a unary invocable that is applied to every element.
-
-This often completely removes the need to write complex lambdas, and when it doesn’t, it simplifies them significantly. An invocable is an extension of callable and also accepts member pointers.
-
-
-\begin{box-note}
-\begin{cppcode}
-struct Account {
-    std::string owner;
-    double value();
-    double base();
-};
-std::vector<Account> acc = get_accounts();
-// member
-std::ranges::sort(acc,{},&Account::owner);
-// member function
-std::ranges::sort(acc,{},&Account::value);
-// lambda
-std::ranges::sort(acc,{},[](const auto& a) { 
-    return a.value()+a.base(); 
-});
-\end{cppcode}
-\end{box-note}
-
-Without projections, we would have to include this logic as part of a custom comparator.
-
-\begin{box-note}
-\begin{cppcode}
-std::vector<int> dt = { 1, 2, 3, 4, 5, 6, 7, 8, 9};
-std::vector<int> result;
-std::ranges::transform(dt, 
-                       dt | std::views::reverse,
-                       std::back_inserter(result),
-                       std::minus<void>(),
-                       [](int v) { return v*v; },
-                       [](int v) { return v*v; });
-std::ranges::copy(result, 
-                  std::ostream_iterator<int>(std::cout, ","));
-\end{cppcode}
-\end{box-note}
-
-This is a slight foreshadowing for views, but I wanted to include another example that utilized two ranges as input. In such a case, we get two separate projections. Note that these projections can also return different return types, as long as they match up with the operation (here std::minus).
 
 \subsection{The small stuff}
 
