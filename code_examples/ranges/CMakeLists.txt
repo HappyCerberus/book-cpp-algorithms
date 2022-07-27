@@ -15,3 +15,7 @@ install(TARGETS projected_type DESTINATION bin)
 
 add_executable(dangling dangling.cpp)
 install(TARGETS dangling DESTINATION bin)
+
+# Does not compile with GCC 11
+#add_executable(view_demo view_demo.cpp)
+# Compile-only
