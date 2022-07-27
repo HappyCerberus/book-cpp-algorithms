@@ -113,5 +113,15 @@ In this chapter, we will go over all the views the standard library offers.
 \index{\cpp{std::views::keys}}
 \index{\cpp{std::views::values}}
 
+The \cpp{std::views::keys} and \cpp{std::views::values} operate on ranges of pair-like elements.
+The \cpp{std::views::keys} will produce a range of the first elements from each pair.
+The \cpp{std::views::values} will produce a range of the second elements from each pair.
+
+\begin{box-note}
+\footnotesize Example of decomposing a \cpp{std::unordered_map} into a view over the keys and a view over the values.
+\tcblower
+\cppfile{code_examples/ranges/key_value_code.h}
+\end{box-note}
+
 \subsection{\texorpdfstring{\cpp{std::views::elements}}{\texttt{std::views::elements}}}
 \index{\cpp{std::views::elements}}
