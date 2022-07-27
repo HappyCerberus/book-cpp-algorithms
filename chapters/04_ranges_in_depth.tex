@@ -143,3 +143,15 @@ Both views are formed from the leading elements of the source range. In the case
 \tcblower
 \cppfile{code_examples/views/take_code.h}
 \end{box-note}
+
+\subsection{\texorpdfstring{\cpp{std::views::drop}, \cpp{std::views::drop_while}}{\texttt{std::views::drop}, \texttt{std::views::drop\_while}}}
+
+The drop views are the inverse of take views.
+The \cpp{std::views::drop} consists of all but the first N elements.
+The \cpp{std::views::drop_while} consists of all but the leading sequence of elements for which the predicate evaluates true.
+
+\begin{box-note}
+\footnotesize Example of a view of all but the first three elements and a view skipping over the leading sequence of odd elements.
+\tcblower
+\cppfile{code_examples/views/drop_code.h}
+\end{box-note}
