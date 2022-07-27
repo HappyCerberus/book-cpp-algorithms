@@ -9,3 +9,7 @@
 # Doesn't compile with GCC 11
 #add_executable(take take.cpp)
 #install(TARGETS take DESTINATION bin)
+
+# Doesn't compile with GCC 11
+#add_executable(drop drop.cpp)
+#install(TARGETS drop DESTINATION bin)
