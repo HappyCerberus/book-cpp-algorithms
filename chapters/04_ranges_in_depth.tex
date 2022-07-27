@@ -94,230 +94,24 @@ User types can declare themselves as borrowed ranges by specializing the \cpp{en
 \cppfile{code_examples/ranges/borrowed_optin_code.h}
 \end{box-note}
 
-To opt-in your ranges to work as temporaries, you need to specialize the enable\_borrowed\_range constant:
+\section{Views}
 
+One of the core problems with algorithms is that they are not easily composable. As a result, the code using algorithms is often quite verbose and requires additional copies when working with immutable data.
 
-You might recognize the problem here. If we weren’t using range variants of the algorithms, the “bad” variant would crash at runtime. However, with ranges, this code will not compile. When a range-based algorithm is invoked with a temporary range that owns its elements, the algorithm will return a special iterator std::ranges::dangling.
-
-Note that the first variant with a std::string\_view will still work just fine. String view is a type of range that doesn’t own its elements, and its iterators are freestanding (they don’t depend on the instance of string\_view), so it is perfectly valid to pass such temporary into a range-based algorithm.
-
-
+Views aim to address this problem by providing cheap to copy and move facilities composed at compile-time.
 
 \begin{box-note}
-\begin{cppcode}
-template<typename T>
-inline constexpr bool 
-    std::ranges::enable_borrowed_range<MyView<T>> = true;
-\end{cppcode}
+\footnotesize Example of composing several views.
+\tcblower
+\cppfile{code_examples/ranges/view_demo_code.h}
 \end{box-note}
 
-\section{Composable views}
+In this chapter, we will go over all the views the standard library offers.
 
-One of the core problems with old STL algorithms is that they are not easily composable. As a result, the code using algorithms is often quite verbose and, when working with immutable data, requires additional copies.
 
-Views are trying to address this issue, making code that relies on standard algorithms less verbose and more explicit.
+\subsection{\texorpdfstring{\cpp{std::views::keys}, \cpp{std::views::values}}{\texttt{std::views::keys}, \texttt{std::views::values}}}
+\index{\cpp{std::views::keys}}
+\index{\cpp{std::views::values}}
 
-\subsection{Views}
-
-Views are simply ranges that are cheap to copy and move (in constant time). Because of this, a view cannot own the elements it is viewing. One exception is std::views::single which owns the single element it is viewing.
-
-Views compose at compile time with the expectation that the compiler will inline the code.
-
-For example, the following code will print out the last three elements of the range. We first reverse the range, then take the first three elements, and finally reverse the range again (note that there is std::views::drop that does this directly).
-
-\begin{box-note}
-\begin{cppcode}
-namespace rv = std::ranges::views;
-std::vector<int> dt = {1, 2, 3, 4, 5, 6, 7};
-for (int v : rv::reverse(rv::take(rv::reverse(dt),3))) {
-    std::cout << v << ", ";
-}
-std::cout << "\n";
-\end{cppcode}
-\end{box-note}
-
-\subsection{View closure objects}
-
-Because of the often deep nesting, the functional syntax of composing views can be cumbersome to write and read.
-
-Fortunately, ranges bring us another approach for compositing views. Views in the std::views namespace are actually view closure objects. These are inline constexpr constants with each std::ranges::xxx\_view mapping to an std::views::xxx object. These objects overload the operator() for functional syntax as seen above and operator| for pipe-style compositing.
-
-\begin{box-note}
-\begin{cppcode}
-namespace rv = std::ranges::views;
-std::vector<int> dt = {1, 2, 3, 4, 5, 6, 7};
-for (int v : dt | rv::reverse | rv::take(3) | rv::reverse) {
-    std::cout << v << ", ";
-}
-std::cout << "\n";
-\end{cppcode}
-\end{box-note}
-
-Note that while views do not own their elements, they do not change the mutability of underlying data. Here, we iterate over odd elements of the array and multiply them by two.
-
-\begin{box-note}
-\begin{cppcode}
-namespace rv = std::ranges::views;
-std::vector<int> dt = {1, 2, 3, 4, 5, 6, 7};
-auto odd = [](std::integral auto v) { return v % 2 == 1; };
-for (auto& v : dt | rv::filter(odd)) {
-    v *= 2;
-}
-\end{cppcode}
-\end{box-note}
-
-\section{FizzBuzz three ways}
-
-Let’s have a look at some concrete examples of Ranges. We will write three versions of FizzBuzz:
-
-\begin{itemize}
-    \item a range-ified coroutine generator
-    \item a generative approach using algorithms
-    \item a composition approach using views
-\end{itemize}
-
-As mentioned at the beginning of the article, the current support in C++20 is a bit lacking. Therefore, I will rely on the range v3 library.
-
-\subsection{Coroutine generator}
-
-Writing a coroutine FizzBuzz generator is almost identical to the typical implementation:
-
-\begin{box-note}
-\begin{cppcode}
-ranges::experimental::generator<std::string> fizzbuzz() {
-    for (int i = 1; ; i++) {
-        std::string result;
-        if (i % 3 == 0) result += "Fizz";
-        if (i % 5 == 0) result += "Buzz";
-        if (result.empty()) co_yield std::to_string(i);
-        else co_yield result;
-    }
-}
-\end{cppcode}
-\end{box-note}
-
-However, if we use the generator<> from range v3 library, we can also use the invoked coroutine as a range.
-
-\begin{box-note}
-\begin{cppcode}
-for (auto s : fizzbuzz() | ranges::views::take(20)) {
-    std::cout << s << "\n";
-}
-\end{cppcode}
-\end{box-note}
-
-The main magic here is in the implementation of the iterator type (note this code is not from range v3 library).
-
-\begin{box-note}
-\begin{cppcode}
-// Resume coroutine to generate new value.
-void operator++() { 
-    coro_.resume(); 
-}
-// Grab current value from coroutine.
-const T& operator*() const {
-    return *coro_.promise().current_value;
-}
-// We are at the end if the coroutine is finished.
-bool operator==(std::default_sentinel_t) const { 
-    return !coro_ || coro_.done(); 
-}
-\end{cppcode}
-\end{box-note}
-
-The std::default\_sentinel\_t is a convenience type provided by the standard, intended to be used for distinguishing comparisons against the end(). With this, we simply need to return this iterator from the generator<> return type:
-
-\begin{box-note}
-\begin{cppcode}
-Iter begin() {
-    if (coro_) {
-        coro_.resume();
-    } 
-    return Iter{cor_};
-}
-std::default_sentinel_t end() { 
-    return {}; 
-}
-\end{cppcode}
-\end{box-note}
-
-\subsection{Generating using algorithms}
-
-We have quite a few options for the generative approach, the most obvious one being generate\_n that will allow us to generate the output directly.
-
-\begin{box-note}
-\begin{cppcode}
-ranges::generate_n(
-    std::ostream_iterator<std::string>(std::cout, "\n"), 
-    20,
-    [i = 0]() mutable {
-        i++;
-        std::string result;
-        if (i % 3 == 0) result += "Fizz";
-        if (i % 5 == 0) result += "Buzz";
-        if (result.empty()) return std::to_string(i);
-        return result;
-});
-\end{cppcode}
-\end{box-note}
-
-\subsection{Compositing using views}
-
-Both of the previous approaches are very similar. They both implement FizzBuzz procedurally. However, we can also implement FizzBuzz in a completely different way.
-
-FizzBuzz includes two cycles. Fizz with a period of three and Buzz with a period of five.
-
-\begin{box-note}
-\begin{cppcode}
-std::array<std::string, 3> fizz{"", "", "Fizz"};
-std::array<std::string, 5> buzz{"", "", "", "", "Buzz"};
-\end{cppcode}
-\end{box-note}
-
-First, we need to turn these cycles into infinite ranges.
-
-\begin{box-note}
-\begin{cppcode}
-const auto inf_fizz = fizz | ranges::views::cycle;
-const auto inf_buzz = buzz | ranges::views::cycle;
-\end{cppcode}
-\end{box-note}
-
-Then we can combine them using zip\_with:
-
-\begin{box-note}
-\begin{cppcode}
-const auto inf_fizzbuzz = ranges::views::zip_with(
-    std::plus<>(), 
-    inf_fizz, 
-    inf_buzz);
-\end{cppcode}
-\end{box-note}
-
-Now we have an infinite range where each 3rd element is “Fizz”, each 5th element is “Buzz”, each 15th element is “FizzBuzz”, and the rest are empty strings.
-
-We are missing the plain numbers for the elements that are neither Fizz of Buzz. So let’s construct an infinite range of indices (starting at one):
-
-\begin{box-note}
-\begin{cppcode}
-const auto indices = ranges::views::indices
-    | ranges::views::drop(1);
-\end{cppcode}
-\end{box-note}
-
-And finally, we need to put these two ranges together and output the final result.
-
-\begin{box-note}
-\begin{cppcode}
-const auto final_range = ranges::views::zip_with(
-    [](auto i, auto s) { 
-        if (s.empty()) return std::to_string(i); 
-        return s;
-    },
-    indices,
-    inf_fizzbuzz
-);
-ranges::copy_n(ranges::begin(final_range), 20,
-    std::ostream_iterator<std::string>(std::cout, "\n"));
-\end{cppcode}
-\end{box-note}
+\subsection{\texorpdfstring{\cpp{std::views::elements}}{\texttt{std::views::elements}}}
+\index{\cpp{std::views::elements}}
