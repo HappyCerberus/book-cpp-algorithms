@@ -133,3 +133,13 @@ The \cpp{std::views::elements} will produce a range of the Nth elements from a r
 \tcblower
 \cppfile{code_examples/views/elements_code.h}
 \end{box-note}
+
+\subsection{\texorpdfstring{\cpp{std::views::take}, \cpp{std::views::take_while}}{\texttt{std::views::take}, \texttt{std::views::take\_while}}}
+
+Both views are formed from the leading elements of the source range. In the case of \cpp{std::views::take}, the view consists of the first N elements. In the case of \cpp{std::views::take_while}, the view consists of the sequence of elements for which the predicate evaluates true.
+
+\begin{box-note}
+\footnotesize Example of a view of the first three elements and a view of the leading sequence of odd elements.
+\tcblower
+\cppfile{code_examples/views/take_code.h}
+\end{box-note}
