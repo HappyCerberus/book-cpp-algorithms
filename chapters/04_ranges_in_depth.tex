@@ -120,8 +120,16 @@ The \cpp{std::views::values} will produce a range of the second elements from ea
 \begin{box-note}
 \footnotesize Example of decomposing a \cpp{std::unordered_map} into a view over the keys and a view over the values.
 \tcblower
-\cppfile{code_examples/ranges/key_value_code.h}
+\cppfile{code_examples/views/keys_values_code.h}
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::views::elements}}{\texttt{std::views::elements}}}
 \index{\cpp{std::views::elements}}
+
+The \cpp{std::views::elements} will produce a range of the Nth elements from a range of tuple-like elements.
+
+\begin{box-note}
+\footnotesize Example of creating element views for each tuple's second and third elements in the source range.
+\tcblower
+\cppfile{code_examples/views/elements_code.h}
+\end{box-note}
