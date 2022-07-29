@@ -180,8 +180,14 @@ The reverse view is the reverse iteration view for bidirectional ranges.
 \cppfile{code_examples/views/reverse_code.h}
 \end{box-note}
 
-
 \subsection{\texorpdfstring{\cpp{std::views::counted}}{\texttt{std::views::counted}}}
 
+The counted view adapts an iterator and number of elements into a view.
 
+\subsection{\texorpdfstring{\cpp{std::views::common}}{\texttt{std::views::common}}}
 
+The common view adapts a view into a common range, a range with a begin and end iterator of matching types. Non-range versions of algorithms require a common range.
+
+\subsection{\texorpdfstring{\cpp{std::views::all}}{\texttt{std::views::all}}}
+
+The all view is a view of all the elements from a range.
