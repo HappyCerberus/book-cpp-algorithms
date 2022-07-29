@@ -37,3 +37,7 @@
 # Doesn't compile with GCC 11
 #add_executable(split_view split.cpp)
 #install(TARGETS split_view DESTINATION bin)
+
+# Doesn't compile with GCC 11
+#add_executable(transform_view transform.cpp)
+#install(TARGETS transform_view DESTINATION bin)
