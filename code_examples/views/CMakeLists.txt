@@ -17,3 +17,7 @@
 # Doesn't compile with GCC 11
 #add_executable(filter filter.cpp)
 #install(TARGETS filter DESTINATION bin)
+
+# Doesn't compile with GCC 11
+#add_executable(reverse_view reverse.cpp)
+#install(TARGETS reverse_view DESTINATION bin)
