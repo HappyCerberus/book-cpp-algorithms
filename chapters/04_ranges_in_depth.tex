@@ -209,3 +209,14 @@ The all view is a view of all the elements from a range.
 \tcblower
 \cppfile{code_examples/views/all_code.h}
 \end{box-note}
+
+\subsection{\texorpdfstring{\cpp{std::views::split}, \cpp{std::views::lazy_split}}{\texttt{std::views::split}, \texttt{std::views::lazy\_split}}}
+
+The two split views split a single range into a range of sub-ranges. However, they differ in their implementation.
+The \cpp{std::view::split} maintains the bidirectional, random access or continuous properties of the underlying range, and the \cpp{std::view::lazy_split} does not, but it does support input ranges.
+
+\begin{box-note}
+\footnotesize Example of using split view to parse a version number.
+\tcblower
+\cppfile{code_examples/views/split_code.h}
+\end{box-note}
