@@ -184,9 +184,21 @@ The reverse view is the reverse iteration view for bidirectional ranges.
 
 The counted view adapts an iterator and number of elements into a view.
 
+\begin{box-note}
+\footnotesize Example of using a counted view to iterate over a subrange.
+\tcblower
+\cppfile{code_examples/views/counted_code.h}
+\end{box-note}
+
 \subsection{\texorpdfstring{\cpp{std::views::common}}{\texttt{std::views::common}}}
 
 The common view adapts a view into a common range, a range with a begin and end iterator of matching types. Non-range versions of algorithms require a common range.
+
+\begin{box-note}
+\footnotesize Example of using adapting a view for a non-range algorithm.
+\tcblower
+\cppfile{code_examples/views/common_code.h}
+\end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::views::all}}{\texttt{std::views::all}}}
 
