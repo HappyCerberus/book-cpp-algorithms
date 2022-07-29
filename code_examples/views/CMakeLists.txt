@@ -21,3 +21,7 @@
 # Doesn't compile with GCC 11
 #add_executable(reverse_view reverse.cpp)
 #install(TARGETS reverse_view DESTINATION bin)
+
+# Doesn't compile with GCC 11
+#add_executable(counted_view counted.cpp)
+#install(TARGETS counted_view DESTINATION bin)
