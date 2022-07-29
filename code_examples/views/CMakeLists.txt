@@ -25,3 +25,7 @@
 # Doesn't compile with GCC 11
 #add_executable(counted_view counted.cpp)
 #install(TARGETS counted_view DESTINATION bin)
+
+# Doesn't compile with GCC 11
+#add_executable(common_view common.cpp)
+#install(TARGETS common_view DESTINATION bin)
