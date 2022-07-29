@@ -108,7 +108,6 @@ Views aim to address this problem by providing cheap to copy and move facilities
 
 In this chapter, we will go over all the views the standard library offers.
 
-
 \subsection{\texorpdfstring{\cpp{std::views::keys}, \cpp{std::views::values}}{\texttt{std::views::keys}, \texttt{std::views::values}}}
 \index{\cpp{std::views::keys}}
 \index{\cpp{std::views::values}}
@@ -132,6 +131,17 @@ The \cpp{std::views::elements} will produce a range of the Nth elements from a r
 \footnotesize Example of creating element views for each tuple's second and third elements in the source range.
 \tcblower
 \cppfile{code_examples/views/elements_code.h}
+\end{box-note}
+
+\subsection{\texorpdfstring{\cpp{std::views::transform}}{\texttt{std::views::transform}}}
+\index{\cpp{std::views::transform}}
+
+The transform view applies a transformation functor to every element of the range.
+
+\begin{box-note}
+\footnotesize Example of using \cpp{std::views::transform} that also changes the base type of the range.
+\tcblower
+\cppfile{code_examples/views/transform_code.h}
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::views::take}, \cpp{std::views::take_while}}{\texttt{std::views::take}, \texttt{std::views::take\_while}}}
@@ -161,6 +171,7 @@ The \cpp{std::views::drop_while} consists of all but the leading sequence of ele
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::views::filter}}{\texttt{std::views::filter}}}
+\index{\cpp{std::views::filter}}
 
 The filter view consists of all elements that satisfy the provided predicate.
 
@@ -171,6 +182,7 @@ The filter view consists of all elements that satisfy the provided predicate.
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::views::reverse}}{\texttt{std::views::reverse}}}
+\index{\cpp{std::views::reverse}}
 
 The reverse view is the reverse iteration view for bidirectional ranges.
 
@@ -181,6 +193,7 @@ The reverse view is the reverse iteration view for bidirectional ranges.
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::views::counted}}{\texttt{std::views::counted}}}
+\index{\cpp{std::views::counted}}
 
 The counted view adapts an iterator and number of elements into a view.
 
@@ -191,6 +204,7 @@ The counted view adapts an iterator and number of elements into a view.
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::views::common}}{\texttt{std::views::common}}}
+\index{\cpp{std::views::common}}
 
 The common view adapts a view into a common range, a range with a begin and end iterator of matching types. Non-range versions of algorithms require a common range.
 
@@ -201,6 +215,7 @@ The common view adapts a view into a common range, a range with a begin and end 
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::views::all}}{\texttt{std::views::all}}}
+\index{\cpp{std::views::all}}
 
 The all view is a view of all the elements from a range.
 
@@ -211,9 +226,11 @@ The all view is a view of all the elements from a range.
 \end{box-note}
 
 \subsection{\texorpdfstring{\cpp{std::views::split}, \cpp{std::views::lazy_split}}{\texttt{std::views::split}, \texttt{std::views::lazy\_split}}}
+\index{\cpp{std::views::split}}
+\index{\cpp{std::views::lazy_split}}
 
 The two split views split a single range into a range of sub-ranges. However, they differ in their implementation.
-The \cpp{std::view::split} maintains the bidirectional, random access or continuous properties of the underlying range, and the \cpp{std::view::lazy_split} does not, but it does support input ranges.
+The \cpp{std::view::split} maintains the bidirectional, random access or contiguous properties of the underlying range, and the \cpp{std::view::lazy_split} does not, but it does support input ranges.
 
 \begin{box-note}
 \footnotesize Example of using split view to parse a version number.
