@@ -29,3 +29,11 @@
 # Doesn't compile with GCC 11
 #add_executable(common_view common.cpp)
 #install(TARGETS common_view DESTINATION bin)
+
+# Doesn't compile with GCC 11
+#add_executable(all_view all.cpp)
+#install(TARGETS all_view DESTINATION bin)
+
+# Doesn't compile with GCC 11
+#add_executable(split_view split.cpp)
+#install(TARGETS split_view DESTINATION bin)
