@@ -45,3 +45,7 @@
 # Doesn't compile with GCC 11
 #add_executable(join_view join.cpp)
 #install(TARGETS join_view DESTINATION bin)
+
+# Doesn't compile with GCC 11
+#add_executable(single_view single.cpp)
+#install(TARGETS single_view DESTINATION bin)
