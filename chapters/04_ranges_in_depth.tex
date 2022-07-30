@@ -225,11 +225,12 @@ The all view is a view of all the elements from a range.
 \cppfile{code_examples/views/all_code.h}
 \end{box-note}
 
-\subsection{\texorpdfstring{\cpp{std::views::split}, \cpp{std::views::lazy_split}}{\texttt{std::views::split}, \texttt{std::views::lazy\_split}}}
+\subsection{\texorpdfstring{\cpp{std::views::split}, \cpp{std::views::lazy_split}, \texorpdfstring{\cpp{std::views::join_view}}{\texttt{std::views::split}, \texttt{std::views::lazy\_split}}, \texttt{std::views::join\_view}}}
 \index{\cpp{std::views::split}}
 \index{\cpp{std::views::lazy_split}}
+\index{\cpp{std::views::join_view}}
 
-The two split views split a single range into a range of sub-ranges. However, they differ in their implementation.
+The two split views split a single range into a view over sub-ranges. However, they differ in their implementation.
 The \cpp{std::view::split} maintains the bidirectional, random access or contiguous properties of the underlying range, and the \cpp{std::view::lazy_split} does not, but it does support input ranges.
 
 \begin{box-note}
@@ -237,3 +238,15 @@ The \cpp{std::view::split} maintains the bidirectional, random access or contigu
 \tcblower
 \cppfile{code_examples/views/split_code.h}
 \end{box-note}
+
+The join view flattens a view of ranges.
+
+\begin{box-note}
+\footnotesize Example of using lazy_split view to split a string into tokens and then join them using the join view.
+\tcblower
+\cppfile{code_examples/views/join_code.h}
+\end{box-note}
+
+
+
+
