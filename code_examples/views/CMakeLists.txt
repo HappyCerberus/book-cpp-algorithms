@@ -53,3 +53,7 @@
 # Doesn't compile with GCC 11
 #add_executable(iota_view iota.cpp)
 #install(TARGETS iota_view DESTINATION bin)
+
+# Doesn't compile with GCC 11
+#add_executable(istream_view istream.cpp)
+#install(TARGETS istream_view DESTINATION bin)
