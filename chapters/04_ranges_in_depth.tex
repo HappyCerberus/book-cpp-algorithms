@@ -271,9 +271,14 @@ The iota view represents a generated sequence formed by repeatedly incrementing 
 \cppfile{code_examples/views/iota_code.h}
 \end{box-note}
 
-
 \subsection{\texorpdfstring{\cpp{std::views::istream}}{\texttt{std::views::istream}}}
 \index{\cpp{std::views::istream}}
 
 The istream view provides similar functionality to istream iterator, except in the form of a view.
 It represents a view obtained by successively applying the istream input operator.
+
+\begin{box-note}
+\footnotesize Example of using istream view.
+\tcblower
+\cppfile{code_examples/views/istream_code.h}
+\end{box-note}
