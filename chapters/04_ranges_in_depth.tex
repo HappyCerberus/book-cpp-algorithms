@@ -225,7 +225,7 @@ The all view is a view of all the elements from a range.
 \cppfile{code_examples/views/all_code.h}
 \end{box-note}
 
-\subsection{\texorpdfstring{\cpp{std::views::split}, \cpp{std::views::lazy_split}, \texorpdfstring{\cpp{std::views::join_view}}{\texttt{std::views::split}, \texttt{std::views::lazy\_split}}, \texttt{std::views::join\_view}}}
+\subsection{\texorpdfstring{\cpp{std::views::split}, \cpp{std::views::lazy_split}, \cpp{std::views::join_view}}{\texttt{std::views::split}, \texttt{std::views::lazy\_split}, \texttt{std::views::join\_view}}}
 \index{\cpp{std::views::split}}
 \index{\cpp{std::views::lazy_split}}
 \index{\cpp{std::views::join_view}}
@@ -242,11 +242,31 @@ The \cpp{std::view::split} maintains the bidirectional, random access or contigu
 The join view flattens a view of ranges.
 
 \begin{box-note}
-\footnotesize Example of using lazy_split view to split a string into tokens and then join them using the join view.
+\footnotesize Example of using \cpp{std::views::lazy_split} to split a string into tokens and then join them using the \cpp{std::views::join}.
 \tcblower
 \cppfile{code_examples/views/join_code.h}
 \end{box-note}
 
+\subsection{\texorpdfstring{\cpp{std::views::empty}, \cpp{std::views::single}}{\texttt{std::views::empty}, \texttt{std::views::single}}}
+\index{\cpp{std::views::empty}}
+\index{\cpp{std::views::single}}
 
+The empty view is an empty view (containing no elements), and the single view is a view that contains a single element.
+Note that the view owns the single element, which will be copied/moved alongside the view.
 
+\begin{box-note}
+\footnotesize Example of using \cpp{std::views::empty} and \cpp{std::views::single}.
+\tcblower
+\cppfile{code_examples/views/single_code.h}
+\end{box-note}
 
+\subsection{\texorpdfstring{\cpp{std::views::iota}}{\texttt{std::views::iota}}}
+\index{\cpp{std::views::iota}}
+
+The iota view represents a generated sequence formed by repeatedly incrementing an initial value.
+
+\subsection{\texorpdfstring{\cpp{std::views::istream}}{\texttt{std::views::istream}}}
+\index{\cpp{std::views::istream}}
+
+The istream view provides similar functionality to istream iterator, except in the form of a view.
+It represents a view obtained by successively applying the istream input operator.
