@@ -1,0 +1,8 @@
+{
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"extensions": [
+		"James-Yu.latex-workshop"
+	]
+}

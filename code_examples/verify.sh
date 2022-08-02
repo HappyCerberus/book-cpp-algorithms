@@ -1,5 +1,5 @@
+#!/bin/bash
 CMAKE="/usr/bin/cmake"
-
 set -e
 
 $CMAKE -S. -B build -G "Unix Makefiles"

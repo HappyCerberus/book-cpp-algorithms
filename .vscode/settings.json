@@ -1,0 +1,24 @@
+{
+    "latex-workshop.latex.tools": [
+    {
+        "name": "LuaLaTex",
+        "command": "lualatex",
+        "args": [
+            "-shell-escape",
+            "-output-directory=%OUTDIR%",
+            "%DOC%"
+        ]
+    }
+    ],
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "Build the book",
+            "tools": [
+                "LuaLaTex"
+            ]
+        },
+    ],
+    "latex-workshop.latex.recipe.default": "first",
+    "latex-workshop.latex.outDir": "build"
+
+}
