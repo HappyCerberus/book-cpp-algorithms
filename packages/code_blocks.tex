@@ -1,4 +1,17 @@
+\def\StripPrefix#1>{}
+\def\isOverleaf{\fi
+    \def\overleafJobname{output}% overleaf defaults to 'output' as \jobname
+    \edef\overleafJobname{\expandafter\StripPrefix\meaning\overleafJobname}%
+    \edef\job{\jobname}%
+    \ifx\job\overleafJobname
+}
+
+\if\isOverleaf%
+\usepackage[newfloat=true]{minted}
+\else
 \usepackage[newfloat=true,outputdir=build]{minted}
+\fi
+
 \usepackage[]{xcolor}
 \usemintedstyle{xcode}
 

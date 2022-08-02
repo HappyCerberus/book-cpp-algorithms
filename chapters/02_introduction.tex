@@ -38,7 +38,7 @@ Finally, the \CC20 standard introduced a significant re-design in the form of ra
 \cppfile{code_examples/introduction/history_cc20_code.h}
 \end{box-note}
 
-As of the time of writing, the \CC23 is not finalized. However, we already know that it will introduce more range algorithms, more views and the ability to implement custom views.
+As of the time of writing, the \CC23 standard is not finalized. However, we already know that it will introduce more range algorithms, more views and the ability to implement custom views.
 
 \section{Iterators and ranges}
 
@@ -56,7 +56,7 @@ To reference the entire content of a data structure, we can use the \cpp{begin()
 \cppfile{code_examples/introduction/iterators_code.h}
 \end{box-note}
 
-Sentinels follow the same idea. However, they do not need to be of an iterator type. Instead, they only need to be comparable to an iterator. The end of the range is then the first iterator that compares equal to the sentinel.
+Sentinels follow the same idea. However, they do not need to be of an iterator type. Instead, they only need to be comparable to an iterator. The exclusive end of the range is then the first iterator that compares equal to the sentinel.
 
 \begin{box-note}
 \footnotesize Example of specifying a range using an iterator and custom sentinel. The sentinel will compare \cpp{true} with iterators at least the given distance from the start iterator, therefore defining a range with the specified number of elements.
@@ -97,9 +97,7 @@ While the naming of many algorithms is sub-optimal, there are a few common namin
 
 \subsection{Counted variants "\texttt{\_n}"}
 
-Counted variants of algorithms accept the range specified using the start iterator and the number of elements (instead of begin and end). This behaviour can be a convenient alternative when working with input and output ranges, where we often do not have an explicit end iterator.
-
-Since \CC20 we also have access to \cpp{std::counted_iterator} adapter, which will only work with the range versions of algorithms.\\
+Counted variants of algorithms accept the range specified using the start iterator and the number of elements (instead of begin and end). This behaviour can be a convenient alternative when working with input and output ranges, where we often do not have an explicit end iterator.\\
 
 \noindent Examples: \cpp{std::for_each_n}, \cpp{std::copy_n}\\\index{\cpp{std::for_each_n}}\index{\cpp{std::copy_n}}
 
@@ -107,7 +105,7 @@ Since \CC20 we also have access to \cpp{std::counted_iterator} adapter, which wi
 
 \subsection{Copy variants "\texttt{\_copy}"}
 
-Copy variants of in-place algorithms that output the result through the provided iterator. The copy behaviour allows this variant to operate on immutable ranges.\\
+Copy variants of in-place algorithms do not write their output back to the source range. Instead, they output the result to one or more output ranges, usually defined by a single iterator denoting the first element to be written to (the number of elements is implied from the source range). The copy behaviour allows these variants to operate on immutable ranges.\\
 
 \noindent Examples: \cpp{std::remove_copy}, \cpp{std::partial_sort_copy}\index{\cpp{std::remove_copy}}\index{\cpp{std::partial_sort_copy}}
 
