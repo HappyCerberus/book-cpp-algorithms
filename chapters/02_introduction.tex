@@ -120,3 +120,5 @@ Predicate variants of algorithms use a predicate to determine a "match" instead 
 Many algorithms can be customized using an invocable. However, with a few exceptions, the invocable is not permitted to modify elements of the range or invalidate iterators. On top of that, unless explicitly noted, the algorithms do not guarantee any particular order of invocation.
 
 These restrictions in practice mean that the passed invocable must be regular. The invocable must return the same result if invoked again with the same arguments. This definition permits accessing a global state such as a cache but does not permit invocables that change their result based on their internal state (such as generators).
+
+\section{A simple mental model for iterators}
