@@ -1,36 +1,4 @@
 \usepackage[many]{tcolorbox}    	% for COLORED BOXES (tikz and xcolor included)
-\usepackage{xcolor}
-
-\tcbset{
-    sharp corners,
-    colback = white,
-    before skip = 0.2cm,    % add extra space before the box
-    after skip = 0.5cm      % add extra space after the box
-}                           % setting global options for tcolorbox
-
-\newtcolorbox{box-info}{
-    colback = LightSkyBlue!20, 
-    colframe = MidnightBlue!50, 
-    boxrule = 0pt, 
-    leftrule = 6pt, % left rule weight
-    fontupper=\sffamily
-}
-
-\newtcolorbox{box-warning}{
-    colback = LightGoldenrodYellow, 
-    colframe = LightGoldenrod, 
-    boxrule = 0pt, 
-    leftrule = 6pt, % left rule weight
-    fontupper=\sffamily
-}
-
-\newtcolorbox{box-critical}{
-    colback = LightSalmon!20, 
-    colframe = OrangeRed!80, 
-    boxrule = 0pt, 
-    leftrule = 6pt, % left rule weight
-    fontupper=\sffamily
-}
 
 \newtcolorbox{box-note}{
     sharpish corners, % better drop shadow
@@ -38,6 +6,10 @@
     toprule = 4.5pt, % top rule weight
     enhanced,
     breakable,
+    enlarge top by=5pt,
+    colback = white,
+    before skip = 0.2cm,    % add extra space before the box
+    after skip = 0.5cm,      % add extra space after the box
     drop fuzzy shadow = black!35,
     fontupper=\sffamily
 }
