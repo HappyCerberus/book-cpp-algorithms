@@ -18,3 +18,6 @@ install(TARGETS sentinels DESTINATION bin)
 
 add_executable(categories categories.cpp)
 install(TARGETS categories DESTINATION bin)
+
+add_executable(mental_range mental_range.cpp)
+install(TARGETS mental_range DESTINATION bin)
