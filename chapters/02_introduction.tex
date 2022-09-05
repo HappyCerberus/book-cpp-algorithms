@@ -127,9 +127,15 @@ It can be tricky to internalize all the rules associated with iterators when wor
 
 Ranges passed in as arguments are usually apparent, typically specified by pair of iterators.
 
-
+\begin{box-note}
+\footnotesize Example with two ranges passed in as an argument. The input range is fully specified, and the end iterator for the output range is implied from the number of elements in the input range.
+\tcblower
+\cppfile{code_examples/introduction/mental_range_code.h}
+\end{box-note}
 
 The less obvious can be the ranges returned by the algorithms. In some cases, the range is evident from the algorithm.
+
+
 
 In some cases, a single returned iterator denotes multiple ranges.
 
