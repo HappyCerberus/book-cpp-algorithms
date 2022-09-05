@@ -1,12 +1,12 @@
 \chapter{Introduction}
 
-The \CC standard library is arguably quite limited in its functionality. However, when it comes to data and number crunching, the \CC standard library provides a versatile toolkit of algorithms.
+The \CC\,standard library is arguably quite limited in its functionality. However, when it comes to data and number crunching, the \CC\,standard library provides a versatile toolkit of algorithms.
 
-If you are a \CC developer, good familiarity with \CC standard algorithms can save you a lot of effort and accidental bugs. Notably, whenever you see a raw loop in your code, you should question whether calling a standard algorithm wouldn't be a better solution (it usually is).
+If you are a \CC\,developer, good familiarity with \CC\,standard algorithms can save you a lot of effort and accidental bugs. Notably, whenever you see a raw loop in your code, you should question whether calling a standard algorithm wouldn't be a better solution (it usually is).
 
 \section{History of standard \texorpdfstring{\CC}{C++} algorithms}
 
-While each \CC standard introduced new algorithms or variants, there are few notable milestones in the history of \CC standard algorithms.
+While each \CC\,standard introduced new algorithms or variants, there are few notable milestones in the history of \CC\,standard algorithms.
 
 The \CC98 standard introduced most of the algorithms. However, it was the \CC11 standard with its introduction of lambdas that made algorithms worthwhile. Before lambdas, the time investment of writing a custom function object made the usefulness of algorithms dubious.
 
@@ -44,7 +44,7 @@ As of the time of writing, the \CC23 standard is not finalized. However, we alre
 
 Algorithms operate on data structures, which poses an issue. How do you abstract the implementation details of a specific data structure and allow the algorithm to work with any data structure that satisfies the algorithm's requirements?
 
-The \CC standard library solution to this problem are iterators and ranges. Iterators encapsulate implementation details of data structure traversal and simultaneously expose a set of operations possible on the given data structure in constant time and space.
+The \CC\, standard library solution to this problem are iterators and ranges. Iterators encapsulate implementation details of data structure traversal and simultaneously expose a set of operations possible on the given data structure in constant time and space.
 
 A range is then denoted by a pair of iterators, or more generally, since \CC20, an iterator and a sentinel. In mathematical terms, a pair of iterators \cpp{it1}, \cpp{it2} denotes a range \cpp{[it1, it2)}, that is, the range includes the element referenced by \cpp{it1} and ends before the element referenced by \cpp{it2}.
 
@@ -121,4 +121,16 @@ Many algorithms can be customized using an invocable. However, with a few except
 
 These restrictions in practice mean that the passed invocable must be regular. The invocable must return the same result if invoked again with the same arguments. This definition permits accessing a global state such as a cache but does not permit invocables that change their result based on their internal state (such as generators).
 
-\section{A simple mental model for iterators}
+\section{A simpler mental model for iterators}
+
+It can be tricky to internalize all the rules associated with iterators when working with standard algorithms. One shorthand that can help is to think in terms of ranges instead of iterators.
+
+Ranges passed in as arguments are usually apparent, typically specified by pair of iterators.
+
+
+
+The less obvious can be the ranges returned by the algorithms. In some cases, the range is evident from the algorithm.
+
+In some cases, a single returned iterator denotes multiple ranges.
+
+Even when the algorithms seem to return an iterator to a specific element, we can still think of the output as a range.

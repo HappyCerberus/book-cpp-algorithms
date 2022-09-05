@@ -1,3 +1,4 @@
+% Overleaf botch. Normally we use minted files in the build folder, but Overleaf needs special care.
 \def\StripPrefix#1>{}
 \def\isOverleaf{\fi
     \def\overleafJobname{output}% overleaf defaults to 'output' as \jobname
@@ -19,6 +20,9 @@
 
 \newminted{cpp}{
     linenos=true,
+    firstnumber=1,
+    tabsize=4,
+    obeytabs,
     xleftmargin=1em,
     breaklines,
     fontsize=\footnotesize,
@@ -35,3 +39,5 @@
     fontsize=\footnotesize,
     numbersep=0.75em
 }
+
+\newmintinline[cpp]{cpp}{}

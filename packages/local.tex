@@ -1,5 +1,6 @@
-\usepackage{sidenotes}
-\usepackage{multirow}
+\usepackage{sidenotes} % Required
+\usepackage{multirow} % Required
+\usepackage{diagbox} % Used for boolean algorithms.
 
 % Command to consistently format side-panel with C++ versions that introduced different variants of the algorithm.
 \newcommand{\cppversions}[5]{
@@ -19,6 +20,7 @@ rangified & #5 \\
 \end{margintable}
 }
 
+% Command to consistently format the algorithm info table.
 \newcommand{\constraints}[4]{
 \begin{center}
 \footnotesize
@@ -46,7 +48,3 @@ parallel domain & \multicolumn{2}{m{\dimexpr.75\textwidth-2\tabcolsep}|}{#2} \\
 \end{tabular}
 \end{center}
 }
-
-\newmintinline[cpp]{cpp}{}
-
-\usepackage{diagbox}
