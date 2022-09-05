@@ -135,8 +135,20 @@ Ranges passed in as arguments are usually apparent, typically specified by pair 
 
 The less obvious can be the ranges returned by the algorithms. In some cases, the range is evident from the algorithm.
 
+\begin{box-note}
+\footnotesize Example of \cpp{std::is_sorted_until} that returns an iterator to the first out-of-order element, which can also be thought as the end iterator for a maximal sorted sub-range.
+\tcblower
+\cppfile{code_examples/introduction/mental_sorted_code.h}
+\end{box-note}
 
+The benefit of thinking about the returned value as the end iterator of a range is that it removes the potential for corner cases. For example, what if the algorithm doesn't find any element out of order? The returned value will be the end iterator of the source range, meaning that the range returned is simply the entire source range.
 
 In some cases, a single returned iterator denotes multiple ranges.
+
+\begin{box-note}
+\footnotesize Example of \cpp{std::lower_bound} that splits the range into two sub-ranges.
+\tcblower
+\cppfile{code_examples/introduction/mental_two_code.h}
+\end{box-note}
 
 Even when the algorithms seem to return an iterator to a specific element, we can still think of the output as a range.
