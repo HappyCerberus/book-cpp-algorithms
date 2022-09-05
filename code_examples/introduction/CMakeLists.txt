@@ -24,3 +24,6 @@ install(TARGETS mental_range DESTINATION bin)
 
 add_executable(mental_sorted mental_sorted.cpp)
 # Compile only
+
+add_executable(mental_two mental_two.cpp)
+# Compile only
