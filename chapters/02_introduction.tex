@@ -133,7 +133,7 @@ Ranges passed in as arguments are usually apparent, typically specified by pair 
 \cppfile{code_examples/introduction/mental_range_code.h}
 \end{box-note}
 
-The less obvious can be the ranges returned by the algorithms. In some cases, the range is evident from the algorithm.
+The returned range can also be evident from the semantics of the algorithm.
 
 \begin{box-note}
 \footnotesize Example of \cpp{std::is_sorted_until} that returns an iterator to the first out-of-order element, which can also be thought as the end iterator for a maximal sorted sub-range.
@@ -151,4 +151,5 @@ In some cases, a single returned iterator denotes multiple ranges.
 \cppfile{code_examples/introduction/mental_two_code.h}
 \end{box-note}
 
-Even when the algorithms seem to return an iterator to a specific element, we can still think of the output as a range.
+Even when the algorithm returns an iterator to a specific element, it might be worth considering the implied range.
+
