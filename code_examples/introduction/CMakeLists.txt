@@ -27,3 +27,6 @@ add_executable(mental_sorted mental_sorted.cpp)
 
 add_executable(mental_two mental_two.cpp)
 # Compile only
+
+add_executable(mental_find mental_find.cpp)
+# Compile only
