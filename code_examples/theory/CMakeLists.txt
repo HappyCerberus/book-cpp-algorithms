@@ -12,3 +12,6 @@ install(TARGETS const_cast DESTINATION bin)
 
 add_executable(initializer_list initializer_list.cpp)
 install(TARGETS initializer_list DESTINATION bin)
+
+add_executable(adl_unqalified adl_unqalified.cpp)
+# Compile only
