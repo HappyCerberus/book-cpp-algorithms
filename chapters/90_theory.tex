@@ -1,0 +1,13 @@
+\chapter{In-depth}
+
+In this chapter, we will go over relevant in-depth topics referenced throughout the rest of the book.
+
+\section{Argument-dependent lookup (ADL)}
+
+When calling a method without qualification (i.e. not specifying the namespace), the compiler needs to determine the set of candidate functions. As a first step, the compiler will do an unqualified name lookup, which starts at the local scope and examines the parent scopes until it finds the first instance of the name (at which point it stops).
+
+\begin{box-note}
+\footnotesize Example of unqualified lookup. Both calls to \cpp{some_call} will resolve to \cpp{::A::B::some_call} since this is the first instance discovered by the compiler.
+\tcblower
+\cppfile{code_examples/theory/adl_unqualified.h}
+\end{box-note}

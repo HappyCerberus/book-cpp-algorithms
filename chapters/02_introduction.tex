@@ -10,11 +10,12 @@ While each \CC\,standard introduced new algorithms or variants, there are few no
 
 The \CC98 standard introduced most of the algorithms. However, it was the \CC11 standard with its introduction of lambdas that made algorithms worthwhile. Before lambdas, the time investment of writing a custom function object made the usefulness of algorithms dubious.
 
-\begin{box-note}
+\raggedbottom
+\begin{box-nobreak}
 \footnotesize Example of \cpp{std::for_each}\index{\cpp{std::for_each}} algorithm with a custom function object, calculating the number of elements and their sum.
 \tcblower
 \cppfile{code_examples/introduction/history_cc98_code.h}
-\end{box-note}
+\end{box-nobreak}
 
 \begin{box-note}
 \footnotesize Example of \cpp{std::for_each}\index{\cpp{std::for_each}} algorithm with a capturing lambda, calculating the number of elements and their sum.
@@ -153,3 +154,8 @@ In some cases, a single returned iterator denotes multiple ranges.
 
 Even when the algorithm returns an iterator to a specific element, it might be worth considering the implied range.
 
+\begin{box-note}
+\footnotesize Example of \cpp{std::find} establishing a prefix range that doesn't contain the searched-for element.
+\tcblower
+\cppfile{code_examples/introduction/mental_find_code.h}
+\end{box-note}
