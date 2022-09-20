@@ -1,2 +1,4 @@
 #include "adl_unqalified_code.h"
-int main() {}
+int main() {
+	A::B::calling_site();
+}

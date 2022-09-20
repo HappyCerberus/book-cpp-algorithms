@@ -10,5 +10,5 @@ std::ostream& operator << (std::ostream& s, const X&) {
 void calling_site() {
 	Custom::X x;
 	Custom::operator << (std::cout, x); // OK, explicit call
-	std::cout << x; // OK, unqualified operator <<, ADL
+	std::cout << x; // Requires ADL
 }

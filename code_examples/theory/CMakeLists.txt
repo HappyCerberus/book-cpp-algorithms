@@ -15,3 +15,6 @@ install(TARGETS initializer_list DESTINATION bin)
 
 add_executable(adl_unqalified adl_unqalified.cpp)
 # Compile only
+
+add_executable(adl_simple adl_simple.cpp)
+# Compile only
