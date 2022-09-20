@@ -9,5 +9,21 @@ When calling a method without qualification (i.e. not specifying the namespace),
 \begin{box-note}
 \footnotesize Example of unqualified lookup. Both calls to \cpp{some_call} will resolve to \cpp{::A::B::some_call} since this is the first instance discovered by the compiler.
 \tcblower
-\cppfile{code_examples/theory/adl_unqualified.h}
+\cppfile{code_examples/theory/adl_unqalified_code.h}
+\end{box-note}
+
+Due to the simplicity of unqualified lookup, we need an additional mechanism to discover overloads. Notably, it is a requirement for operator overloading since operator calls are unqualified. This is where argument-dependent lookup comes in.
+
+\begin{box-note}
+\footnotesize Without ADL, any call to a custom operator overload would have to be fully qualified, requiring the function call syntax.
+\tcblower
+\cppfile{code_examples/theory/adl_code.h}
+\end{box-note}
+
+While the full rules for ADL are long, the heavily simplified version is that the compiler will also consider the innermost namespace of all the arguments when determining the viable function overloads.
+
+\begin{box-note}
+\footnotesize 
+\tcblower
+\cppfile{code_examples/theory/adl_code.h}
 \end{box-note}
