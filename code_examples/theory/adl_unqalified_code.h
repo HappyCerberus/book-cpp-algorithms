@@ -7,7 +7,8 @@ void some_call(double) {}
 void calling_site() {
     some_call(1);   // A::B::some_call
     some_call(2.0); // A::B::some_call
-    //some_call("hello world"); Will not compile, no conversion from const char* -> double
+    // some_call("hello world"); will not compile
+    // no conversion from const char* -> double
 }
 }
 }

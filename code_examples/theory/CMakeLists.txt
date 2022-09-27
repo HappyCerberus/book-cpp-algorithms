@@ -18,3 +18,6 @@ add_executable(adl_unqalified adl_unqalified.cpp)
 
 add_executable(adl_simple adl_simple.cpp)
 # Compile only
+
+add_executable(adl_nonfunc adl_nonfunc.cpp)
+# Compile only
