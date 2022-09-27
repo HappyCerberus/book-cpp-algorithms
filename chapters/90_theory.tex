@@ -42,3 +42,20 @@ Friend functions (when defined inline) do not participate in the normal lookup (
 
 \subsection{Function objects vs ADL}
 
+The second notable interaction occurs with non-function symbols. In the context of this section, the important ones are function objects (and lambdas).
+
+Argument-dependent lookup will not consider non-function symbols. This means that a function object or a lambda must be either visible to an unqualified lookup or need to be fully qualified.
+
+\begin{box-note}
+\footnotesize Example demonstrating a lambda stored in an inline variable that can only be invoked through a qualified call.
+\tcblower
+\cppfile{code_examples/theory/adl_nonfunc_code.h}
+\end{box-note}
+
+Finally, discovering a non-function symbol during the unqualified lookup phase will prevent ADL completely.
+
+\begin{box-note}
+\footnotesize Example demonstrating a non-function object preventing ADL, making a friend function impossible to invoke.
+\tcblower
+\cppfile{code_examples/theory/adl_shutdown_code.h}
+\end{box-note}
