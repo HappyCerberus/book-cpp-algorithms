@@ -1,6 +1,6 @@
-\chapter{In-depth}
+\chapter{Bits of C++ theory}
 
-In this chapter, we will go over relevant in-depth topics referenced throughout the rest of the book.
+This chapter will dive deep into the various topics referenced throughout the book. While this chapter serves as a reference, the topics are still presented in a heavily simplified, example-heavy format. For a proper reference, please refer to the C++ standard.
 
 \section{Argument-dependent lookup (ADL)}
 
@@ -20,10 +20,25 @@ Due to the simplicity of unqualified lookup, we need an additional mechanism to 
 \cppfile{code_examples/theory/adl_code.h}
 \end{box-note}
 
-While the full rules for ADL are long, the heavily simplified version is that the compiler will also consider the innermost namespace of all the arguments when determining the viable function overloads.
+While the full rules for ADL are quite complex, the heavily simplified version is that the compiler will also consider the innermost namespace of all the arguments when determining the viable function overloads.
 
 \begin{box-note}
 \footnotesize 
 \tcblower
-\cppfile{code_examples/theory/adl_code.h}
+\cppfile{code_examples/theory/adl_simple_code.h}
 \end{box-note}
+
+Arguably the true power of ADL lies in the interactions with other language features, so let's look at how ADL interacts with friend functions and function objects.
+
+\subsection{Friend functions vs ADL}
+
+Friend functions (when defined inline) do not participate in the normal lookup (they are part of the surrounding namespace but are not visible). However, they are still visible to ADL, which permits a common implementation pattern for a default implementation with a customization point through ADL.
+
+\begin{box-note}
+\footnotesize Example demonstrating a default implementation with a customization point through ADL. The default implementation needs to be discovered during the unqualified lookup; therefore, if any custom implementation is visible in the surrounding namespaces, it will block this discovery.
+\tcblower
+\cppfile{code_examples/theory/adl_default_code.h}
+\end{box-note}
+
+\subsection{Function objects vs ADL}
+
