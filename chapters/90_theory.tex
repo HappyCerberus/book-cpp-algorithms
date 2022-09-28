@@ -59,3 +59,9 @@ Finally, discovering a non-function symbol during the unqualified lookup phase w
 \tcblower
 \cppfile{code_examples/theory/adl_shutdown_code.h}
 \end{box-note}
+
+\subsection{\texorpdfstring{\CC20 ADL customization point}{C++20 ADL customization point}}
+
+With the introduction of concepts in \CC20, we now have a cleaner way to introduce a customization point using ADL.
+
+This approach has several benefits, in particular on the call site. We no longer need to remember to pull in the namespace of the default implementation. Furthermore, because the call is now fully qualified, we avoid the problem of symbol collisions that can potentially completely prevent ADL.
