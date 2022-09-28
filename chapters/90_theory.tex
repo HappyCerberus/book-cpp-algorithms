@@ -64,4 +64,10 @@ Finally, discovering a non-function symbol during the unqualified lookup phase w
 
 With the introduction of concepts in \CC20, we now have a cleaner way to introduce a customization point using ADL.
 
+\begin{box-note}
+\footnotesize Example.
+\tcblower
+\cppfile{code_examples/theory/adl_niebloid_code.h}
+\end{box-note}
+
 This approach has several benefits, in particular on the call site. We no longer need to remember to pull in the namespace of the default implementation. Furthermore, because the call is now fully qualified, we avoid the problem of symbol collisions that can potentially completely prevent ADL.
