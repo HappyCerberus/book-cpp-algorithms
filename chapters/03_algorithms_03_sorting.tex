@@ -35,7 +35,7 @@ The type returned for the spaceship operator is the common comparison category t
 \subsection{\texorpdfstring{\cpp{std::lexicographical_compare}}{\texttt{std::lexicographical\_compare}}}
 \index{\cpp{std::lexicographical_compare}}
 
-Lexicographical \texttt{strict\_weak\_ordering} for ranges is exposed through the \texttt{std::lexicographical\_compare} algorithm.
+Lexicographical \texttt{strict\_weak\_ordering} for ranges is exposed through the \newline\texttt{std::lexicographical\_compare} algorithm.
 
 \cppversions{\texttt{lex\dots compare}}{\CC98}{\CC20}{\CC17}{\CC20}
 
@@ -58,7 +58,14 @@ Because the standard containers already offer a built-in lexicographical compari
 \subsection{\texorpdfstring{\cpp{std::lexicographical_compare_three_way}}{\texttt{std::lexicographical\_compare\_three\_way}}}
 \index{\cpp{std::lexicographical_compare_three_way}}
 
-The \texttt{std::lexicographical\_compare\_three\_way} is the spaceship operator equivalent to \texttt{std::lexicographical\_compare}. It returns one of \texttt{std::strong\_ordering}, \texttt{std::weak\_ordering} or \texttt{std::partial\_ordering} types, depending on the type returned by the elements' spaceship operator.
+The \texttt{std::lexicographical\_compare\_three\_way} is the spaceship operator equivalent to \texttt{std::lexicographical\_compare}. It returns one of:
+\begin{itemize}
+    \item\texttt{std::strong\_ordering}
+    \item \texttt{std::weak\_ordering}
+    \item \texttt{std::partial\_ordering}
+\end{itemize}
+
+The type depends on the type returned by the elements' spaceship operator.
 
 \cppversions{\texttt{lex\dots three\_way}}{\CC20}{\CC20}{N/A}{N/A}
 \constraints{\texttt{(input\_range, input\_range)}}{}{\texttt{operator<=>}}{\texttt{strong\_ordering}, \texttt{weak\_ordering}, \texttt{partial\_ordering}}
@@ -140,7 +147,7 @@ The \cpp{std::is_sorted_until} algorithm returns the first out-of-order element 
 \end{box-note}
 
 Note that because of the behaviour of \cpp{std::is_sorted_until}, the following is always true:\\
-\small\cpp{std::is_sorted(r.begin(), std::is_sorted_until(r.begin(), r.end()))}
+\begin{small}\cpp{std::is_sorted(r.begin(), std::is_sorted_until(r.begin(), r.end()))}\end{small}
 
 \subsection{\texorpdfstring{\cpp{std::partial_sort}}{\texttt{std::partial\_sort}}}
 \index{\cpp{std::partial_sort}}
@@ -188,8 +195,8 @@ Because the C standard library is part of the C++ standard library, we also have
 
 I would strongly recommend avoiding \cpp{qsort}, as \cpp{std::sort} and \cpp{std::ranges::sort} should be a better choice in every situation. Moreover, \cpp{qsort} is only valid for trivially copyable types, and those will correctly optimize to \cpp{memcpy}/\cpp{memmove} operations even when using \cpp{std::sort}.
 
-\begin{box-note}
+\begin{box-nobreak}
 \footnotesize Example of using \cpp{std::sort} to achieve the same result as in the previous example.
 \tcblower
 \cppfile{code_examples/algorithms/qsort_not_code.h}
-\end{box-note}
+\end{box-nobreak}

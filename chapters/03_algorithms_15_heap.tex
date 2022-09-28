@@ -20,11 +20,11 @@ The valuable property of a heap is that it can be constructed in linear time and
 
 The \cpp{std::make_heap} algorithm reorders elements in the given range such that the elements maintain the max-heap property, that is, the element at index $i$ compares greater or equal to the elements at indexes $2i+1$ and $2i+2$.
 
-\begin{box-note}
+\begin{box-nobreak}
 \footnotesize Example of using \cpp{std::make_heap} to construct a max-heap and a min-heap (using a custom comparator).
 \tcblower
 \cppfile{code_examples/algorithms/make_heap_code.h}
-\end{box-note}
+\end{box-nobreak}
 
 The \cpp{std::push_heap} and \cpp{std::pop_heap} algorithms simulate push and pop operations for the max-heap data structure. However, because they operate on top of a range, they cannot manipulate the underlying data structure. Therefore, they use the last element of the range as the input/output.
 
@@ -61,7 +61,7 @@ The \cpp{std::is_heap} and \cpp{std::is_heap_until} algorithms check the heap in
 
 \constraints{\texttt{random\_access\_range}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
-The two algorithms follow the same logic as \cpp{std::is_sorted} and \cpp{std::is_sorted_until}, returning a boolean and an iterator to the first out-of-order element respectively.
+The two algorithms follow the same logic as \cpp{std::is_sorted} and \texttt{std::is\-\_sorted\-\_until}, returning a boolean and an iterator to the first out-of-order element respectively.
 
 \begin{box-note}
 \footnotesize Example of using \cpp{std::is_heap} and \cpp{std::is_heap_until}.

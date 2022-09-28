@@ -50,12 +50,12 @@ The \cpp{std::iota} generates elements by consecutively assigning the result of 
 \cppfile{code_examples/algorithms/iota_code.h}
 \end{box-note}
 
-Notably, the \cpp{std::iota} algorithm is also an outlier in the support added with the C++20 standard. The std::iota algorithm did not receive a range version. However, we do have access to an iota view.
+Notably, the \cpp{std::iota} algorithm is also an outlier in the support added with the C++20 standard. The \cpp{std::iota} algorithm did not receive a range version. However, we do have access to an iota view.
 
-\begin{box-note}
+\begin{box-nobreak}
 \footnotesize Example of using both finite and infinite \cpp{std::views::iota}.
 \tcblower
 \cppfile{code_examples/algorithms/iota_view_code.h}
-\end{box-note}
+\end{box-nobreak}
 
-Here we take advantage of the finite view constructor \cpp{std::views::iota(1,10)} to establish the output size (line 3), which allows us to use the infinite view \cpp{std::views::iota(5)} for the second parameter. Functionally, we could swap even the second view for a finite one. However, this would impose an additional (and unnecessary) boundary check.
+Here we take advantage of the finite view constructor \cpp{std::views::iota(1,10)} to establish the output size (line 3), which allows us to use the infinite view \texttt{std::views\-::iota(5)} for the second parameter. Functionally, we could swap even the second view for a finite one. However, this would impose an additional (and unnecessary) boundary check.

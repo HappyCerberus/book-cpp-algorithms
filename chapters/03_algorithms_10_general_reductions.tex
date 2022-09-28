@@ -14,7 +14,7 @@ The \cpp{std::reduce} algorithm is a generalised version of \cpp{std::accumulate
 \cppversions{\texttt{reduce}}{\CC17}{\CC20}{\CC17}{N/A}
 \constraints{\texttt{input\_range}}{\texttt{forward\_range}}{\texttt{std::plus<>()}}{\texttt{binary\_functor}}
 
-Note that while we have access to a sequenced execution policy (\cpp{std::execution::seq}), this does not make \cpp{std::reduce} sequenced in a left-fold sense.
+Note that while we have access to a sequenced execution policy (i.e. \newline\cpp{std::execution::seq}), this does not make \cpp{std::reduce} sequenced in a left-fold sense.
 
 \begin{box-note}
 \footnotesize Example of using \cpp{std::reduce} with and without an execution policy.
@@ -35,7 +35,7 @@ The initial value of the accumulator will be “Quack” (line 2). Adding the ot
 \subsection{\texorpdfstring{\cpp{std::transform_reduce}}{\texttt{std::transform\_reduce}}}
 \index{\cpp{std::transform_reduce}}
 
-The \cpp{std::transform_reduce} algorithm is the generalised counterpart to \cpp{std::inner_product}. On top of the two-range variant, the algorithm also provides a unary overload.
+The \cpp{std::transform_reduce} algorithm is the generalised counterpart to \texttt{std::inner\-\_product}. On top of the two-range variant, the algorithm also provides a unary overload.
 
 \cppversions{\texttt{transform\_reduce}}{\CC17}{\CC20}{\CC17}{N/A}
 \constraints{\texttt{input\_range}}{\texttt{forward\_range}}{N/A}{\texttt{(binary\_functor, unary\_functor)}}

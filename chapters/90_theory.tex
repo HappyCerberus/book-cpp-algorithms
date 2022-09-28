@@ -3,6 +3,7 @@
 This chapter will dive deep into the various topics referenced throughout the book. While this chapter serves as a reference, the topics are still presented in a heavily simplified, example-heavy format. For a proper reference, please refer to the C++ standard.
 
 \section{Argument-dependent lookup (ADL)}
+\label{theory:adl}
 
 When calling a method without qualification (i.e. not specifying the namespace), the compiler needs to determine the set of candidate functions. As a first step, the compiler will do an unqualified name lookup, which starts at the local scope and examines the parent scopes until it finds the first instance of the name (at which point it stops).
 
@@ -65,7 +66,7 @@ Finally, discovering a non-function symbol during the unqualified lookup phase w
 With the introduction of concepts in \CC20, we now have a cleaner way to introduce a customization point using ADL.
 
 \begin{box-note}
-\footnotesize Example.
+\footnotesize The concept on line 4 will be satisfied if an ADL call is valid, i.e. there is a custom implementation. This is then used on lines 8 and 13 to differentiate between the two overloads. One calls the custom implementation, and the other contains the default implementation. The inline variable on line 18 is in an inline namespace to prevent collision with friend functions in the same namespace. However, because friend functions are only visible to ADL, a fully qualified call will always invoke this function object.
 \tcblower
 \cppfile{code_examples/theory/adl_niebloid_code.h}
 \end{box-note}

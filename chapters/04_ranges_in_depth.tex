@@ -14,11 +14,11 @@ Concepts are a new C++20 language feature that permits library implementors to c
 
 First, the definitions of all concepts are now part of the standard library, e.g. you can look up what exactly it means for a type to be a \cpp{random_access_range} and also use these concepts to constrain your code.
 
-\begin{box-note}
+\begin{box-nobreak}
 \footnotesize Example of using standard concepts in user code. The function accepts any random access range as the first argument and an output iterator with the same underlying type as the second argument.
 \tcblower
 \cppfile{code_examples/ranges/concepts_code.h}
-\end{box-note}
+\end{box-nobreak}
 
 Second, error messages now reference unsatisfied constraints instead of reporting an error deep in the library implementation.
 
@@ -86,7 +86,7 @@ Borrowed ranges are ranges that "borrow" their elements from another range. Prim
 \cppfile{code_examples/ranges/dangling_code.h}
 \end{box-note}
 
-User types can declare themselves as borrowed ranges by specializing the \cpp{enable_borrowed_range} constant.
+User types can declare themselves as borrowed ranges by specializing the \texttt{enable\-\_borrowed\-\_range} constant.
 
 \begin{box-note}
 \footnotesize Example demonstrating declaring MyView as a borrowed range.
@@ -231,7 +231,7 @@ The all view is a view of all the elements from a range.
 \index{\cpp{std::views::join_view}}
 
 The two split views split a single range into a view over sub-ranges. However, they differ in their implementation.
-The \cpp{std::view::split} maintains the bidirectional, random access or contiguous properties of the underlying range, and the \cpp{std::view::lazy_split} does not, but it does support input ranges.
+The \cpp{std::view::split} maintains the bidirectional, random access or contiguous properties of the underlying range, and the \texttt{std::view::\-lazy\_split} does not, but it does support input ranges.
 
 \begin{box-note}
 \footnotesize Example of using split view to parse a version number.

@@ -105,4 +105,4 @@ You might be wondering whether we can cause the same dangling reference (iterato
 \cppfile{code_examples/algorithms/min_element_dangling_code.h}
 \end{box-note}
 
-All ranged versions of algorithms that return iterators will return the \cpp{std::ranges::dangling} type when invoked on a temporary range. This would preclude the use case of using \cpp{std::span} to sub-reference a range, which is why the range algorithms have an additional concept of a \cpp{borrowed_range}. Such ranges can be passed in as temporaries since they do not own their elements.
+All ranged versions of algorithms that return iterators will return the \texttt{std::ranges\-::dangling} type when invoked on a temporary range. This would preclude the use case of using \cpp{std::span} to sub-reference a range, which is why the range algorithms have an additional concept of a \cpp{borrowed_range}. Such ranges can be passed in as temporaries since they do not own their elements.

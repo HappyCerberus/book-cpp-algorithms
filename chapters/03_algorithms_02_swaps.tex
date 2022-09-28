@@ -1,32 +1,6 @@
 \section{Swaps}
 
-Before discussing swaps, we need to make a short detour and discuss argument-dependent lookup, an essential aspect of the pre-C++20 version of the std::swap algorithm.
-
-Argument-dependent lookup is relied upon heavily in C++, notably when overloading operators.
-
-\begin{box-note}
-\footnotesize Example of argument-dependent lookup for \cpp{operator<<} implemented as a function.
-\tcblower
-\cppfile{code_examples/theory/adl_code.h}
-\end{box-note}
-
-The situation changes slightly when the function is implemented as a friend function. Such a function is a member of the surrounding namespace. However, it is not visible outside of ADL.
-
-\begin{box-note}
-\footnotesize Example of argument-dependent lookup for \cpp{operator<<} implemented as a friend function.
-\tcblower
-\cppfile{code_examples/theory/adl_friend_code.h}
-\end{box-note}
-
-The benefit of relying on ADL is that there is no complexity on the caller's site. An unqualified call will invoke the correct overload. Except, this wouldn't be C++ if there weren't an exception to this rule.
-
-If on top of having the ability to specialize, we also want default behaviour as a fallback, the caller now needs to make sure to pull in the default overload to the local scope.
-
-\begin{box-note}
-\footnotesize Example of argument-dependent lookup with a default templated version of the function.
-\tcblower
-\cppfile{code_examples/theory/adl_default_code.h}
-\end{box-note}
+Before C++11 and the introduction of move operations, swaps were the only way objects with value semantics could exchange content without involving a deep copy.
 
 \subsection{\texorpdfstring{\cpp{std::swap}}{\texttt{std::swap}}}
 \index{\cpp{std::swap}}
@@ -35,7 +9,7 @@ The non-range version of \cpp{std::swap} will swap the values of the two paramet
 
 \cppversions{\texttt{swap}}{\CC98}{\CC20}{N/A}{\CC20}
 
-Correctly calling swap (as mentioned at the beginning of this section) requires pulling the default std::swap version to the local scope.
+Correctly calling swap requires pulling the default std::swap version to the local scope. To read more on why this is needed check out the theory chapter of this book, specifically the section on ADL (\ref{theory:adl}).
 
 \begin{box-note}
 \footnotesize Example of correctly calling \cpp{std::swap}.

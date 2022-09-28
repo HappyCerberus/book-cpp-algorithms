@@ -93,7 +93,7 @@ Note that using \cpp{std::reverse} is only a reasonable solution if the range mu
 \cppfile{code_examples/algorithms/reverse_code.h}
 \end{box-note}
 
-C-style arrays and C-style strings can be adapted using \cpp{std::span} and \cpp{std::string_view} to allow reverse iteration.
+C-style arrays and C-style strings can be adapted using \cpp{std::span} and \texttt{std::string\-\_view} to allow reverse iteration.
 
 \begin{box-note}
 \footnotesize Example of using \cpp{std::span} and \cpp{std::string_view} to addapt C-style constructs for reverse iteration.
@@ -104,7 +104,7 @@ C-style arrays and C-style strings can be adapted using \cpp{std::span} and \cpp
 \subsection{\texorpdfstring{\cpp{std::rotate}}{\texttt{std::rotate}}}
 \index{\cpp{std::rotate}}
 
-The \cpp{std::rotate} algorithm rearranges elements in the range from \cpp{[first, middle),[middle, last)} to \cpp{[middle, last),[first, middle)}.
+The \cpp{std::rotate} algorithm rearranges elements in the range from \texttt{[first, middle),} \texttt{[middle, last)} to \texttt{[middle, last),} \texttt{[first, middle)}.
 
 \cppversions{\texttt{rotate}}{\CC11}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{(forward\_range, forward\_iterator)}}{\texttt{(forward\_range, forward\_iterator)}}{}{}
@@ -118,7 +118,7 @@ The \cpp{std::rotate} algorithm rearranges elements in the range from \cpp{[firs
 \subsection{\texorpdfstring{\cpp{std::shuffle}}{\texttt{std::shuffle}}}
 \index{\cpp{std::shuffle}}
 
-The \cpp{std::shuffle} algorithm is a successor of the now-defunct \cpp{std::random_shuffle} algorithm (deprecated in \CC14, removed in \CC17) and relies on new random facilities added in \CC11.
+The \cpp{std::shuffle} algorithm is a successor of the now-defunct (deprecated in \CC14, removed in \CC17) \cpp{std::random_shuffle} algorithm and relies on new random facilities added in \CC11.
 
 \cppversions{\texttt{shuffle}}{\CC11}{N/A}{N/A}{\CC20}
 \constraints{\texttt{random\_access\_range}}{}{}{}

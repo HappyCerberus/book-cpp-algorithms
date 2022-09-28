@@ -50,11 +50,11 @@ The \cpp{std::copy_backward} and \cpp{std::move_backward} are variants that copy
 
 The output iterator cannot be within \cpp{(first, last]} and will be treated as the end iterator for the destination range, meaning that the algorithm will write the first value to \cpp{std::prev(end)}.
 
-\begin{box-note}
+\begin{box-nobreak}
 \footnotesize Example of a non-overlapping and permitted overlapping case of \cpp{std::copy_backward}.
 \tcblower
 \cppfile{code_examples/algorithms/copy_backward_code.h}
-\end{box-note}
+\end{box-nobreak}
 
 \subsection{\texorpdfstring{\cpp{std::copy_n}}{\texttt{std::copy\_n}}}
 \index{\cpp{std::copy_n}}
