@@ -24,3 +24,6 @@ add_executable(adl_nonfunc adl_nonfunc.cpp)
 
 add_executable(adl_shutdown adl_shutdown.cpp)
 # Compile only
+
+add_executable(adl_niebloid adl_niebloid.cpp)
+# Compile only
