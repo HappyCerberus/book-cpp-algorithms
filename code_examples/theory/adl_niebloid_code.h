@@ -6,8 +6,8 @@ namespace impl {
     struct DoSomethingFn { 
         template <typename T> void operator()(T&& arg) const
         requires HasCustomImpl<T> {
-		do_something(std::forward<T>(arg));
-	}
+            do_something(std::forward<T>(arg));
+        }
 
         template <typename T> void operator()(T&&) const
         requires (!HasCustomImpl<T>) { /* default implementation */ }
