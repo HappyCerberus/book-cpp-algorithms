@@ -62,7 +62,7 @@ When using the iterator-based interface, the middle iterator (i.e. the iterator 
 \index{\cpp{std::unique}}
 \index{\cpp{std::unique_copy}}
 
-The std::unique algorithm removes consecutive duplicate values. The typical use case is in conjunction with a sorted range. However, this is not a requirement of std::unique.
+The \cpp{std::unique} algorithm removes consecutive duplicate values. The typical use case is in conjunction with a sorted range. However, this is not a requirement of \cpp{std::unique}.
 
 \cppversions{\texttt{unique}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{forward\_range}}{\texttt{forward\_range}}{\texttt{operator==}}{\texttt{binary\_predicate}}
@@ -75,7 +75,7 @@ Because unique works in-place and cannot resize the underlying range, it leaves 
 \cppfile{code_examples/algorithms/unique_code.h}
 \end{box-note}
 
-The \cpp{std::unique_copy} is a variant of std::unique that outputs the unique values to a second range.
+The \cpp{std::unique_copy} is a variant of \cpp{std::unique} that outputs the unique values to a second range.
 
 \cppversions{\texttt{unique\_copy}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{input\_range -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{\texttt{operator==}}{\texttt{binary\_predicate}}
