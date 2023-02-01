@@ -1,6 +1,7 @@
 alignas(alignof(std::string)) char buff1[sizeof(std::string)*5];
 alignas(alignof(std::string)) char buff2[sizeof(std::string)*5];
-std::vector<std::string> data = {"hello", "world", "and", "everyone", "else"};
+std::vector<std::string> data = {
+    "hello", "world", "and", "everyone", "else"};
 
 auto *bg1 = reinterpret_cast<std::string*>(buff1);
 std::uninitialized_copy(data.begin(), data.end(), bg1);

@@ -15,4 +15,3 @@ auto cmp = [](const auto& left, const auto& right)
 std::ranges::merge(data1, data2, std::back_inserter(result), cmp);
 // result == {0, second}, {1, first}, {2, first},
 //           {2, second}, {3, first}, {4, second}
-

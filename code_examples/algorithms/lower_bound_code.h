@@ -1,8 +1,10 @@
 const std::vector<ExamResult>& results = get_results();
 
-auto lb = std::ranges::lower_bound(results, 49, {}, &ExamResult::score);
+auto lb = std::ranges::lower_bound(results, 49, {},
+								   &ExamResult::score);
 // First element for which: it->score >= 49
-auto ub = std::ranges::upper_bound(results, 99, {}, &ExamResult::score);
+auto ub = std::ranges::upper_bound(results, 99, {},
+								   &ExamResult::score);
 // First element for which: 99 < it->score 
  
 for (auto it = results.begin(); it != lb; it++) {

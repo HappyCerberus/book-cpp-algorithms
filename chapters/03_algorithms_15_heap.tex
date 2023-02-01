@@ -20,21 +20,21 @@ The valuable property of a heap is that it can be constructed in linear time and
 
 The \cpp{std::make_heap} algorithm reorders elements in the given range such that the elements maintain the max-heap property, that is, the element at index $i$ compares greater or equal to the elements at indexes $2i+1$ and $2i+2$.
 
-\begin{box-nobreak}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/aYeTrofdK}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::make_heap} to construct a max-heap and a min-heap (using a custom comparator).
 \tcblower
 \cppfile{code_examples/algorithms/make_heap_code.h}
-\end{box-nobreak}
+\end{codebox}
 
 The \cpp{std::push_heap} and \cpp{std::pop_heap} algorithms simulate push and pop operations for the max-heap data structure. However, because they operate on top of a range, they cannot manipulate the underlying data structure. Therefore, they use the last element of the range as the input/output.
 
 The \cpp{std::push_heap} algorithm will insert the last element of the range into the heap, and \cpp{std::pop_heap} will extract the maximum element to the last position of the range. As previously mentioned, both operations have logarithmic complexity.
 
-\begin{box-note}
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/h34Eh5T7a}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::push_heap} and \cpp{std::pop_heap}.
 \tcblower
 \cppfile{code_examples/algorithms/push_heap_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::sort_heap}}{\texttt{std::sort\_heap}}}
 \index{\cpp{std::sort_heap}}
@@ -44,11 +44,11 @@ The \cpp{std::sort_heap} will reorder the elements in a heap into a sorted order
 \cppversions{\texttt{sort\_heap}}{\CC98}{\CC20}{N/A}{\CC20}
 \constraints{\texttt{random\_access\_range}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/odrjGK7xb}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::sort_heap}.
 \tcblower
 \cppfile{code_examples/algorithms/sort_heap_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::is_heap}, \cpp{std::is_heap_until}}{\texttt{std::is\_heap}, \texttt{std::is\_heap\_until}}}
 \index{\cpp{std::is_heap}}
@@ -63,31 +63,31 @@ The \cpp{std::is_heap} and \cpp{std::is_heap_until} algorithms check the heap in
 
 The two algorithms follow the same logic as \cpp{std::is_sorted} and \texttt{std::is\-\_sorted\-\_until}, returning a boolean and an iterator to the first out-of-order element respectively.
 
-\begin{box-note}
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/oz41sxfWb}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::is_heap} and \cpp{std::is_heap_until}.
 \tcblower
 \cppfile{code_examples/algorithms/is_heap_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{Comparison with \texorpdfstring{\cpp{std::priority_queue}}{\texttt{std::priority\_queue}}}
 \index{\cpp{std::priority_queue}}
 
 As mentioned at the beginning of this section, the heap algorithms provide effectively the same functionality as \cpp{std::priority_queue}. To demonstrate the differences, let's look at two versions of a topk algorithm: an algorithm that takes a range and returns the top k elements in sorted order as a \cpp{std::vector}.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/TvPv3sWsj}{\ExternalLink}}
 \footnotesize Example of implementing a topk algorithm using a \cpp{std::priority_queue}.
 \tcblower
 \cppfile{code_examples/extras/priority_queue_queue_code.h}
-\end{box-note}
+\end{codebox}
 
 The example relies on \CC20 concepts to provide a generic interface and should therefore work with any range on input, returning a \cpp{std::vector} of the same element type.
 
 When using the priority queue, we can utilize the simple \cpp{push()} and \cpp{pop()} interface provided (lines 12 and 14). However, extracting all data from the queue is only possible by repeatedly applying \cpp{pop()} until the queue is empty (line 20).
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/EYhGcr8qj}{\ExternalLink}}
 \footnotesize Example of implementing a topk algorithm using heap algorithms.
 \tcblower
 \cppfile{code_examples/extras/priority_queue_heap_code.h}
-\end{box-note}
+\end{codebox}
 
 When using the heap algorithms, we need to manually manage the underlying data structure (lines 9-10 and 13–14). However, we do not need to extract the data, and on top of that, we could omit the final \cpp{std::sort_heap} (line 20) if we do not need the top k elements in sorted order.

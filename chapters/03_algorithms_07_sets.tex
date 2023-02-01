@@ -10,19 +10,19 @@ The \cpp{std::set_difference} algorithm produces a range containing elements pre
 \cppversions{\texttt{set\_difference}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{(input\_range, input\_range) -> output\_iterator}}{\texttt{(forward\_range, forward\_range) -> forward\_iterator}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
-For equivalent elements, where the first range contains $M$ such elements and the second range contains $N$ such elements, the result will contain the last \cpp{std::max(M-N, 0)} such elements from the first range.
-
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/WMz45WbW6}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::set_difference}.
 \tcblower
 \cppfile{code_examples/algorithms/set_difference_code.h}
-\end{box-note}
+\end{codebox}
 
-\begin{box-note}
+For equivalent elements, where the first range contains $M$ such elements and the second range contains $N$ such elements, the result will contain the last \cpp{std::max(M-N,0)} such elements from the first range.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/YdPnxPh88}{\ExternalLink}}
 \footnotesize Example demonstrating \cpp{std::set_difference} behaviour when equivalent elements are present.
 \tcblower
 \cppfile{code_examples/algorithms/set_difference_equal_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::set_symmetric_difference}}{\texttt{std::set\_symmetric\_difference}}}
 \index{\cpp{std::set_symmetric_difference}}
@@ -32,19 +32,19 @@ The \cpp{std::set_symetric_difference} algorithm produces a range containing ele
 \cppversions{\texttt{set\_sym\dots diff\dots}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{(input\_range, input\_range) -> output\_iterator}}{\texttt{(forward\_range, forward\_range) -> forward\_iterator}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/PrTn6voGn}{\ExternalLink}}
+    \footnotesize Example of using \cpp{std::set_symmetric_difference}.
+    \tcblower
+    \cppfile{code_examples/algorithms/set_symmetric_difference_code.h}
+\end{codebox}
+
 For equivalent elements, where the first range contains $M$ such elements and the second range contains $N$ such elements, the result will contain the last \cpp{std::abs(M-N)} such elements from the corresponding range. That is, if $M>N$, $M-N$ elements will be copied from the first range; otherwise, $N-M$ elements will be copied from the second range.
 
-\begin{box-nobreak}
-\footnotesize Example of using \cpp{std::set_symmetric_difference}.
-\tcblower
-\cppfile{code_examples/algorithms/set_symmetric_difference_code.h}
-\end{box-nobreak}
-
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/7hGacnfWe}{\ExternalLink}}
 \footnotesize Example demonstrating \cpp{std::set_symmetric_difference} behaviour when equivalent elements are present.
 \tcblower
 \cppfile{code_examples/algorithms/set_symmetric_difference_equal_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::set_union}}{\texttt{std::set\_union}}}
 \index{\cpp{std::set_union}}
@@ -54,19 +54,19 @@ The \cpp{std::set_union} algorithm produces a range containing elements present 
 \cppversions{\texttt{set\_union}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{(input\_range, input\_range) -> output\_iterator}}{\texttt{(forward\_range, forward\_range) -> forward\_iterator}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/anvj66jfT}{\ExternalLink}}
+    \footnotesize Example of using \cpp{std::set_union}.
+    \tcblower
+    \cppfile{code_examples/algorithms/set_union_code.h}
+\end{codebox}
+
 For equivalent elements, where the first range contains $M$ such elements and the second range contains $N$ such elements, the result will contain $M$ elements from the first range, followed by the last \cpp{std::max(N-M,0)} elements from the second range.
 
-\begin{box-note}
-\footnotesize Example of using \cpp{std::set_union}.
-\tcblower
-\cppfile{code_examples/algorithms/set_union_code.h}
-\end{box-note}
-
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/KbqGWbzP6}{\ExternalLink}}
 \footnotesize Example demonstrating \cpp{std::set_union} behaviour when equivalent elements are present.
 \tcblower
 \cppfile{code_examples/algorithms/set_union_equal_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::set_intersection}}{\texttt{std::set\_intersection}}}
 \index{\cpp{std::set_intersection}}
@@ -76,16 +76,16 @@ The \cpp{std::set_intersection} algorithm produces a range containing elements p
 \cppversions{\texttt{set\_intersection}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{(input\_range, input\_range) -> output\_iterator}}{\texttt{(forward\_range, forward\_range) -> forward\_iterator}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/h3fqn9K6v}{\ExternalLink}}
+    \footnotesize Example of using \cpp{std::set_intersection}.
+    \tcblower
+    \cppfile{code_examples/algorithms/set_intersection_code.h}
+\end{codebox}
+
 For equivalent elements, where the first range contains $M$ such elements and the second range contains $N$ such elements, the result will contain the first \cpp{std::min(M,N)} elements from the first range.
 
-\begin{box-note}
-\footnotesize Example of using \cpp{std::set_intersection}.
-\tcblower
-\cppfile{code_examples/algorithms/set_intersection_code.h}
-\end{box-note}
-
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/seK3YWqTo}{\ExternalLink}}
 \footnotesize Example demonstrating \cpp{std::set_intersection} behaviour when equivalent elements are present.
 \tcblower
 \cppfile{code_examples/algorithms/set_intersection_equal_code.h}
-\end{box-note}
+\end{codebox}

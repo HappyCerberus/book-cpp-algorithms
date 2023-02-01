@@ -1,7 +1,7 @@
 template <typename It, typename Cond>
 	requires std::forward_iterator<It> 
 		&& std::indirectly_swappable<It,It> 
-		&& std::predicate<Cond>
+		&& std::predicate<Cond, It>
 auto partition(It first, It last, Cond cond) {
 	while (first != last && cond(first)) ++first;
 	if (first == last) return last;

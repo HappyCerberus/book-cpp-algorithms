@@ -1,8 +1,12 @@
 \section{Left folds}
 
-Left folds are one of the two big groups of numerical algorithms. Folds operate in a strict order, "folding in" one element at a time by evaluating \cpp{acc = fold_op(acc, el)} for each element. For left folds, the direction of operation is left to right. However, we can easily change the direction for bidirectional ranges since those support reverse iteration.
+Left folds are one of the two big groups of numerical algorithms. 
+Folds operate in a strict order, "folding in" one element at a time by evaluating \cpp{acc=fold_op(acc,el)} for each element.
+For left folds, the direction of operation is left to right.
 
 Because of the strictly linear operation, none of the left-fold algorithms supports a parallel version.
+
+When using numerical algorithms, it's worth understanding the behaviour of numerical types in C++, notably the interactions between silent implicit conversions and template type deduction rules. You can read more on this in the theory chapter in the section \ref{theory:numerics}.
 
 \subsection{\texorpdfstring{\cpp{std::accumulate}}{\texttt{std::accumulate}}}
 \index{\cpp{std::accumulate}}
@@ -12,20 +16,19 @@ The \cpp{std::accumulate} algorithm is the single-range left-fold.
 \cppversions{\texttt{accumulate}}{\CC98}{\CC20}{N/A}{N/A}
 \constraints{\texttt{input\_range}}{}{\texttt{operator +}}{\texttt{binary\_functor}}
 
-\begin{box-note}
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/3decPenW6}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::accumulate}.
 \tcblower
 \cppfile{code_examples/algorithms/accumulate_code.h}
-\end{box-note}
+\end{codebox}
 
-Note that the algorithm accepts an initial value that also dictates the accumulator type.
-% TODO: link to chapter about numerical conversions and promotions
+While left folds operate strictly left-to-right, we can mitigate this limitation by utilizing reverse iterators—note, of course, that this requires at least a bidirectional range.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/6verMGo6P}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::accumulate} as a right fold.
 \tcblower
 \cppfile{code_examples/algorithms/accumulate_right_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::inner_product}}{\texttt{std::inner\_product}}}
 \index{\cpp{std::inner_product}}
@@ -37,21 +40,21 @@ The \cpp{std::inner_product} algorithm is a left fold over two ranges. The pairs
 
 The default version uses \cpp{operator*} for the reduction and \cpp{operator+} for the fold operation.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/j9M7eGxnd}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::inner_product}.
 \tcblower
 \cppfile{code_examples/algorithms/inner_product_code.h}
-\end{box-note}
+\end{codebox}
 
 Because the algorithm only uses the ranges as input, there is no issue with overlapping ranges.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/1G6Yc3rhn}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::inner_product} on a single range to calculate sum of absolute differences between elements.
 \tcblower
 \cppfile{code_examples/algorithms/inner_product_one_code.h}
-\end{box-note}
+\end{codebox}
 
-\subsection{\texorpdfstring{\cpp{std::partial_sum}}{\texttt{std::partial_sum}}}
+\subsection{\texorpdfstring{\cpp{std::partial_sum}}{\texttt{std::partial\_sum}}}
 \index{\cpp{std::partial_sum}}
 
 The \cpp{std::partial_sum} algorithm operates as a left fold. However, it doesn't reduce the range into a single value. Instead, the algorithm writes each partial result to the output range.
@@ -59,12 +62,44 @@ The \cpp{std::partial_sum} algorithm operates as a left fold. However, it doesn'
 \cppversions{\texttt{partial\_sum}}{\CC98}{\CC20}{N/A}{N/A}
 \constraints{\texttt{input\_range -> output\_iterator}}{}{\texttt{operator+}}{\texttt{binary\_functor}}
 
-The output iterator is permitted to be the input ranges’ begin iterator.
+The output iterator is permitted to be the input ranges' begin iterator.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/G83s3edax}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::partial_sum}.
 \tcblower
 \cppfile{code_examples/algorithms/partial_sum_code.h}
-\end{box-note}
+\end{codebox}
 
-% TODO: stateful functors
+\subsection{\texorpdfstring{\cpp{std::adjacent_difference}}{\texttt{std::adjacent\_difference}}}
+\index{\cpp{std::adjacent_difference}}
+
+The \cpp{std::adjacent_difference} is a numerical algorithm, which is the odd one out as it provides both a strict left-to-right variant, but at the same time also supports parallel execution, where it behaves like a generalized reduction (we will talk about those in the next section).
+
+The algorithm operates similarly to the \cpp{std::transform} algorithm, operating on each pair of consecutive elements in the range. However, unlike \cpp{std::transform}, it does guarantee left-to-right execution.
+
+The algorithm also supports input ranges, which is achieved by internally storing the copy of the last right operand to be reused as the left operand for the subsequent reduction step.
+
+\cppversions{\texttt{adjacent\_difference}}{\CC98}{\CC20}{\CC17}{N/A}
+\constraints{\texttt{input\_range -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{\texttt{operator -}}{\texttt{binary\_functor}}
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/6vPea76qr}{\ExternalLink}}
+\footnotesize Example of the default version of \cpp{std::adjacent_difference}, which will calculate the difference of adjacent elements, with the first element copied.
+\tcblower
+\cppfile{code_examples/algorithms/adjacent_difference_code.h}
+\end{codebox}
+
+The left-to-right operation can be exploited for generative use cases.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/fn18zEP4e}{\ExternalLink}}
+\footnotesize Example of more inventive use of \cpp{std::adjacent_difference} to generate the Fibonacci sequence.
+\tcblower
+\cppfile{code_examples/algorithms/adjacent_difference_extra_code.h}
+\end{codebox}
+
+For parallel overloads, the input and output ranges cannot overlap.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/7hYj7qaTb}{\ExternalLink}}
+\footnotesize Example of the parallel \cpp{std::adjacent_difference} overload.
+\tcblower
+\cppfile{code_examples/algorithms/adjacent_difference_par_code.h}
+\end{codebox}

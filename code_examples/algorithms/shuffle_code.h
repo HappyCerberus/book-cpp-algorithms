@@ -9,7 +9,8 @@ friend std::ostream& operator << (std::ostream& s, const Card& card) {
 		{"Hearts", "Diamonds", "Clubs", "Spades"};
 
 	if (card.index >= 52)
-		throw std::domain_error("Card index has to be in the range 0..51");
+		throw std::domain_error(
+			"Card index has to be in the range 0..51");
 
 	s << ranks[card.index%13] << " of " << suits[card.index/13];
 	return s;

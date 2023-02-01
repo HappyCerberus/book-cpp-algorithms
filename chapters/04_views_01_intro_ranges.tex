@@ -1,0 +1,116 @@
+\chapter{Introduction to Ranges}
+
+The \CC20 standard introduced the Ranges library (a.k.a. STLv2), which effectively replaces existing algorithms and facilities.
+In this chapter, we will go over the main changes.
+
+Note that Ranges are one of the features that landed in \CC20 in a partial state.
+Despite \CC23 introducing plenty of additional features, we already know that many features will still not make it into \CC23.
+
+\section{Reliance on concepts}
+
+The standard has always described what is required of each argument passed to an algorithm. However, this description was purely informative, and the language did not offer first-class tools to enforce these requirements. Because of this, the error messages were often confusing.
+
+Concepts are a new C++20 language feature that permits library implementors to constrain the arguments of generic code. Concepts are beyond the scope of this book; however, there are two consequences worth noting.
+
+First, the definitions of all concepts are now part of the standard library, e.g. you can look up what exactly it means for a type to be a \cpp{random_access_range} and also use these concepts to constrain your code.
+\raggedbottom
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/ajd55nzsr}{\ExternalLink}}
+\footnotesize Example of using standard concepts in user code. The function accepts any random access range as the first argument and an output iterator with the same underlying type as the second argument.
+\tcblower
+\cppfile{code_examples/ranges/concepts_code.h}
+\end{codebox}
+
+Second, error messages now reference unsatisfied constraints instead of reporting an error deep in the library implementation.
+
+\begin{minted}[fontsize=\footnotesize]{cpp}
+note: candidate: 'template<class _Iter, class _Sent, class _Comp, class _Proj>
+    requires (random_access_iterator<_Iter>)
+\end{minted}
+
+\section{Notion of a Range}
+
+Non-range algorithms have always operated strictly using iterators. Conceptually, the range of elements has been defined by two iterators \cpp{[first, last)} or when working with all elements from a standard data structure \cpp{[begin, end)}.
+
+Range algorithms formally define a range as an iterator and a sentinel pair. Moving the sentinel to a different type unlocks the potential to simplify code where an end iterator doesn't naturally map to an element. The standard offers two default sentinel types, \cpp{std::default_sentinel} and \cpp{std::unreachable_sentinel}.
+
+Apart from simplifying certain use cases, sentinels also allow for infinite ranges and potential performance improvements.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/6o5M9fqE7}{\ExternalLink}}
+\footnotesize Example of an infinite range when the data guarantees termination. Using \cpp{std::unreachable_sentinel} causes the boundary check to be optimized-out, removing one comparison from the loop.
+\tcblower
+\cppfile{code_examples/ranges/infinite_code.h}
+\end{codebox}
+
+We can only use this approach when we have a contextual guarantee that the algorithm will terminate without going out of bounds. However, this removes one of the few instances when algorithms couldn't perform as well as handwritten code.
+
+And finally, with the introduction of the range, algorithms now provide range overloads, leading to more concise and easier-to-read code.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/47h5MMKKv}{\ExternalLink}}
+\footnotesize Example of using the range overload of \cpp{std::sort}.
+\tcblower
+\cppfile{code_examples/ranges/rangified_code.h}
+\end{codebox}
+
+\section{Projections}
+
+Each range algorithm comes with an additional argument, the projection.
+The projection is effectively a baked-in transform operation applied before an element is passed into the main functor.
+
+The projection can be any invocable, which includes member pointers.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/4xvjn8jbc}{\ExternalLink}}
+\footnotesize Example of using a projection to sort elements of a range based on a computed value from an element method.
+\tcblower
+\cppfile{code_examples/ranges/projection_code.h}
+\end{codebox}
+
+Because the projection result is only used for the main functor, it does not modify the output of the algorithm except for \cpp{std::ranges::transform}.
+
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/Tr3zY5YPd}{\ExternalLink}}
+\footnotesize Example of the difference between \cpp{std::ranges::copy_if}, which uses the projection result for the predicate and \cpp{std::ranges::transform}, which uses the projection result as the input for the transformation function (therefore making it affect the output type).
+\tcblower
+\cppfile{code_examples/ranges/projected_type_code.h}
+\end{codebox}
+
+\section{Dangling iterator protection}
+
+Because range versions of algorithms provide overloads that accept entire ranges, they open the potential for dangling iterators when users pass in a temporary range.
+
+However, for some ranges, passing in a temporary is not an issue. To distinguish these two cases and to prevent dangling iterators, the range library has the concepts of a borrowed range and a special type \cpp{std::ranges::dangling}.
+
+Borrowed ranges are ranges that "borrow" their elements from another range. Primary examples are \cpp{std::string_view} and \cpp{std::span}. For borrowed ranges, the lifetime of the elements is not tied to the lifetime of the range itself.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/oY8zYGs7r}{\ExternalLink}}
+\footnotesize Example demonstrating the different handling for a borrowed range \cpp{std::string_view} and a \cpp{std::string}.
+\tcblower
+\cppfile{code_examples/ranges/dangling_code.h}
+\end{codebox}
+
+User types can declare themselves as borrowed ranges by specializing the \texttt{enable\-\_borrowed\-\_range} constant.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/Tnh687nxj}{\ExternalLink}}
+\footnotesize Example demonstrating declaring MyView as a borrowed range.
+\tcblower
+\cppfile{code_examples/ranges/borrowed_optin_code.h}
+\end{codebox}
+
+\section{Views}
+
+One of the core problems with algorithms is that they are not easily composable. As a result, the code using algorithms is often quite verbose and requires additional copies when working with immutable data.
+
+Views aim to address this problem by providing cheap to copy and move facilities composed at compile-time.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/aM3vxs1f8}{\ExternalLink}}
+\footnotesize Example of composing several views.
+\tcblower
+\cppfile{code_examples/ranges/view_demo_code.h}
+\end{codebox}
+
+It is worth noting that views are stateful and should be treated as stateful lambdas (e.g. for iterator validity and thread safety).
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/fK91qd3M4}{\ExternalLink}}
+\footnotesize Example of \cpp{std::views::drop} caching behaviour.
+\tcblower
+\cppfile{code_examples/ranges/stateful_code.h}
+\end{codebox}

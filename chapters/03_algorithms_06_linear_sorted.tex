@@ -10,11 +10,11 @@ The \cpp{std::includes} algorithm will determine whether one range (all elements
 \cppversions{\texttt{includes}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{(input\_range, input\_range)}}{\texttt{(forward\_range, forward\_range)}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
-\begin{box-note}
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/od9oa6xEP}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::includes} to check whether a string contains all English (lower-case) letters.
 \tcblower
 \cppfile{code_examples/algorithms/includes_code.h}
-\end{box-note}
+\end{codebox}
 
 The example uses \cpp{std::iota} to generate the lower-case letters (line 2), which requires the destination vector to be pre-allocated (line 1).
 
@@ -28,19 +28,19 @@ The \cpp{std::merge} algorithm merges two sorted ranges, with the output written
 
 The merge operation is stable. Equal elements from the first range will be ordered before equal elements from the second range.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/fj3rzovKf}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::merge}.
 \tcblower
 \cppfile{code_examples/algorithms/merge_code.h}
-\end{box-note}
+\end{codebox}
 
 The parallel version requires the output to be a forward range (represented by a \cpp{forward_iterator}). Therefore, we cannot use wrappers like \cpp{std::back_inserter} and must preallocate the output range to sufficient capacity.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/oEPTe7GnY}{\ExternalLink}}
 \footnotesize Example of parallel \cpp{std::merge}.
 \tcblower
 \cppfile{code_examples/algorithms/merge_par_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::inplace_merge}}{\texttt{std::inplace\_merge}}}
 \index{\cpp{std::inplace_merge}}
@@ -52,11 +52,11 @@ The \cpp{std::inplace_merge} algorithm merges two consecutive sub-ranges.
 
 When using the iterator-based interface, the middle iterator (i.e. the iterator to the first element of the second sub-range) is the second argument.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/8Ge81Gojr}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::inplace_merge}.
 \tcblower
 \cppfile{code_examples/algorithms/inplace_merge_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::unique}, \cpp{std::unique_copy}}{\texttt{std::unique}, \texttt{std::unique\_copy}}}
 \index{\cpp{std::unique}}
@@ -69,19 +69,19 @@ The \cpp{std::unique} algorithm removes consecutive duplicate values. The typica
 
 Because unique works in-place and cannot resize the underlying range, it leaves the end of the range with unspecified values and returns an iterator to the beginning of this sub-range.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/7bcKTfe9b}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::unique}.
 \tcblower
 \cppfile{code_examples/algorithms/unique_code.h}
-\end{box-note}
+\end{codebox}
 
 The \cpp{std::unique_copy} is a variant of \cpp{std::unique} that outputs the unique values to a second range.
 
 \cppversions{\texttt{unique\_copy}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{input\_range -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{\texttt{operator==}}{\texttt{binary\_predicate}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/TMP7ec6P5}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::unique_copy}.
 \tcblower
 \cppfile{code_examples/algorithms/unique_copy_code.h}
-\end{box-note}
+\end{codebox}

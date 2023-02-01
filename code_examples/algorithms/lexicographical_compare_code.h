@@ -8,7 +8,7 @@ bool cmp1 = std::lexicographical_compare(range1.begin(), range1.end(),
 bool cmp2 = range1 < range2;
 // cmp1 == cmp2 == true
 
-bool cmp3 = std::lexicographical_compare(range2.begin(), range2.end(), 
+bool cmp3 = std::lexicographical_compare(range2.begin(), range2.end(),
 	range3.begin(), range3.end());
 // same as
 bool cmp4 = range2 < range3;

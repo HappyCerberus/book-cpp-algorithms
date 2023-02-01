@@ -1,53 +1,21 @@
-%\documentclass[10pt,b5paper,svgnames,table,twoside]{memoir}
-%\documentclass[11pt,a4paper,svgnames,table,twoside]{memoir}
 \documentclass[11pt,svgnames,table,a4paper]{book}
-%\usepackage{showframe}
-%\checkandfixthelayout
-
-\newcommand{\version}{0.3.0}
-\usepackage{hyperref}
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    filecolor=magenta,      
-    urlcolor=cyan,
-    pdftitle={Standard C++ Algorithms},
-    pdfpagemode=FullScreen,
-    }
-\usepackage{enumitem}
-\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
-            \node[shape=circle,draw,inner sep=1pt] (char) {#1};}}
-
-\input{packages/fonts}
-\input{packages/color_blocks}
-\input{packages/code_blocks}
-\input{packages/glossary_and_index}
-\input{packages/local}
-
-\title{The 114 C++ standard algorithms\\and other related topics}
-
-\author{RNDr. Šimon Tóth}
-\date{2022}
+\input{packages/packages}
 
 \begin{document}
 \frontmatter
 \input{chapters/00_title_page}
-
-\input{chapters/01_preface} % Reviewed
+\input{chapters/01_preface}
 
 \mainmatter
 \tableofcontents
-
-\input{chapters/02_introduction} % In review
-\input{chapters/03_algorithms_00_main} % In review
-\input{chapters/04_ranges_in_depth} % In review
-
-\input{chapters/90_theory} % TODO
+ 
+\input{chapters/02_introduction}
+\input{chapters/03_algorithms_00_main}
+\input{chapters/04_views_00_main}
+\input{chapters/90_theory}
 
 \appendix
-\input{chapters/XX_index}
-
-% Section on iterator invalidation
+\printindex
 
 \backmatter
 

@@ -24,19 +24,19 @@ The \cpp{std::lower_bound} and \cpp{std::upper_bound} algorithms offer boundary 
     \item if no such element exists, both algorithms return the end iterator
 \end{itemize}
 
-\begin{box-note}
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/cbz464eWe}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::lower_bound} and \cpp{std::upper_bound} to divide a sorted range into three parts: lower than the bottom threshold, between the bottom and upper threshold and higher than the upper threshold.
 \tcblower
 \cppfile{code_examples/algorithms/lower_bound_code.h}
-\end{box-note}
+\end{codebox}
 
 While the algorithms will operate on any \cpp{forward_range}, the logarithmic divide and conquer behaviour is only available for \cpp{random_access_range}. Data structures like \cpp{std::set}, \cpp{std::multiset}, \cpp{std::map} and \cpp{std::multimap} offer their $O(logn)$ implementations of lower and upper bound as methods.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/o9Wdvzno9}{\ExternalLink}}
 \footnotesize Example of using \cpp{lower_bound} and \cpp{upper_bound} methods on a \cpp{std::multiset}.
 \tcblower
 \cppfile{code_examples/algorithms/lower_bound_set_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::equal_range}}{\texttt{std::equal\_range}}}
 \index{\cpp{std::equal_range}}
@@ -48,11 +48,11 @@ The \cpp{std::equal_range} algorithm returns both lower and upper bounds for the
 
 Because the lower bound returns the first element for which \texttt{elem >= value} and the upper bound returns the first element for which \texttt{value < elem}, the result is a range \texttt{[lb, ub)} of elements equal to the value.
 
-\begin{box-note}
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/bhW73YG1b}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::equal_range}.
 \tcblower
 \cppfile{code_examples/algorithms/equal_range_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::partition_point}}{\texttt{std::partition\_point}}}
 \index{\cpp{std::partition_point}}
@@ -64,11 +64,11 @@ Despite the naming, \cpp{std:partition_point} works very similarly to \texttt{st
 
 \cpp{std::partition_point} will return the first element that does not satisfy the provided predicate. This algorithm only requires the range to be partitioned (with respect to the predicate).
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/WTzs4zYTq}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::partition_point}.
 \tcblower
 \cppfile{code_examples/algorithms/partition_point_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::binary_search}}{\texttt{std::binary\_search}}}
 \index{\cpp{std::binary_search}}
@@ -80,27 +80,27 @@ The \cpp{std::binary_search} provides a presence check, returning a boolean indi
 
 Using \cpp{std::binary_search} is equivalent to calling \cpp{std::equal_range} and checking whether the returned is non-empty; however, \cpp{std::binary_search} offers a single lookup performance, where \cpp{std::equal_range} does two lookups to determine the lower and upper bounds.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/7fP71Kjvx}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::binary_search} with an equivalent check using \cpp{std::equal_range}.
 \tcblower
 \cppfile{code_examples/algorithms/binary_search_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{bsearch} - C standard library}{\texttt{bsearch} - C standard library}}
 \index{\cpp{bsearch}}
 
 From the C standard library, C++ inherits \cpp{bsearch}. This algorithm returns one of the elements equal to the provided key, or \cpp{nullptr} if none such element is found.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/sEEashheY}{\ExternalLink}}
 \footnotesize Example of using \cpp{bsearch}.
 \tcblower
 \cppfile{code_examples/algorithms/bsearch_code.h}
-\end{box-note}
+\end{codebox}
 
 As with \cpp{qsort}, there is effectively no reason to use \cpp{bsearch} in C++ code. Depending on the specific use case, one of the previously mentioned algorithms should be a suitable replacement.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/9ePnd7vGc}{\ExternalLink}}
 \footnotesize Example demonstrating alternatives to \cpp{bsearch}.
 \tcblower
 \cppfile{code_examples/algorithms/bsearch_alternatives_code.h}
-\end{box-note}
+\end{codebox}

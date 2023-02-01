@@ -8,4 +8,3 @@ while ((token = find(it, data.end(), ';')) != data.end()) {
 	it = std::next(token);
 }
 // out == { "John", "Doe", "April", "1", "1900" }
-

@@ -15,27 +15,27 @@ For the forward direction, the output iterator is not permitted to be within \te
 
 \constraints{\texttt{input\_range -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{}{}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/d5c855Gcv}{\ExternalLink}}
 \footnotesize Example of a non-overlapping and permitted overlapping case of \cpp{std::copy}.
 \tcblower
 \cppfile{code_examples/algorithms/copy_code.h}
-\end{box-note}
+\end{codebox}
 
 Move operates identically, except it casts each element to an rvalue before the assignment, turning copies into moves.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/cP1P3e6q3}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::move}.
 \tcblower
 \cppfile{code_examples/algorithms/move_code.h}
-\end{box-note}
+\end{codebox}
 
 Significantly, whether std::move will move depends on the underlying element type. If the underlying type is copy-only, std::move will behave identically to std::copy.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/9ejzxEr8K}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::move} with a copy-only type.
 \tcblower
 \cppfile{code_examples/algorithms/move_nomove_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::copy_backward}, \cpp{std::move_backward}}{\texttt{std::copy\_backward}, \texttt{std::move\_backward}}}
 \index{\cpp{std::copy_backward}}
@@ -50,11 +50,11 @@ The \cpp{std::copy_backward} and \cpp{std::move_backward} are variants that copy
 
 The output iterator cannot be within \cpp{(first, last]} and will be treated as the end iterator for the destination range, meaning that the algorithm will write the first value to \cpp{std::prev(end)}.
 
-\begin{box-nobreak}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/TThv49Gqa}{\ExternalLink}}
 \footnotesize Example of a non-overlapping and permitted overlapping case of \cpp{std::copy_backward}.
 \tcblower
 \cppfile{code_examples/algorithms/copy_backward_code.h}
-\end{box-nobreak}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::copy_n}}{\texttt{std::copy\_n}}}
 \index{\cpp{std::copy_n}}
@@ -66,11 +66,11 @@ The \cpp{std::copy_n} algorithm is the counted variant of \cpp{std::copy} that a
 
 The algorithm cannot check whether the requested count is valid and does not go out of bounds, so this burden is on the caller.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/KGYab3WEr}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::copy_n}.
 \tcblower
 \cppfile{code_examples/algorithms/copy_n_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::copy_if}, \cpp{std::remove_copy}, \cpp{std::remove_copy_if}}{\texttt{std::copy\_if}, \texttt{std::remove\_copy}, \texttt{std::remove\_copy\_if}}}
 \index{\cpp{std::copy_if}}
@@ -87,11 +87,11 @@ The \cpp{std::copy_if}, \cpp{std::remove_copy} and \cpp{std::remove_copy_if} are
 
 The \cpp{std::remove_copy} algorithm will copy elements that do not match the provided value. The \cpp{std::copy_if} and \cpp{std::remove_copy_if} algorithms will copy elements based on a predicate, with \cpp{std::copy_if} copying elements for which the predicate returns true and \cpp{std::remove_copy_if} copying elements for which the predicate returns false.
 
-\begin{box-note}
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/vY6bTcqsr}{\ExternalLink}}
 \footnotesize Example demonstrating differences between \cpp{std::copy_if}, \cpp{std::remove_copy} and \cpp{std::remove_copy_if}.
 \tcblower
 \cppfile{code_examples/algorithms/copy_if_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::sample}}{\texttt{std::sample}}}
 \index{\cpp{std::sample}}
@@ -103,11 +103,11 @@ The \cpp{std::sample} algorithm is a random selective copy algorithm. The algori
 
 The two domains of this algorithm are due to the stable nature of the sampling, maintaining the order of elements from the source range. This feature requires either the input range to be at least a forward range or the destination range needs to be a random-access range.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/75WPEfjM9}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::sample}.
 \tcblower
 \cppfile{code_examples/algorithms/sample_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::replace_copy}, \cpp{std::replace_copy_if}}{\texttt{std::replace\_copy}, \texttt{std::replace\_copy\_if}}}
 \index{\cpp{std::replace_copy}}
@@ -121,11 +121,11 @@ For \cpp{std::replace_copy}, the algorithm will replace elements matching a valu
 \cppversions{\texttt{replace\_copy\_if}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{input\_range -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{N/A}{\texttt{unary\_predicate}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/TPTq4q8rr}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::replace_copy} and \cpp{std::replace_copy_if}.
 \tcblower
 \cppfile{code_examples/algorithms/replace_copy_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::reverse_copy}}{\texttt{std::reverse\_copy}}}
 \index{\cpp{std::reverse_copy}}
@@ -137,11 +137,11 @@ The \cpp{std::reverse_copy} algorithm copies elements in reverse order.
 
 Not to be confused with the \cpp{std::copy_backwards}, which copies elements in the original order. The \cpp{std::reverse_copy} does not permit the source, and the destination ranges to overlap.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/1YM9WevcT}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::reverse_copy}.
 \tcblower
 \cppfile{code_examples/algorithms/reverse_copy_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::rotate_copy}}{\texttt{std::rotate\_copy}}}
 \index{\cpp{std::rotate_copy}}
@@ -153,8 +153,8 @@ The \cpp{std::rotate_copy} algorithm will copy elements \cpp{[middle, last)}, fo
 
 The input and output ranges cannot overlap.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/MWf5q3r9d}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::rotate_copy}.
 \tcblower
 \cppfile{code_examples/algorithms/rotate_copy_code.h}
-\end{box-note}
+\end{codebox}

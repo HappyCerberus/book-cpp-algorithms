@@ -11,4 +11,3 @@ std::for_each(std::execution::par_unseq,
 	[](Custom& el) {
 		el.expensive_operation();
 	});
-

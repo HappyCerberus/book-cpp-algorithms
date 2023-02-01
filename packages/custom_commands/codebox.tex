@@ -1,0 +1,26 @@
+\usepackage[many]{tcolorbox}    	% for COLORED BOXES (tikz and xcolor included)
+
+\newtcolorbox{codebox}[2][]{
+    sharpish corners, % better drop shadow
+    boxrule = 0pt,
+    toprule = 4.5pt, % top rule weight
+    enhanced,
+    enlarge top by=5pt,
+    colback = white,
+    before skip = 0.2cm,    % add extra space before the box
+    after skip = 0.5cm,      % add extra space after the box
+    drop fuzzy shadow = black!35,
+    fontupper=\footnotesize\sffamily,
+    fonttitle=\footnotesize\sffamily\color{black},
+    title=Open in Compiler Explorer #2,
+    attach boxed title to bottom right={xshift=6pt,yshift=6pt},
+    boxed title style={
+        enhanced,
+        arc=0pt,
+        outer arc=0pt,
+        boxrule = 0pt,
+        colback = white,
+        drop fuzzy shadow = black!35,
+    },
+    #1,
+}

@@ -7,7 +7,8 @@ auto cmp = [](const auto& l, const auto& r) {
 	return l.value < r.value;
 };
 
-std::vector<Labeled> equal1{{"first_a", 1}, {"first_b", 1}, {"first_c", 1}, {"first_d", 1}};
+std::vector<Labeled> equal1{{"first_a", 1}, {"first_b", 1}, 
+							{"first_c", 1}, {"first_d", 1}};
 std::vector<Labeled> equal2{{"second_a", 1}, {"second_b", 1}};
 
 std::vector<Labeled> equal_difference;

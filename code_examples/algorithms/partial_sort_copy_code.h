@@ -8,4 +8,3 @@ std::ranges::partial_sort_copy(cnt, std::default_sentinel,
 	top.begin(), top.end(), 
 	std::greater<>{});
 // top == { 9, 8, 7 }
-

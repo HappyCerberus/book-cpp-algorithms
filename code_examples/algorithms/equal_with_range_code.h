@@ -12,5 +12,3 @@ auto pair_it = std::mismatch(first.begin(), first.end(),
 	second.begin(), second.end());
 // pair_it.first == first.end()
 // *pair_it.second == 6
-
-

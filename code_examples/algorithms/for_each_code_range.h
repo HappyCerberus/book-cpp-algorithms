@@ -4,4 +4,3 @@ for(auto el : data) {
 	sum += el;
 }
 // sum == 45
-

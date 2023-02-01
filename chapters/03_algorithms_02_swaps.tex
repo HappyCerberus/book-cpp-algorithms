@@ -11,12 +11,11 @@ The non-range version of \cpp{std::swap} will swap the values of the two paramet
 
 Correctly calling swap requires pulling the default std::swap version to the local scope. To read more on why this is needed check out the theory chapter of this book, specifically the section on ADL (\ref{theory:adl}).
 
-\begin{box-note}
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/Yzvzrb4rY}{\ExternalLink}}
 \footnotesize Example of correctly calling \cpp{std::swap}.
 \tcblower
 \cppfile{code_examples/algorithms/swap_calling_code.h}
-\end{box-note}
-\newpage
+\end{codebox}
 
 The C++20 rangified version of swap removes this complexity, and it will:
 
@@ -26,11 +25,11 @@ The C++20 rangified version of swap removes this complexity, and it will:
     \item if the parameters are also not arrays, it will default to a move-swap
 \end{itemize}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/8GxdMxsan}{\ExternalLink}}
 \footnotesize Example of specializing and calling \cpp{std::ranges::swap}.
 \tcblower
 \cppfile{code_examples/algorithms/swap_range_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::iter_swap}}{\texttt{std::iter\_swap}}}
 \index{\cpp{std::iter_swap}}
@@ -41,19 +40,19 @@ The \cpp{std::iter_swap} is an indirect swap, swapping values behind two forward
 
 \constraints{(\cpp{forward_iterator}, \cpp{forward_iterator}) (non-range)}{}{}{}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/77enEEh4c}{\ExternalLink}}
 \footnotesize Example demonstrating the use \cpp{std::iter_swap} in a generic two-way partition algorithm. The algorithm uses concepts to constrain the acceptable types of its arguments.
 \tcblower
 \cppfile{code_examples/algorithms/iter_swap_partition_code.h}
-\end{box-note}
+\end{codebox}
 
 The range version extends the functionality to other dereferenceable objects.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/bxeP3PPaE}{\ExternalLink}}
 \footnotesize Example demonstrating the use of range version of \cpp{std::ranges::iter_swap} to swap the values pointed to by two instances of \cpp{std::unique_ptr}.
 \tcblower
 \cppfile{code_examples/algorithms/iter_swap_unique_ptr_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::swap_ranges}}{\texttt{std::swap\_ranges}}}
 \index{\cpp{std::swap_ranges}}
@@ -62,8 +61,8 @@ The \cpp{std::swap_ranges} algorithm exchanges elements between two non-overlapp
 
 \cppversions{\texttt{swap\_ranges}}{\CC98}{\CC20}{\CC17}{\CC20}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/aEPe66f1E}{\ExternalLink}}
 \footnotesize Example of swapping the first three elements of an array with the last three elements using \cpp{std::swap_ranges}. Note the reversed order of elements due to the use of \cpp{rbegin}.
 \tcblower
 \cppfile{code_examples/algorithms/swap_ranges_code.h}
-\end{box-note}
+\end{codebox}

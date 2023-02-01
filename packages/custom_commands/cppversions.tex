@@ -1,0 +1,18 @@
+% Command to consistently format side-panel with C++ versions 
+% that introduced different variants of the algorithm.
+\newcommand{\cppversions}[5]{
+\begin{margintable}
+\footnotesize
+\begin{tabular}{|m{\dimexpr.5\marginparwidth-2\tabcolsep-1pt}|m{\dimexpr.5\marginparwidth-2\tabcolsep-1pt}|}
+\rowcolor{black!80} \multicolumn{2}{c}{\textcolor{white}{#1}} \\
+introduced & #2 \\
+\hline
+constexpr & #3 \\
+\hline
+parallel & #4 \\
+\hline
+rangified & #5 \\
+\hline
+\end{tabular}
+\end{margintable}
+}

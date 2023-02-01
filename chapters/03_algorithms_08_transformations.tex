@@ -9,41 +9,15 @@ The most straightforward transformation possible is to apply a transformation fu
 
 \cppversions{\texttt{transform}}{\CC98}{\CC20}{\CC17}{\CC20}
 
-% Mention lazy version
-
 \constraints{\texttt{input\_range -> output\_iterator}\newline\texttt{(input\_range, input\_iterator) -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}\newline\texttt{(forward\_range, forward\_iterator) -> forward\_iterator}}{N/A}{\texttt{unary\_functor}\newline\texttt{binary\_functor}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/6W38nMh6b}{\ExternalLink}}
 \footnotesize Example of unary and binary version of \cpp{std::transform}. Note that the output iterator can be one of the input ranges' begin iterator (line 4 and 12).
 \tcblower
 \cppfile{code_examples/algorithms/transform_code.h}
-\end{box-note}
+\end{codebox}
 
 Note that \cpp{std::transform} does not guarantee strict left-to-right evaluation. If that is required, use \cpp{std::for_each} instead.
-
-\subsection{\texorpdfstring{\cpp{std::adjacent_difference}}{\texttt{std::adjacent\_difference}}}
-\index{\cpp{std::adjacent_difference}}
-
-The \cpp{std::adjacent_difference} is a numerical algorithm, which might make it seem out of place in this section; however, it is essentially a binary transformation algorithm that operates on adjacent elements of the single source range.
-
-Unlike \cpp{std::transform}, \cpp{std::adjacent_difference} guarantees left-to-right application. Furthermore, because it operates on input ranges, the algorithm internally stores a copy of the last read value for use as the left operand in the next step.
-
-\cppversions{\texttt{adjacent\_difference}}{\CC98}{\CC20}{\CC17}{N/A}
-\constraints{\texttt{input\_range -> output\_iterator}}{\texttt{forward\_range -> forward\_iterator}}{\texttt{operator -}}{\texttt{binary\_functor}}
-
-\begin{box-note}
-\footnotesize Example of the default version of \cpp{std::adjacent_difference}, which will calculate the difference of adjacent elements, with the first element copied.
-\tcblower
-\cppfile{code_examples/algorithms/adjacent_difference_code.h}
-\end{box-note}
-
-\begin{box-note}
-\footnotesize Example of more inventive use of \cpp{std::adjacent_difference} to generate the Fibonacci sequence.
-\tcblower
-\cppfile{code_examples/algorithms/adjacent_difference_extra_code.h}
-\end{box-note}
-
-Note that the \cpp{std::next(data.begin())} for the output range is critical here. The \cpp{std::adjacent_difference} algorithm will read each element only once and remembers the previously read value for the left argument. The \cpp{std::next} ensures that we generate one element ahead of either argument.
 
 \subsection{\texorpdfstring{\cpp{std::remove}, \cpp{std::remove_if}}{\texttt{std::remove}, \texttt{std::remove\_if}}}
 \index{\cpp{std::remove}}
@@ -56,11 +30,11 @@ Because the algorithms cannot resize the underlying range, the removal is achiev
 \cppversions{\texttt{remove, remove\_if}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{forward\_range}}{\texttt{forward\_range}}{N/A}{\texttt{unary\_predicate}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/eb56eshTq}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::remove} and \cpp{std::remove_if}.
 \tcblower
 \cppfile{code_examples/algorithms/remove_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::replace}, \cpp{std::replace_if}}{\texttt{std::replace}, \texttt{std::replace\_if}}}
 \index{\cpp{std::replace}}
@@ -71,11 +45,11 @@ The \cpp{std::replace} and \cpp{std::replace_if} algorithms replace elements tha
 \cppversions{\texttt{replace, replace\_if}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{forward\_range}}{\texttt{forward\_range}}{N/A}{\texttt{unary\_predicate}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/aPrWhxxsj}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::replace} and \cpp{std::replace_if}.
 \tcblower
 \cppfile{code_examples/algorithms/replace_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::reverse}}{\texttt{std::reverse}}}
 \index{\cpp{std::reverse}}
@@ -87,19 +61,19 @@ The \cpp{std::reverse} algorithm will reverse the order of elements in the range
 
 Note that using \cpp{std::reverse} is only a reasonable solution if the range must be mutated because bidirectional ranges already support reverse iteration.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/onsj6dvqK}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::reverse} and reverse iteration, provided by bidirectional ranges.
 \tcblower
 \cppfile{code_examples/algorithms/reverse_code.h}
-\end{box-note}
+\end{codebox}
 
 C-style arrays and C-style strings can be adapted using \cpp{std::span} and \texttt{std::string\-\_view} to allow reverse iteration.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/YW8sEa4c3}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::span} and \cpp{std::string_view} to addapt C-style constructs for reverse iteration.
 \tcblower
 \cppfile{code_examples/extras/span_stringview_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::rotate}}{\texttt{std::rotate}}}
 \index{\cpp{std::rotate}}
@@ -109,11 +83,36 @@ The \cpp{std::rotate} algorithm rearranges elements in the range from \texttt{[f
 \cppversions{\texttt{rotate}}{\CC11}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{(forward\_range, forward\_iterator)}}{\texttt{(forward\_range, forward\_iterator)}}{}{}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/dP7TMfjKv}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::rotate}.
 \tcblower
 \cppfile{code_examples/algorithms/rotate_code.h}
-\end{box-note}
+\end{codebox}
+
+\subsection{\texorpdfstring{\cpp{std::shift_left}, \cpp{std::shift_right}}{\texttt{std::shift\_left}, \texttt{std::shift\_right}}}
+\index{\cpp{std::shift_left}}
+\index{\cpp{std::shift_right}}
+
+The \cpp{std::shift_left} and \cpp{std::shift_right} algorithms move elements in the provided range by the specified amount of positions.
+However, unlike std::rotate, the shift doesn't wrap around.
+
+\cppversions{\texttt{shift\_left}}{\CC20}{\CC20}{\CC20}{\CC20}
+\cppversions{\texttt{shift\_right}}{\CC20}{\CC20}{\CC20}{\CC20}
+\constraints{\texttt{forward\_range}}{\texttt{forward\_range}}{}{}
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/5Tjh3M5Kv}{\ExternalLink}}
+\footnotesize Example of using \cpp{std::shift_left} and \cpp{std::shift_right} with a trivially copyable type.
+\tcblower
+\cppfile{code_examples/algorithms/shift_code.h}
+\end{codebox}
+
+One way to think about these algorithms is that they "make space" for the requested number of new elements.
+
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/sbY3fxYrs}{\ExternalLink}}
+\footnotesize Example of using \cpp{std::shift_right} to make space for four new elements. Note that \texttt{'d'} wasn't moved as there is no place to move it to, and in the context of "making space" will be overwritten anyway.
+\tcblower
+\cppfile{code_examples/algorithms/shift_move_code.h}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::shuffle}}{\texttt{std::shuffle}}}
 \index{\cpp{std::shuffle}}
@@ -123,11 +122,11 @@ The \cpp{std::shuffle} algorithm is a successor of the now-defunct (deprecated i
 \cppversions{\texttt{shuffle}}{\CC11}{N/A}{N/A}{\CC20}
 \constraints{\texttt{random\_access\_range}}{}{}{}
 
-\begin{box-note}
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/PE3bM8Gof}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::shuffle} to shuffle a deck of cards.
 \tcblower
 \cppfile{code_examples/algorithms/shuffle_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::next_permutation}, \cpp{std::prev_permutation}}{\texttt{std::next\_permutation}, \texttt{std::prev\_permutation}}}
 \index{\cpp{std::next_permutation}}
@@ -139,11 +138,11 @@ The \cpp{std::next_permutation} and \cpp{std::prev_permutation} algorithms will 
 \cppversions{\texttt{prev\_permutation}}{\CC98}{\CC20}{N/A}{\CC20}
 \constraints{\texttt{bidirectional\_range}}{}{\texttt{operator <}}{\texttt{strict\_weak\_ordering}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/shfGz3brv}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::next_permutation} to iterate over all permutations of three unique elements.
 \tcblower
 \cppfile{code_examples/algorithms/next_permutation_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::is_permutation}}{\texttt{std::is\_permutation}}}
 \index{\cpp{std::is_permutation}}
@@ -153,8 +152,8 @@ The \cpp{std::is_permutation} algorithm is an excellent tool for checking whethe
 \cppversions{\texttt{is\_permutation}}{\CC11}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{(forward\_range, forward\_range)}}{\texttt{(forward\_range, forward\_range)}}{\texttt{operator==}}{\texttt{binary\_predicate}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/axqfP6aaT}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::is_permutation} to validate a simple sort implementation.
 \tcblower
 \cppfile{code_examples/algorithms/is_permutation_code.h}
-\end{box-note}
+\end{codebox}

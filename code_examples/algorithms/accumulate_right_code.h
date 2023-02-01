@@ -11,4 +11,3 @@ auto right_fold = std::accumulate(data.rbegin(), data.rend(), 0,
 		return acc / 2 + el;
 	});
 // right_fold == 3
-

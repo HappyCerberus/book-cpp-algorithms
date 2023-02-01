@@ -3,7 +3,8 @@ int min = std::min(x, y);
 // min == 10
 
 std::string hello = "hello", world = "world";
-std::string& universe = const_cast<std::string&>(std::max(hello, world));
+std::string& universe = 
+    const_cast<std::string&>(std::max(hello, world));
 universe = "universe";
 
 std::string greeting = hello + " " + world;

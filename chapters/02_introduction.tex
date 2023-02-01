@@ -11,33 +11,33 @@ While each \CC\,standard introduced new algorithms or variants, there are few no
 The \CC98 standard introduced most of the algorithms. However, it was the \CC11 standard with its introduction of lambdas that made algorithms worthwhile. Before lambdas, the time investment of writing a custom function object made the usefulness of algorithms dubious.
 
 \raggedbottom
-\begin{box-nobreak}
+\begin{codebox}[]{\href{https://godbolt.org/z/73r9n1WYM}{\ExternalLink}}
 \footnotesize Example of \cpp{std::for_each}\index{\cpp{std::for_each}} algorithm with a custom function object, calculating the number of elements and their sum.
 \tcblower
 \cppfile{code_examples/introduction/history_cc98_code.h}
-\end{box-nobreak}
+\end{codebox}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://godbolt.org/z/zv4fWbT3z}{\ExternalLink}}
 \footnotesize Example of \cpp{std::for_each}\index{\cpp{std::for_each}} algorithm with a capturing lambda, calculating the number of elements and their sum.
 \tcblower
 \cppfile{code_examples/introduction/history_cc11_code.h}
-\end{box-note}
+\end{codebox}
 
 The \CC17 standard introduced parallel algorithms that provide an easy way to speed up processing with minimal effort. All you need to do is to specify the desired execution model, and the library will take care of parallelizing the execution.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://godbolt.org/z/1nK5944K7}{\ExternalLink}}
 \footnotesize Example of \cpp{std::for_each}\index{\cpp{std::for_each}} algorithm using unsequenced parallel execution model. Note that counters are now shared state and need to be \cpp{std::atomic}\index{\cpp{std::atomic}} or protected by a \cpp{std::mutex}\index{\cpp{std::mutex}}.
 \tcblower
 \cppfile{code_examples/introduction/history_cc17_code.h}
-\end{box-note}
+\end{codebox}
 
 Finally, the \CC20 standard introduced a significant re-design in the form of ranges and views. Range versions of algorithms can now operate on ranges instead of \cpp{begin} and \cpp{end} iterators and views provide lazily evaluated versions of algorithms and utilities.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://godbolt.org/z/57TGnzzxc}{\ExternalLink}}
 \footnotesize Example of the range version of the \cpp{std::for_each}\index{\cpp{std::for_each}} algorithm.
 \tcblower
 \cppfile{code_examples/introduction/history_cc20_code.h}
-\end{box-note}
+\end{codebox}
 
 As of the time of writing, the \CC23 standard is not finalized. However, we already know that it will introduce more range algorithms, more views and the ability to implement custom views.
 
@@ -51,19 +51,19 @@ A range is then denoted by a pair of iterators, or more generally, since \CC20, 
 
 To reference the entire content of a data structure, we can use the \cpp{begin()} and \cpp{end()} methods that return an iterator to the first element and an iterator one past the last element, respectively. Hence, the range \cpp{[begin, end)} contains all data structure elements.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://godbolt.org/z/Wj4YjE51v}{\ExternalLink}}
 \footnotesize Example of specifying a range using two iterators.
 \tcblower
 \cppfile{code_examples/introduction/iterators_code.h}
-\end{box-note}
+\end{codebox}
 
 Sentinels follow the same idea. However, they do not need to be of an iterator type. Instead, they only need to be comparable to an iterator. The exclusive end of the range is then the first iterator that compares equal to the sentinel.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://godbolt.org/z/qKrMo7scn}{\ExternalLink}}
 \footnotesize Example of specifying a range using an iterator and custom sentinel. The sentinel will compare \cpp{true} with iterators at least the given distance from the start iterator, therefore defining a range with the specified number of elements.
 \tcblower
 \cppfile{code_examples/introduction/sentinels_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{Iterator categories}
 
@@ -82,11 +82,11 @@ The set of operations that are possible in constant time and space defines the f
     \textit{arrays, e.g. std::vector}\index{\cpp{std::vector}}
 \end{description}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://godbolt.org/z/dcaMEdnoM}{\ExternalLink}}
 \footnotesize Example demonstrating the difference between a random access iterator provided by \cpp{std::vector} and a bidirectional iterator provided by \cpp{std::list}.
 \tcblower
 \cppfile{code_examples/introduction/categories_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{Range categories}
 
@@ -128,19 +128,19 @@ It can be tricky to internalize all the rules associated with iterators when wor
 
 Ranges passed in as arguments are usually apparent, typically specified by pair of iterators.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://godbolt.org/z/zTh9rn5E4}{\ExternalLink}}
 \footnotesize Example with two ranges passed in as an argument. The input range is fully specified, and the end iterator for the output range is implied from the number of elements in the input range.
 \tcblower
 \cppfile{code_examples/introduction/mental_range_code.h}
-\end{box-note}
+\end{codebox}
 
 The returned range can also be evident from the semantics of the algorithm.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://godbolt.org/z/escqfWsnE}{\ExternalLink}}
 \footnotesize Example of \cpp{std::is_sorted_until} that returns an iterator to the first out-of-order element, which can also be thought as the end iterator for a maximal sorted sub-range.
 \tcblower
 \cppfile{code_examples/introduction/mental_sorted_code.h}
-\end{box-note}
+\end{codebox}
 
 The benefit of thinking about the returned value as the end iterator of a range is that it removes the potential for corner cases. For example, what if the algorithm doesn't find any element out of order? The returned value will be the end iterator of the source range, meaning that the range returned is simply the entire source range.
 
@@ -148,16 +148,16 @@ The benefit of thinking about the returned value as the end iterator of a range 
 
 In some cases, a single returned iterator denotes multiple ranges.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://godbolt.org/z/YEGKPToz7}{\ExternalLink}}
 \footnotesize Example of \cpp{std::lower_bound} that splits the range into two sub-ranges.
 \tcblower
 \cppfile{code_examples/introduction/mental_two_code.h}
-\end{box-note}
+\end{codebox}
 
 Even when the algorithm returns an iterator to a specific element, it might be worth considering the implied range.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://godbolt.org/z/Er15W6K5W}{\ExternalLink}}
 \footnotesize Example of \cpp{std::find} establishing a prefix range that doesn't contain the searched-for element.
 \tcblower
 \cppfile{code_examples/introduction/mental_find_code.h}
-\end{box-note}
+\end{codebox}

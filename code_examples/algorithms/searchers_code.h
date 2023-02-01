@@ -10,5 +10,3 @@ auto it2 = std::search(haystack.begin(), haystack.end(),
 auto it3 = std::search(haystack.begin(), haystack.end(), 
 	std::boyer_moore_horspool_searcher(needle.begin(), needle.end()));
 // it1 == it2 == it3
-
-

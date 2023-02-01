@@ -10,24 +10,12 @@
 \if\isOverleaf%
 \usepackage[newfloat=true]{minted}
 \else
-\usepackage[newfloat=true,outputdir=build]{minted}
+\usepackage[newfloat=true,cachedir=mint,outputdir=build]{minted}
 \fi
 
 \usepackage[]{xcolor}
 \usemintedstyle{xcode}
-
 \renewcommand\theFancyVerbLine{\footnotesize\arabic{FancyVerbLine}}
-
-\newminted{cpp}{
-    linenos=true,
-    firstnumber=1,
-    tabsize=4,
-    obeytabs,
-    xleftmargin=1em,
-    breaklines,
-    fontsize=\footnotesize,
-    numbersep=0.75em
-}
 
 \newmintedfile[cppfile]{cpp}{
     linenos=true,

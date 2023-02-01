@@ -7,7 +7,8 @@ sum = std::reduce(std::execution::par_unseq,
 	data.begin(), data.end(), 0);
 // sum == 15
 
-auto product = std::reduce(data.begin(), data.end(), 1, std::multiplies<>{});
+auto product = std::reduce(data.begin(), data.end(), 1,
+	std::multiplies<>{});
 // product == 120
 
 product = std::reduce(std::execution::par_unseq,

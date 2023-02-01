@@ -14,11 +14,11 @@ A good default for a \cpp{strict_weak_ordering} implementation is lexicographica
 
 Since C++20 introduced the spaceship operator, user-defined types can easily access the default version of lexicographical ordering.
 
-\begin{box-note}
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/7PjY8fc1G}{\ExternalLink}}
 \footnotesize Example of three approaches to implementing lexicographical comparison for a custom type.
 \tcblower
 \cppfile{code_examples/theory/comparable_code.h}
-\end{box-note}
+\end{codebox}
 
 The default lexicographical ordering (line 14) works recursively. It starts with the object’s bases first, left-to-right, depth-first and then non-static members in declaration order (processing arrays element by element, left-to-right).
 
@@ -41,19 +41,19 @@ Lexicographical \texttt{strict\_weak\_ordering} for ranges is exposed through th
 
 \constraints{(\cpp{input_range}, \cpp{input_range})}{(\cpp{forward_range}, \cpp{forward_range})}{\cpp{operator<}}{\cpp{strict_weak_ordering}}
 
-\begin{box-note}
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/YGW4ET1oa}{\ExternalLink}}
 \footnotesize Example of using \cpp{lexicographical_compare} and the built-in less than operator to compare vectors of integers.
 \tcblower
 \cppfile{code_examples/algorithms/lexicographical_compare_code.h}
-\end{box-note}
+\end{codebox}
 
 Because the standard containers already offer a built-in lexicographical comparison, the algorithm mainly finds use for comparing raw C arrays and in cases when we need to specify a custom comparator.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/djs6TGsEs}{\ExternalLink}}
 \footnotesize Example of using \cpp{lexicographical_compare} for C-style arrays and customizing the comparator.
 \tcblower
 \cppfile{code_examples/algorithms/lexicographical_compare_useful_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::lexicographical_compare_three_way}}{\texttt{std::lexicographical\_compare\_three\_way}}}
 \index{\cpp{std::lexicographical_compare_three_way}}
@@ -70,11 +70,11 @@ The type depends on the type returned by the elements' spaceship operator.
 \cppversions{\texttt{lex\dots three\_way}}{\CC20}{\CC20}{N/A}{N/A}
 \constraints{\texttt{(input\_range, input\_range)}}{}{\texttt{operator<=>}}{\texttt{strong\_ordering}, \texttt{weak\_ordering}, \texttt{partial\_ordering}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/vrEqPaEEz}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::lexicographical_compare_three_way}.
 \tcblower
 \cppfile{code_examples/algorithms/lexicographical_compare_three_way_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::sort}}{\texttt{std::sort}}}
 \index{\cpp{std::sort}}
@@ -86,19 +86,19 @@ The \cpp{std::sort} algorithm is the canonical $O(n*logn)$ sort (typically imple
 
 Due to the $O(n*logn)$ complexity guarantee, \cpp{std::sort} only operates on \cpp{random_access} ranges. Notably, \cpp{std::list} offers a method with an approximate $n*logn$ complexity.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/vef61TWj9}{\ExternalLink}}
 \footnotesize Basic example of using \cpp{std::sort} and \cpp{std::list::sort}.
 \tcblower
 \cppfile{code_examples/algorithms/sort_code.h}
-\end{box-note}
+\end{codebox}
 
 With C++20, we can take advantage of projections to sort by a method or member:
 
-\begin{box-note}
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/4aGenq9b6}{\ExternalLink}}
 \footnotesize Example of using a projection in conjunction with a range algorithm. The algorithm will sort the elements based on the values obtained by invoking the method \cpp{value} on each element.
 \tcblower
 \cppfile{code_examples/algorithms/sort_projection_code.h}
-\end{box-note}
+\end{codebox}
 
 Before C++14, you would have to fully specify the type of the comparator, i.e. \cpp{std::greater<double>{}}. The type erased variant \cpp{std::greater<>{}} relies on type deduction to determine the parameter types. Projections accept an unary invocable, including pointers to members and member functions.
 
@@ -112,11 +112,11 @@ The \cpp{std::sort} is free to re-arrange equivalent elements, which can be unde
 
 If additional memory is available, stable\_sort remains $O(n*logn)$. However, if it fails to allocate, it will degrade to an $O(n*logn*logn)$ algorithm.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/TKx8qP8bK}{\ExternalLink}}
 \footnotesize Example of re-sorting a range using \cpp{std::stable_sort}, resulting in a guaranteed order of elements.
 \tcblower
 \cppfile{code_examples/algorithms/stable_sort_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::is_sorted}}{\texttt{std::is\_sorted}}}
 \index{\cpp{std::is_sorted}}
@@ -126,11 +126,11 @@ The \cpp{std::is_sorted} algorithm is a linear check returning a boolean denotin
 \cppversions{\texttt{is\_sorted}}{\CC11}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{forward\_range}}{\texttt{forward\_range}}{\cpp{std::less}}{\texttt{strict\_weak\_ordering}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/T3n9bfqdM}{\ExternalLink}}
 \footnotesize Example of testing a range using \cpp{std::is_sorted}.
 \tcblower
 \cppfile{code_examples/algorithms/is_sorted_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::is_sorted_until}}{\texttt{std::is\_sorted\_until}}}
 \index{\cpp{std::is_sorted_until}}
@@ -140,11 +140,11 @@ The \cpp{std::is_sorted_until} algorithm returns the first out-of-order element 
 \cppversions{\texttt{is\_sorted\_until}}{\CC11}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{forward\_range}}{\texttt{forward\_range}}{\texttt{std::less}}{\texttt{strict\_weak\_ordering}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/1dvboE6b1}{\ExternalLink}}
 \footnotesize Example of testing a range using \cpp{std::is_sorted_until}.
 \tcblower
 \cppfile{code_examples/algorithms/is_sorted_until_code.h}
-\end{box-note}
+\end{codebox}
 
 Note that because of the behaviour of \cpp{std::is_sorted_until}, the following is always true:\\
 \begin{small}\cpp{std::is_sorted(r.begin(), std::is_sorted_until(r.begin(), r.end()))}\end{small}
@@ -160,43 +160,43 @@ The \cpp{std::partial_sort} algorithm reorders the range's elements such that th
 
 The benefit of using a partial sort is faster runtime — approximately $O(n*logk)$, where k is the number of elements sorted.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/j6xjM4GnT}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::partial_sort} to sort the first three elements of a range.
 \tcblower
 \cppfile{code_examples/algorithms/partial_sort_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::partial_sort_copy}}{\texttt{std::partial\_sort\_copy}}}
 \index{\cpp{std::partial_sort_copy}}
 
-The \cpp{std::partial_sort_copy} algorithm has the same behaviour as \cpp{std::partial_sort}; however, it does not operate inline. Instead, the algorithm writes the results to a second range.
+The \cpp{std::partial_sort_copy} algorithm has the same behaviour as \linebreak\cpp{std::partial_sort}; however, it does not operate inline. Instead, the algorithm writes the results to a second range.
 
 \cppversions{\texttt{partial\_sort\_copy}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\cpp{input_range -> random_access_range}}{\cpp{forward_range -> random_access_range}}{\cpp{operator<}}{\texttt{strict\_weak\_ordering}}
 
 The consequence of writing output to a second range is that the source range does not have to be mutable nor provide random access.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/vjKc5nY31}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::partial_sort_copy} to iterate over ten integers read from standard input and storing the top three values in sorted order.
 \tcblower
 \cppfile{code_examples/algorithms/partial_sort_copy_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{qsort}}{\texttt{qsort}} - C standard library}
 \index{\cpp{qsort}}
 
 Because the C standard library is part of the C++ standard library, we also have access to \cpp{qsort}.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/Y4E63aThP}{\ExternalLink}}
 \footnotesize Example of using \cpp{qsort} to sort an array of integers.
 \tcblower
 \cppfile{code_examples/algorithms/qsort_code.h}
-\end{box-note}
+\end{codebox}
 
-I would strongly recommend avoiding \cpp{qsort}, as \cpp{std::sort} and \cpp{std::ranges::sort} should be a better choice in every situation. Moreover, \cpp{qsort} is only valid for trivially copyable types, and those will correctly optimize to \cpp{memcpy}/\cpp{memmove} operations even when using \cpp{std::sort}.
+I would strongly recommend avoiding \cpp{qsort}, as \cpp{std::sort} and \cpp{std::ranges::sort} should be a better choice in every situation. Moreover, \cpp{qsort} is only valid for trivially copyable types, and those will correctly optimize to \cpp{memcpy} / \cpp{memmove} operations even when using \cpp{std::sort}.
 
-\begin{box-nobreak}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/nT9GPh8Tq}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::sort} to achieve the same result as in the previous example.
 \tcblower
 \cppfile{code_examples/algorithms/qsort_not_code.h}
-\end{box-nobreak}
+\end{codebox}

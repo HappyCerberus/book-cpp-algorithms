@@ -12,11 +12,11 @@ The \cpp{std::partition} algorithm provides the basic partitioning functionality
 \cppversions{\texttt{partition}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{forward\_range}}{\texttt{forward\_range}}{N/A}{\texttt{unary\_predicate}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/9P8eWKfsd}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::partition} to process exam results.
 \tcblower
 \cppfile{code_examples/algorithms/partition_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::stable_partition}}{\texttt{std::stable\_partition}}}
 \index{\cpp{std::stable_partition}}
@@ -29,11 +29,11 @@ The \cpp{std::stable_partition} algorithm adds the guarantee of preserving the r
 
 \constraints{\texttt{bidirectional\_range}}{\texttt{bidirectional\_range}}{N/A}{\texttt{unary\_predicate}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/zjeczYqK8}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::stable_partition} to move selected items to the beginning of a list.
 \tcblower
 \cppfile{code_examples/algorithms/stable_partition_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::is_partitioned}}{\texttt{std::is\_partitioned}}}
 \index{\cpp{std::is_partitioned}}
@@ -45,11 +45,11 @@ The \cpp{std::is_partitioned} algorithm is a linear check returning a boolean de
 
 Note that a sorted range is always partitioned for any possible value (with a different partition point).
 
-\begin{box-nobreak}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/nKecEhs3b}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::is_partitioned}.
 \tcblower
 \cppfile{code_examples/algorithms/is_partitioned_code.h}
-\end{box-nobreak}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::partition_copy}}{\texttt{std::partition\_copy}}}
 \index{\cpp{std::partition_copy}}
@@ -59,11 +59,11 @@ The \cpp{std::partition_copy} is a variant of \cpp{std::partition} that, instead
 \cppversions{\texttt{partition\_copy}}{\CC11}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{input\_range -> (output\_iterator, output\_iterator)}}{\texttt{forward\_range -> (forward\_iterator, forward\_iterator)}}{N/A}{\texttt{unary\_predicate}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/nzrbczh4j}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::partition_copy} to copy even elements into one range and odd elements into another range.
 \tcblower
 \cppfile{code_examples/algorithms/partition_copy_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::nth_element}}{\texttt{std::nth\_element}}}
 \index{\cpp{std::nth_element}}
@@ -80,8 +80,8 @@ Because of its selection/partitioning nature, \cpp{std::nth_element} offers a be
 
 However, note that the standard only mandates average $O(n)$ complexity, and \cpp{std::nth_element} implementations can have high overhead, so always test to determine which provides better performance for your use case.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/n7T3h5sM8}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::nth_element}.
 \tcblower
 \cppfile{code_examples/algorithms/nth_element_code.h}
-\end{box-note}
+\end{codebox}

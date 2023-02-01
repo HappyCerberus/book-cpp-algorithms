@@ -15,26 +15,26 @@ The \cpp{std::generate} algorithm fills a range by consecutively assigning the r
 
 The generator provided to \cpp{std::generate} can be a non-regular function since \cpp{std::generate} guarantees strict left-to-right evaluation.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/6dnTG7Mqo}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::fill} and \cpp{std::generate}.
 \tcblower
 \cppfile{code_examples/algorithms/generate_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::fill_n}, \cpp{std::generate_n}}{\texttt{std::fill\_n}, \texttt{std::generate\_n}}}
 \index{\cpp{std::fill_n}}
 \index{\cpp{std::generate_n}}
 
-The \cpp{std::fill_n} and \cpp{std::generate_n} are variants of \cpp{std::fill} and \cpp{std::generate} that operate on ranges specified using the start iterator and number of elements. This behaviour allows the algorithms to be used with iterator adapters, such as \cpp{std::back_inserter}.
+The \cpp{std::fill_n} and \cpp{std::generate_n} are variants of \cpp{std::fill} and \newline\cpp{std::generate} that operate on ranges specified using the start iterator and number of elements. This behaviour allows the algorithms to be used with iterator adapters, such as \cpp{std::back_inserter}.
 
 \cppversions{\texttt{fill\_n, generate\_n}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{output\_iterator}}{\texttt{forward\_iterator}}{N/A}{\texttt{generator}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/qGcdezEaG}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::fill_n} and \cpp{std::generate_n}.
 \tcblower
 \cppfile{code_examples/algorithms/fill_n_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::iota}}{\texttt{std::iota}}}
 \index{\cpp{std::iota}}
@@ -44,18 +44,18 @@ The \cpp{std::iota} generates elements by consecutively assigning the result of 
 \cppversions{\texttt{iota}}{\CC11}{\CC20}{N/A}{\CC23}
 \constraints{\texttt{forward\_range}}{}{}{}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/19WaoodvM}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::iota}.
 \tcblower
 \cppfile{code_examples/algorithms/iota_code.h}
-\end{box-note}
+\end{codebox}
 
 Notably, the \cpp{std::iota} algorithm is also an outlier in the support added with the C++20 standard. The \cpp{std::iota} algorithm did not receive a range version. However, we do have access to an iota view.
 
-\begin{box-nobreak}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/qnz9hWxh8}{\ExternalLink}}
 \footnotesize Example of using both finite and infinite \cpp{std::views::iota}.
 \tcblower
 \cppfile{code_examples/algorithms/iota_view_code.h}
-\end{box-nobreak}
+\end{codebox}
 
 Here we take advantage of the finite view constructor \cpp{std::views::iota(1,10)} to establish the output size (line 3), which allows us to use the infinite view \texttt{std::views\-::iota(5)} for the second parameter. Functionally, we could swap even the second view for a finite one. However, this would impose an additional (and unnecessary) boundary check.

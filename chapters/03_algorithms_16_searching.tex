@@ -1,7 +1,7 @@
 \section{Search and compare algorithms}
 
 The search and compare category provides straightforward linear (when compared against a single value) and quadratic (when compared against a range) complexity algorithms.
-
+\raggedbottom
 \subsection{\texorpdfstring{\cpp{std::find}, \cpp{std::find_if}, \cpp{std::find_if_not}}{\texttt{std::find}, \texttt{std::find\_if}, \texttt{std::find\_if\_not}}}
 \index{\cpp{std::find}}
 \index{\cpp{std::find_if}}
@@ -14,21 +14,19 @@ The std::find algorithm provides a basic linear search. The standard provides th
 
 \constraints{\texttt{input\_range}}{\texttt{forward\_range}}{\texttt{operator==} (\texttt{find})}{\texttt{unary\_predicate}}
 
-A typical example of searching by value is finding delimiters:
-
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/P993bPz39}{\ExternalLink}}
 \footnotesize Example of utilizing \cpp{std::find} to find delimiters in a string.
 \tcblower
 \cppfile{code_examples/algorithms/find_code.h}
-\end{box-note}
+\end{codebox}
 
 If we want to search for categories of elements, we can use \cpp{std::find_if} and \cpp{std::find_if_not} since these two variants search using a predicate.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/n9vTGsE4T}{\ExternalLink}}
 \footnotesize Example of utilizing \cpp{std::find_if_not} to find leading and trailing whitespace.
 \tcblower
 \cppfile{code_examples/algorithms/find_if_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::adjacent_find}}{\texttt{std::adjacent\_find}}}
 \index{\cpp{std::adjacent_find}}
@@ -40,11 +38,11 @@ The \cpp{std::adjacent_find} is a binary find algorithm that searches for pairs 
 
 If the algorithm finds a pair of elements, it will return an iterator to the first of the two elements (end iterator otherwise).
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/Paao79a68}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::adjacent_find} to find the first pair of equal elements and the first pair of elements that sum up to more than ten.
 \tcblower
 \cppfile{code_examples/algorithms/adjacent_find_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::search_n}}{\texttt{std::search\_n}}}
 \index{\cpp{std::search_n}}
@@ -56,11 +54,11 @@ The \cpp{std::search_n} algorithm searches for n instances of the given value.
 
 The interface to \cpp{std::search_n} can be a bit confusing. The algorithm accepts the number of instances and the value to search for as two consecutive arguments, followed by an optional custom comparator function.
 
-\begin{box-note}
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/q737jor9n}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::search_n} to find two consecutive elements equal to $3$, three elements equal to $3$ (in modulo $5$ arithmetic) and finally, two elements equal to $0$.
 \tcblower
 \cppfile{code_examples/algorithms/search_n_code.h}
-\end{box-note}
+\end{codebox}
 
 Note that \cpp{std::search_n} is one exception to the \cpp{_n} naming scheme.
 
@@ -74,11 +72,11 @@ Using \cpp{std::find_if}, we can easily search for a category of elements. Howev
 
 Note that we are shifting from linear search to $O(m*n)$ time complexity since, for each element of the first range, we need to compare it to all elements in the second range (worst case).
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/YnTGErxTo}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::find_first_of}.
 \tcblower
 \cppfile{code_examples/algorithms/find_first_of_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::search}, \cpp{std::find_end}}{\texttt{std::search}, \texttt{std::find\_end}}}
 \index{\cpp{std::search}}
@@ -90,24 +88,24 @@ The \cpp{std::search} algorithm will return the first instance, and \texttt{std:
 \cppversions{\texttt{search, find\_end}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{(forward\_range, forward\_range)}}{\texttt{(forward\_range, forward\_range)}}{\texttt{operator==}}{\texttt{binary\_predicate}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/Gq94oEo9K}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::search} and \cpp{std::find_end}.
 \tcblower
 \cppfile{code_examples/algorithms/search_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsubsection{Searchers}
 
 Since \CC17, we also can specify custom searchers for the search algorithm. Apart from the basic one, the standard implements Boyer-Moore and Boyer-Moore-Horspool string searchers that offer different best-case, worst-case and average complexity.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/7MKfzoP77}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::search} with custom searchers.
 \tcblower
 \cppfile{code_examples/algorithms/searchers_code.h}
 \index{\cpp{std::default_searcher}}
 \index{\cpp{std::boyer_moore_searcher}}
 \index{\cpp{std::boyer_moore_horspool_searcher}}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::count}, \cpp{std::count_if}}{\texttt{std::count}, \texttt{std::count\_if}}}
 \index{\cpp{std::count}}
@@ -120,11 +118,11 @@ The \cpp{std::count} and \cpp{std::count_if} algorithms count the number of matc
 
 The element searched for can be specified using a value (\cpp{std::count}) or a predicate (\cpp{std::count_if}).
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/sP8eqd45j}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::count} and \cpp{std::count_if}.
 \tcblower
 \cppfile{code_examples/algorithms/count_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::equal}, \cpp{std::mismatch}}{\texttt{std::equal}, \texttt{std::mismatch}}}
 \index{\cpp{std::equal}}
@@ -135,29 +133,29 @@ The \cpp{std::equal} algorithm provides an equality comparison for ranges.
 \cppversions{\texttt{equal}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{(input\_range, input\_iterator)}}{\texttt{(forward\_range, forward\_iterator)}}{\texttt{operator==}}{\texttt{binary\_predicate}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/16jEbK3qo}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::equal}.
 \tcblower
 \cppfile{code_examples/algorithms/equal_code.h}
-\end{box-note}
+\end{codebox}
 
 The \cpp{std::mismatch} algorithm behaves exactly like \cpp{std::equal}; however, instead of returning a simple boolean, it returns a pair of iterators denoting the mismatched elements.
 
 \cppversions{\texttt{mismatch}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\texttt{(input\_range, input\_iterator)}}{\texttt{(forward\_range, forward\_iterator)}}{\texttt{operator==}}{\texttt{binary\_predicate}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/cY4Eo3MYv}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::mismatch}.
 \tcblower
 \cppfile{code_examples/algorithms/mismatch_code.h}
-\end{box-note}
+\end{codebox}
 
 On top of the basic variants, both \cpp{std::equal} and \cpp{std::mismatch} offer a version where both ranges are fully specified (since C++14). These versions can detect mismatches beyond the first range's scope.
 
 \constraints{\texttt{(input\_range, input\_range)} since \CC14}{(forward\_range, forward\_range)}{\texttt{operator==}}{\texttt{binary\_predicate}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/f93PY3fPM}{\ExternalLink}}
 \footnotesize Example of detecting a mismatch beyond the scope of the first range.
 \tcblower
 \cppfile{code_examples/algorithms/equal_with_range_code.h}
-\end{box-note}
+\end{codebox}

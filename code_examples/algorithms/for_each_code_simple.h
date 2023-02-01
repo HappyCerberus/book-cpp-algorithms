@@ -4,4 +4,3 @@ std::for_each(data.begin(), data.end(), [&sum](int el) {
 	sum += el;
 	});
 // sum == 45
-

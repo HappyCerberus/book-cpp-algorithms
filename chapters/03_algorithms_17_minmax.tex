@@ -4,21 +4,21 @@ This group contains algorithms that operate with minimums and maximums. However,
 
 For functions that accept an \cpp{std::initializer_list}, it is worth keeping in mind that \cpp{std::initializer_list} is constructed by copy; its internal array of elements is copy constructed from the listed elements. Therefore we need to be careful when using \cpp{std::initializer_list} outside of compile-time contexts.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/14enPTMbj}{\ExternalLink}}
 \footnotesize Example demonstrating case when utilizing \cpp{std::initializer_list} leads to excessive copies.
 \tcblower
 \cppfile{code_examples/theory/initializer_list_code.h}
-\end{box-note}
+\end{codebox}
 
 In this example, using \cpp{std::initializer_list} leads to six copies (which we count using the static data member \cpp{X::copy_cnt}). Five copies result from passing in the variables \texttt{a} to \texttt{e} into the \cpp{std::initializer_list}, and one is the result of the return from \cpp{std::max}.
 
 In rare cases, we can force constness on a mutable entity. If the constness is undesirable, using \cpp{const_cast} to cast away the const is an option.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/64qvaf3cj}{\ExternalLink}}
 \footnotesize Example demonstrating the valid and invalid uses for \cpp{const_cast}.
 \tcblower
 \cppfile{code_examples/theory/const_cast_code.h}
-\end{box-note}
+\end{codebox}
 
 Please remember that when using casts like \cpp{const_cast}, you effectively override the compiler's judgment. Therefore it is entirely up to you to ensure that the given cast is valid.
 
@@ -32,29 +32,29 @@ The basic versions of \cpp{std::min}, \cpp{std::max} and \cpp{std::minmax} opera
 \cppversions{\texttt{min, max}}{\CC98}{\CC14}{N/A}{\CC20}
 \cppversions{\texttt{minmax}}{\CC11}{\CC14}{N/A}{\CC20}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/5GKe13fd5}{\ExternalLink}}
 \footnotesize Example demonstrating use of \cpp{std::min} and \cpp{std::max}.
 \tcblower
 \cppfile{code_examples/algorithms/min_max_code.h}
-\end{box-note}
+\end{codebox}
 
 Capturing the result by value gets a bit more complicated with \cpp{std::minmax}, which returns a \cpp{std::pair} of const references. To avoid dangling references to expired prvalues we must explicitly name the result type. Unfortunately, there is no way to work around this problem when using \cpp{auto} or structured binding.
 
-\begin{box-note}
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/WGahheGfT}{\ExternalLink}}
 \footnotesize Example demonstrating use of \cpp{std::minmax}.
 \tcblower
 \cppfile{code_examples/algorithms/minmax_code.h}
-\end{box-note}
+\end{codebox}
 
 The C++14 and C++20 standards introduced additional variants of the min-max algorithms that return by value. The change to return by value resolves the dangling reference issue while simultaneously introducing the potential for excessive copies.
 
 \constraints{\CC14: \texttt{initializer\_list}\newline \CC20 range version: \texttt{input\_range}}{}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/P4r5ze416}{\ExternalLink}}
 \footnotesize Example of \cpp{std::initializer_list} and range variants of \cpp{std::min}, \cpp{std::max} and \cpp{std::minmax}.
 \tcblower
 \cppfile{code_examples/algorithms/minmax_extra_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::clamp}}{\texttt{std::clamp}}}
 \index{\cpp{std::clamp}}
@@ -71,11 +71,11 @@ The \cpp{std::clamp} algorithm takes three arguments, the value, the minimum and
 
 Because the algorithm accepts its arguments by const reference and returns a const reference, it shares the same issues as the min-max algorithms regarding const correctness and dangling references.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/3fcTvTEfM}{\ExternalLink}}
 \footnotesize Examples of using \cpp{std::clamp} with prvalues and with lvalues and \cpp{const_cast} to get mutable access to the original variable.
 \tcblower
 \cppfile{code_examples/algorithms/clamp_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::min_element}, \cpp{std::max_element}, \newline\cpp{std::minmax_element}}{\texttt{std::min\_element}, \texttt{std::max\_element},
 \textCR\texttt{std::minmax\_element}}}
@@ -91,18 +91,18 @@ The element versions of min-max algorithms operate on ranges and, instead of ret
 
 \constraints{\texttt{forward\_range}}{\texttt{forward\_range}}{\texttt{operator<}}{\texttt{strict\_weak\_ordering}}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/M1v9Yb93K}{\ExternalLink}}
 \footnotesize Example of using element versions of min-max algorithms.
 \tcblower
 \cppfile{code_examples/algorithms/min_element_code.h}
-\end{box-note}
+\end{codebox}
 
 You might be wondering whether we can cause the same dangling reference (iterator) issue with the element versions of min-max algorithms. Fortunately, one very nice feature of C++20 ranges is the protection against precisely this problem.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/vq7d3bq1K}{\ExternalLink}}
 \footnotesize Example demonstrating protection from dangling iterators.
 \tcblower
 \cppfile{code_examples/algorithms/min_element_dangling_code.h}
-\end{box-note}
+\end{codebox}
 
 All ranged versions of algorithms that return iterators will return the \texttt{std::ranges\-::dangling} type when invoked on a temporary range. This would preclude the use case of using \cpp{std::span} to sub-reference a range, which is why the range algorithms have an additional concept of a \cpp{borrowed_range}. Such ranges can be passed in as temporaries since they do not own their elements.

@@ -1,0 +1,178 @@
+\chapter{The views}
+
+In this chapter, we will go over all the views the standard library offers.
+
+\section{\texorpdfstring{\cpp{std::views::keys}, \cpp{std::views::values}}{\texttt{std::views::keys}, \texttt{std::views::values}}}
+\index{\cpp{std::views::keys}}
+\index{\cpp{std::views::values}}
+
+The \cpp{std::views::keys} and \cpp{std::views::values} operate on ranges of pair-like elements.
+The \cpp{std::views::keys} will produce a range of the first elements from each pair.
+The \cpp{std::views::values} will produce a range of the second elements from each pair.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/vs1WjT1cM}{\ExternalLink}}
+\footnotesize Example of decomposing a \cpp{std::unordered_map} into a view over the keys and a view over the values.
+\tcblower
+\cppfile{code_examples/views/keys_values_code.h}
+\end{codebox}
+
+\section{\texorpdfstring{\cpp{std::views::elements}}{\texttt{std::views::elements}}}
+\index{\cpp{std::views::elements}}
+
+The \cpp{std::views::elements} will produce a range of the Nth elements from a range of tuple-like elements.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/efjT5o8G8}{\ExternalLink}}
+\footnotesize Example of creating element views for each tuple's second and third elements in the source range.
+\tcblower
+\cppfile{code_examples/views/elements_code.h}
+\end{codebox}
+
+\section{\texorpdfstring{\cpp{std::views::transform}}{\texttt{std::views::transform}}}
+\index{\cpp{std::views::transform}}
+
+The transform view applies a transformation functor to every element of the range.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/qanMb3GqG}{\ExternalLink}}
+\footnotesize Example of using \cpp{std::views::transform} that also changes the base type of the range.
+\tcblower
+\cppfile{code_examples/views/transform_code.h}
+\end{codebox}
+
+\section{\texorpdfstring{\cpp{std::views::take}, \cpp{std::views::take_while}}{\texttt{std::views::take}, \texttt{std::views::take\_while}}}
+\index{\cpp{std::views::take}}
+\index{\cpp{std::views::take_while}}
+
+Both views are formed from the leading elements of the source range. In the case of \cpp{std::views::take}, the view consists of the first N elements. In the case of \cpp{std::views::take_while}, the view consists of the sequence of elements for which the predicate evaluates true.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/6vavoW6T3}{\ExternalLink}}
+\footnotesize Example of a view of the first three elements and a view of the leading sequence of odd elements.
+\tcblower
+\cppfile{code_examples/views/take_code.h}
+\end{codebox}
+
+\section{\texorpdfstring{\cpp{std::views::drop}, \cpp{std::views::drop_while}}{\texttt{std::views::drop}, \texttt{std::views::drop\_while}}}
+\index{\cpp{std::views::drop}}
+\index{\cpp{std::views::drop_while}}
+
+The drop views are the inverse of take views.
+The \cpp{std::views::drop} consists of all but the first N elements.
+The \cpp{std::views::drop_while} consists of all but the leading sequence of elements for which the predicate evaluates true.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/Yn9PKe1aY}{\ExternalLink}}
+\footnotesize Example of a view of all but the first three elements and a view skipping over the leading sequence of odd elements.
+\tcblower
+\cppfile{code_examples/views/drop_code.h}
+\end{codebox}
+
+\section{\texorpdfstring{\cpp{std::views::filter}}{\texttt{std::views::filter}}}
+\index{\cpp{std::views::filter}}
+
+The filter view consists of all elements that satisfy the provided predicate.
+
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/4hYba6qf3}{\ExternalLink}}
+\footnotesize Example of a view of even elements.
+\tcblower
+\cppfile{code_examples/views/filter_code.h}
+\end{codebox}
+
+\section{\texorpdfstring{\cpp{std::views::reverse}}{\texttt{std::views::reverse}}}
+\index{\cpp{std::views::reverse}}
+
+The reverse view is the reverse iteration view for bidirectional ranges.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/eY7ohjGTM}{\ExternalLink}}
+\footnotesize Example of a reverse view.
+\tcblower
+\cppfile{code_examples/views/reverse_code.h}
+\end{codebox}
+
+\section{\texorpdfstring{\cpp{std::views::counted}}{\texttt{std::views::counted}}}
+\index{\cpp{std::views::counted}}
+
+The counted view adapts an iterator and number of elements into a view.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/rcfe69aEo}{\ExternalLink}}
+\footnotesize Example of using a counted view to iterate over a subrange.
+\tcblower
+\cppfile{code_examples/views/counted_code.h}
+\end{codebox}
+
+\section{\texorpdfstring{\cpp{std::views::common}}{\texttt{std::views::common}}}
+\index{\cpp{std::views::common}}
+
+The common view adapts a view into a common range, a range with a begin and end iterator of matching types. Non-range versions of algorithms require a common range.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/WbGrGK56z}{\ExternalLink}}
+\footnotesize Example of using adapting a view for a non-range algorithm.
+\tcblower
+\cppfile{code_examples/views/common_code.h}
+\end{codebox}
+
+\section{\texorpdfstring{\cpp{std::views::all}}{\texttt{std::views::all}}}
+\index{\cpp{std::views::all}}
+
+The all view is a view of all the elements from a range.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/1hf9ajK81}{\ExternalLink}}
+\footnotesize Example of creating a view over all elements. Note that view over all elements is the default.
+\tcblower
+\cppfile{code_examples/views/all_code.h}
+\end{codebox}
+
+\section{\texorpdfstring{\cpp{std::views::split}, \cpp{std::views::lazy_split}, \newline\cpp{std::views::join_view}}{\texttt{std::views::split}, \texttt{std::views::lazy\_split}, \textCR\texttt{std::views::join\_view}}}
+\index{\cpp{std::views::split}}
+\index{\cpp{std::views::lazy_split}}
+\index{\cpp{std::views::join_view}}
+
+The two split views split a single range into a view over sub-ranges. However, they differ in their implementation.
+The \cpp{std::view::split} maintains the bidirectional, random access or contiguous properties of the underlying range, and the \texttt{std::view::\-lazy\_split} does not, but it does support input ranges.
+
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/cjxdMjYhr}{\ExternalLink}}
+\footnotesize Example of using split view to parse a version number.
+\tcblower
+\cppfile{code_examples/views/split_code.h}
+\end{codebox}
+
+The join view flattens a view of ranges.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/MT7qbqjT6}{\ExternalLink}}
+\footnotesize Example of using \cpp{std::views::lazy_split} to split a string into tokens and then join them using the \cpp{std::views::join}.
+\tcblower
+\cppfile{code_examples/views/join_code.h}
+\end{codebox}
+
+\section{\texorpdfstring{\cpp{std::views::empty}, \cpp{std::views::single}}{\texttt{std::views::empty}, \texttt{std::views::single}}}
+\index{\cpp{std::views::empty}}
+\index{\cpp{std::views::single}}
+
+The empty view is an empty view (containing no elements), and the single view is a view that contains a single element.
+Note that the view owns the single element, which will be copied/moved alongside the view.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/d91M3o36e}{\ExternalLink}}
+\footnotesize Example of using \cpp{std::views::empty} and \cpp{std::views::single}.
+\tcblower
+\cppfile{code_examples/views/single_code.h}
+\end{codebox}
+
+\section{\texorpdfstring{\cpp{std::views::iota}}{\texttt{std::views::iota}}}
+\index{\cpp{std::views::iota}}
+
+The iota view represents a generated sequence formed by repeatedly incrementing an initial value.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/cEMdszTjE}{\ExternalLink}}
+\footnotesize Example of using the finite and infinite iota view.
+\tcblower
+\cppfile{code_examples/views/iota_code.h}
+\end{codebox}
+
+\section{\texorpdfstring{\cpp{std::views::istream}}{\texttt{std::views::istream}}}
+\index{\cpp{std::views::istream}}
+
+The istream view provides similar functionality to istream iterator, except in the form of a view.
+It represents a view obtained by successively applying the istream input operator.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/7r6x74PsY}{\ExternalLink}}
+\footnotesize Example of using istream view.
+\tcblower
+\cppfile{code_examples/views/istream_code.h}
+\end{codebox}

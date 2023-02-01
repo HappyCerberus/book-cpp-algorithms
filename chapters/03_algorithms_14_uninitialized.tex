@@ -10,16 +10,16 @@ The counted variants of the algorithms are not listed in this section\footnote{T
 \index{\cpp{std::construct_at}}
 \index{\cpp{std::destroy_at}}
 
-The \cpp{std::construct_at} and \cpp{std::destroy_at} algorithms will construct/destroy a single element at a given address. If additional arguments are specified, \cpp{std::construct_at} will forward these to the objects’ constructor.
+The \cpp{std::construct_at} and \cpp{std::destroy_at} algorithms will construct/destroy a single element at a given address. If additional arguments are specified, \newline\cpp{std::construct_at} will forward these to the objects’ constructor.
 
 \cppversions{\texttt{construct\_at}}{\CC20}{\CC20}{N/A}{\CC20}
 \cppversions{\texttt{destroy\_at}}{\CC17}{\CC20}{N/A}{\CC20}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/fKMdoYd5r}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::create_at} to create a \cpp{std::string} object using the arguments eight and ‘X’, which results in a string filled with eight copies of the X character.
 \tcblower
 \cppfile{code_examples/algorithms/create_at_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::uninitialized_default_construct},\newline\cpp{std::uninitialized_value_construct},\newline\cpp{std::uninitialized_fill}, \newline\cpp{std::destroy}}{\texttt{std::uninitialized\_default\_construct},\newline\texttt{std::uninitialized\_value\_construct},\newline\texttt{std::uninitialized\_fill}, \newline\texttt{std::destroy}}}
 \index{\cpp{std::uninitialized_default_construct}}
@@ -36,12 +36,11 @@ The three uninitialized algorithms cover the default initialization, value initi
 
 \constraints{\texttt{forward\_range\newline forward\_iterator (counted)}}{}{}{} % Cleanup the counted variant situation
 
-\begin{box-note}
-\footnotesize 
-Example demonstrating the use of the counted variants of the uninitialized construction algorithm and the \cpp{std::destroy_n} algorithms. Note that for \cpp{std::string}, there is no difference between default and value construction.
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/snnhY37xM}{\ExternalLink}}
+\footnotesize Example demonstrating the use of the counted variants of the uninitialized construction algorithm and the \cpp{std::destroy_n} algorithms. Note that for \cpp{std::string}, there is no difference between default and value construction.
 \tcblower
 \cppfile{code_examples/algorithms/uninitialized_constr_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\cpp{std::uninitialized_copy}, \cpp{std::uninitalized_move}}{\texttt{std::uninitialized\_copy}, \texttt{std::uninitalized\_move}}}
 \index{\cpp{std::uninitialized_copy}}
@@ -54,18 +53,18 @@ The \cpp{std::unitialized_copy} and \cpp{std::unitialized_move} algorithms follo
 
 \constraints{\texttt{input\_range -> forward\_iterator\newline input\_iterator -> forward\_iterator (counted)}}{\texttt{forward\_range -> forward\_iterator\newline forward\_iterator -> forward\_iterator (counted)}}{}{}
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/a9v4Tn46z}{\ExternalLink}}
 \footnotesize Example of using \cpp{std::uninitialized_copy} and \cpp{std::uninitialized_move}.
 \tcblower
 \cppfile{code_examples/algorithms/uninitialized_copy_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsubsection{Transactional behaviour}
 
 The main benefit of using the uninitialized memory algorithms is that they correctly handle transactional behaviour. Transactionality is important in cases where the constructor of an object can throw. If one of the objects fails to construct, the algorithms will correctly roll back by destructing already constructed objects.
 
-\begin{box-note}
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/6bP3P4ecK}{\ExternalLink}}
 \footnotesize Example demonstrating the roll-back behaviour of uninitialized algorithms when the third invocation of the constructor throws. Note that the exception is re-thrown after the partial work is rolled back.
 \tcblower
 \cppfile{code_examples/algorithms/transactional_code.h}
-\end{box-note}
+\end{codebox}

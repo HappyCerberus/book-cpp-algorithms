@@ -7,27 +7,27 @@ This chapter will dive deep into the various topics referenced throughout the bo
 
 When calling a method without qualification (i.e. not specifying the namespace), the compiler needs to determine the set of candidate functions. As a first step, the compiler will do an unqualified name lookup, which starts at the local scope and examines the parent scopes until it finds the first instance of the name (at which point it stops).
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/GbbM5x98E}{\ExternalLink}}
 \footnotesize Example of unqualified lookup. Both calls to \cpp{some_call} will resolve to \cpp{::A::B::some_call} since this is the first instance discovered by the compiler.
 \tcblower
 \cppfile{code_examples/theory/adl_unqalified_code.h}
-\end{box-note}
+\end{codebox}
 
 Due to the simplicity of unqualified lookup, we need an additional mechanism to discover overloads. Notably, it is a requirement for operator overloading since operator calls are unqualified. This is where argument-dependent lookup comes in.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/odqGe47jW}{\ExternalLink}}
 \footnotesize Without ADL, any call to a custom operator overload would have to be fully qualified, requiring the function call syntax.
 \tcblower
 \cppfile{code_examples/theory/adl_code.h}
-\end{box-note}
+\end{codebox}
 
 While the full rules for ADL are quite complex, the heavily simplified version is that the compiler will also consider the innermost namespace of all the arguments when determining the viable function overloads.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/ebvhrsqKW}{\ExternalLink}}
 \footnotesize 
 \tcblower
 \cppfile{code_examples/theory/adl_simple_code.h}
-\end{box-note}
+\end{codebox}
 
 Arguably the true power of ADL lies in the interactions with other language features, so let's look at how ADL interacts with friend functions and function objects.
 
@@ -35,11 +35,11 @@ Arguably the true power of ADL lies in the interactions with other language feat
 
 Friend functions (when defined inline) do not participate in the normal lookup (they are part of the surrounding namespace but are not visible). However, they are still visible to ADL, which permits a common implementation pattern for a default implementation with a customization point through ADL.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/nYME37jqE}{\ExternalLink}}
 \footnotesize Example demonstrating a default implementation with a customization point through ADL. The default implementation needs to be discovered during the unqualified lookup; therefore, if any custom implementation is visible in the surrounding namespaces, it will block this discovery.
 \tcblower
 \cppfile{code_examples/theory/adl_default_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{Function objects vs ADL}
 
@@ -47,28 +47,184 @@ The second notable interaction occurs with non-function symbols. In the context 
 
 Argument-dependent lookup will not consider non-function symbols. This means that a function object or a lambda must be either visible to an unqualified lookup or need to be fully qualified.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/v8KobovKf}{\ExternalLink}}
 \footnotesize Example demonstrating a lambda stored in an inline variable that can only be invoked through a qualified call.
 \tcblower
 \cppfile{code_examples/theory/adl_nonfunc_code.h}
-\end{box-note}
+\end{codebox}
 
 Finally, discovering a non-function symbol during the unqualified lookup phase will prevent ADL completely.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/f75bTc7aE}{\ExternalLink}}
 \footnotesize Example demonstrating a non-function object preventing ADL, making a friend function impossible to invoke.
 \tcblower
 \cppfile{code_examples/theory/adl_shutdown_code.h}
-\end{box-note}
+\end{codebox}
 
 \subsection{\texorpdfstring{\CC20 ADL customization point}{C++20 ADL customization point}}
 
 With the introduction of concepts in \CC20, we now have a cleaner way to introduce a customization point using ADL.
 
-\begin{box-note}
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/Kr13she7v}{\ExternalLink}}
 \footnotesize The concept on line 4 will be satisfied if an ADL call is valid, i.e. there is a custom implementation. This is then used on lines 8 and 13 to differentiate between the two overloads. One calls the custom implementation, and the other contains the default implementation. The inline variable on line 18 is in an inline namespace to prevent collision with friend functions in the same namespace. However, because friend functions are only visible to ADL, a fully qualified call will always invoke this function object.
 \tcblower
 \cppfile{code_examples/theory/adl_niebloid_code.h}
-\end{box-note}
+\end{codebox}
 
 This approach has several benefits, in particular on the call site. We no longer need to remember to pull in the namespace of the default implementation. Furthermore, because the call is now fully qualified, we avoid the problem of symbol collisions that can potentially completely prevent ADL.
+
+\section{Integral and floating-point types}
+\label{theory:numerics}
+
+Arguably one of the most error-prone parts of C++ is integral and floating-point expressions. As this part of the language is inherited from C, it relies heavily on fairly complex implicit conversion rules and sometimes interacts unintuitively with more static parts of C++ language.
+
+\subsection{Integral types}
+
+There are two phases of potential type changes when working with integral types. First, promotions are applied to types of lower rank than int, and if the resulting expression still contains different integral types, a conversion is applied to arrive at a common type.
+
+The ranks of integral types are defined in the standard:
+
+\begin{enumerate}
+    \item \cpp{bool}
+    \item \cpp{char}, \cpp{signed char}, \cpp{unsigned char}
+    \item \cpp{short int}, \cpp{unsigned short int}
+    \item \cpp{int}, \cpp{unsigned int}
+    \item \cpp{long int}, \cpp{unsigned long int}
+    \item \cpp{long long int}, \cpp{unsigned long long int}
+\end{enumerate}
+
+\subsubsection{Promotions}
+
+As mentioned, integral promotions are applied to types of lower rank than \cpp{int} (e.g. \cpp{bool}, \cpp{char}, \cpp{short}). Such operands will be promoted to int (if \cpp{int} can represent all the values of the type, \cpp{unsigned int} if not).
+
+Promotions are generally harmless and invisible but can pop up when we mix them with static C++ features (more on that later).
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/P4EGeYxWc}{\ExternalLink}}
+\footnotesize Example of \cpp{uint16_t} (both \cpp{a} and \cpp{b}) being promoted to \cpp{int}.
+\tcblower
+\cppfile{code_examples/theory/integral_promotions.h}
+\end{codebox}
+
+\subsubsection{Conversions}
+
+Conversions apply after promotions when the two operands are still of different integral types.
+
+If the types are of the same signedness, the operand of the lower rank is converted to the type of the operand with the higher rank.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/91jhK9xdK}{\ExternalLink}}
+\footnotesize Example of integral conversion. Both operands have the same signedness.
+\tcblower
+\cppfile{code_examples/theory/integral_conversions_same.h}
+\end{codebox}
+
+When we mix integral types of different signedness, there are three possible outcomes.
+
+When the unsigned operand is of the same or higher rank than the signed operand, the signed operand is converted to the type of the unsigned operand.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/q988MTKor}{\ExternalLink}}
+\footnotesize Example of integral conversion. The operands have different signedness but the same rank.
+\tcblower
+\cppfile{code_examples/theory/integral_conversions_different_a.h}
+\end{codebox}
+
+When the type of the signed operand can represent all values of the unsigned operand, the unsigned operand is converted to the type of the signed operand.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/q988MTKor}{\ExternalLink}}
+\footnotesize Example of integral conversion. The operands have different signedness, and the type of the signed operand can represent all values of the unsigned operand.
+\tcblower
+\cppfile{code_examples/theory/integral_conversions_different_b.h}
+\end{codebox}
+
+Otherwise, both operands are converted to the unsigned version of the signed operand type.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/4hxMGd7Y8}{\ExternalLink}}
+\footnotesize Example of integral conversion. The operands have different signedness, and the type of the signed operand cannot represent all values of the unsigned operand.
+\tcblower
+\cppfile{code_examples/theory/integral_conversions_different_c.h}
+\end{codebox}
+
+Due to these rules, mixing integral types can sometimes lead to non-intuitive behaviour.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/c77aKGGaW}{\ExternalLink}}
+\footnotesize Demonstration of a condition that changes value based on the type of one of the operands.
+\tcblower
+\cppfile{code_examples/theory/integral_conversions_problems.h}
+\end{codebox}
+
+\subsubsection{C++20 safe integral operations}
+
+The C++20 standard introduced several tools that can be used to mitigate the issues when working with different integral types.
+
+Firstly, the standard introduced \cpp{std::ssize()}, which allows code that relies on signed integers to avoid mixing signed and unsigned integers when working with containers.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/jej1djd1W}{\ExternalLink}}
+\footnotesize Demonstration of using \cpp{std::ssize} to avoid a signed-unsigned mismatch between the index variable and the container size.
+\tcblower
+\cppfile{code_examples/theory/safe_ssize.h}
+\end{codebox}
+
+Second, a set of safe integral comparisons was introduced to correctly compare values of different integral types (without any value changes caused by conversions).
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/s5ecd1rfh}{\ExternalLink}}
+\footnotesize Demonstration of safe comparison functions.
+\tcblower
+\cppfile{code_examples/theory/safe_compare.h}
+\end{codebox}
+
+Finally, a small utility \cpp{std::in_range} will return whether the tested type can represent the supplied value.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/M3M3bMEYK}{\ExternalLink}}
+\footnotesize Demonstration of \cpp{std::in_range}.
+\tcblower
+\cppfile{code_examples/theory/safe_in_range.h}
+\end{codebox}
+
+\subsection{Floating-point types}
+
+The rules for floating-point types are a lot simpler. The resulting type of an expression is the highest floating-point type of the two arguments, including situations when one of the arguments is an integral type (highest in order: \cpp{float}, \cpp{double}, \cpp{long double}).
+
+Importantly, this logic is applied per operator, so ordering matters. 
+
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/dvncjjGj6}{\ExternalLink}}
+\footnotesize In this example, both expressions end up with the resulting type \cpp{long double}; however, in the first expression, we lose precision by first converting to \cpp{float}.
+\tcblower
+\cppfile{code_examples/theory/floating_point.h}
+\end{codebox}
+
+Ordering is one of the main things to remember when working with floating-point numbers (this is a general rule, not specific to C++). Operations with floating-point numbers are not associative.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/q3c43h7hj}{\ExternalLink}}
+\footnotesize Demonstration of non-associativity of floating point expressions.
+\tcblower
+\cppfile{code_examples/theory/floating_point_ordering.h}
+\end{codebox}
+
+Any operation with floating-point numbers of different magnitudes should be done with care.
+
+\subsection{Interactions with other C++ features}
+
+While integral types are implicitly inter-convertible, references to different integral types are not related types and will, therefore, not bind to each other. This has two consequences.
+
+First, trying to bind an lvalue reference to a non-matching integral type will not succeed. Second, if the destination reference can bind to temporaries (rvalue, const lvalue), the value will go through an implicit conversion, and the reference will bind to the resulting temporary.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/71b73eo8P}{\ExternalLink}}
+\footnotesize Demonstration of integral type behaviour with reference types.
+\tcblower
+\cppfile{code_examples/theory/references.h}
+\end{codebox}
+
+Finally, we need to talk about type deduction. Because type deduction is a static process, it does remove the opportunity for implicit conversions. However, this also brings potential issues.
+
+\begin{codebox}[]{\href{https://compiler-explorer.com/z/f131811x4}{\ExternalLink}}
+\footnotesize Demonstration of potential problem of type deduction when using standard algorithms.
+\tcblower
+\cppfile{code_examples/theory/deduction_algorithm.h}
+\end{codebox}
+
+But at the same time, when mixed with concepts, we can mitigate implicit conversions while only accepting a specific integral type.
+
+\begin{codebox}[breakable]{\href{https://compiler-explorer.com/z/qcWPPhTT6}{\ExternalLink}}
+\footnotesize Demonstration of using concepts to prevent implicit conversions.
+\tcblower
+\cppfile{code_examples/theory/deduction_concepts.h}
+\end{codebox}

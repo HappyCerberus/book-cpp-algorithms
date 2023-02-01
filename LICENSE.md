@@ -1,4 +1,4 @@
-(c) RNDr. Šimon Tóth 2022 (business@simontoth.eu)
+(c) RNDr. Šimon Tóth 2022-2023 (business@simontoth.eu)
 
 # Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Public License
 
