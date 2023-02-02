@@ -79,12 +79,12 @@ The type depends on the type returned by the elements' spaceship operator.
 \subsection{\texorpdfstring{\cpp{std::sort}}{\texttt{std::sort}}}
 \index{\cpp{std::sort}}
 
-The \cpp{std::sort} algorithm is the canonical $O(n*logn)$ sort (typically implemented as intro-sort).
+The \cpp{std::sort} algorithm is the canonical $O(n\log n)$ sort (typically implemented as intro-sort).
 
 \cppversions{\texttt{sort}}{\CC98}{\CC20}{\CC17}{\CC20}
 \constraints{\cpp{random_access_range}}{\cpp{random_access_range}}{\cpp{operator<}}{\cpp{strict_weak_ordering}}
 
-Due to the $O(n*logn)$ complexity guarantee, \cpp{std::sort} only operates on \cpp{random_access} ranges. Notably, \cpp{std::list} offers a method with an approximate $n*logn$ complexity.
+Due to the $O(n\log n)$ complexity guarantee, \cpp{std::sort} only operates on \cpp{random_access} ranges. Notably, \cpp{std::list} offers a method with an approximate $n\log n$ complexity.
 
 \begin{codebox}[]{\href{https://compiler-explorer.com/z/vef61TWj9}{\ExternalLink}}
 \footnotesize Basic example of using \cpp{std::sort} and \cpp{std::list::sort}.
@@ -110,7 +110,7 @@ The \cpp{std::sort} is free to re-arrange equivalent elements, which can be unde
 \cppversions{\texttt{stable\_sort}}{\CC98}{N/A}{\CC17}{\CC20}
 \constraints{\cpp{random_access_range}}{}{\cpp{operator<}}{\cpp{strict_weak_ordering}}
 
-If additional memory is available, stable\_sort remains $O(n*logn)$. However, if it fails to allocate, it will degrade to an $O(n*logn*logn)$ algorithm.
+If additional memory is available, stable\_sort remains $O(n\log n)$. However, if it fails to allocate, it will degrade to an $O(n\log n\log n)$ algorithm.
 
 \begin{codebox}[]{\href{https://compiler-explorer.com/z/TKx8qP8bK}{\ExternalLink}}
 \footnotesize Example of re-sorting a range using \cpp{std::stable_sort}, resulting in a guaranteed order of elements.
