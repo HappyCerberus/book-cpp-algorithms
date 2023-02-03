@@ -5,7 +5,7 @@
 #include <cassert>
 
 inline constexpr const size_t MAIN_SEATS = 2;
-inline constexpr const ssize_t PAGE_SIZE = 2;
+inline constexpr const size_t PAGE_SIZE = 2;
 
 struct Player {
     std::string display_name;
