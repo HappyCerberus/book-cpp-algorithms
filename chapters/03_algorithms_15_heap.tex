@@ -90,4 +90,4 @@ When using the priority queue, we can utilize the simple \cpp{push()} and \cpp{p
 \cppfile{code_examples/extras/priority_queue_heap_code.h}
 \end{codebox}
 
-When using the heap algorithms, we need to manually manage the underlying data structure (lines 9-10 and 13–14). However, we do not need to extract the data, and on top of that, we could omit the final \cpp{std::sort_heap} (line 20) if we do not need the top k elements in sorted order.
+When using the heap algorithms, we need to manually manage the underlying data structure (lines 9-10 and 13–14). However, we do not need to extract the data, and on top of that, we could omit the final \cpp{std::ranges::sort_heap} (line 20) if we do not need the top k elements in sorted order.
