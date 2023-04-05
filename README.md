@@ -36,13 +36,13 @@ The `verify.sh` shell script will build all (except for a few that don't compile
 
 This section was provided by [@wxinix](https://github.com/wxinix). Please direct any questions to him.
 
-[Texstudio](https://www.texstudio.org/) offers an alternative solution for Windows users who are building from sources within a virtual machine and are unable to use the VSCode and Docker approach. Follow the steps below:
+[TeXstudio](https://www.texstudio.org/) offers an alternative solution for those who are building from sources in a virtual machine environment and are unable to use the VSCode and Docker approach. Follow the steps below (assuming the Guest OS of the virtual machine is Windows):
 
 - Install [Anaconda](https://www.anaconda.com/) and add `C:\Users\YourUserName\anaconda3\Scripts` to system path. Replace `YourUserName` with your actual user name.
-- Install [Texstudio](https://www.texstudio.org/). 
-- Go to Texstudio menu "Options -> Configure Texstudio -> Commands -> XeLaTex", and enter the following command: `xelatex.exe -synctex=1 -interaction=nonstopmode -shell-escape -aux-directory=build -output-directory=build %.tex`. This command sets both the aux and output directories to ".\build".
-- Go to Texstudio menu "Options -> Configure Texstudio -> Build -> Meta Commands -> Default Compiler", and enter `txs:///xelatex`. This switches the default compiler from `pdflatex` to `xelatex`. Then, enable the checkbox "Show Advanced Options".
-- For Texstudio menu "Options -> Configure Texstudio -> Build -> Build Options -> PDF File", enter `build`. This tells the pdf previewer to look for the generated pdf file in the ".\build" directory.
-- Finally, go to "Texstudio menu Options -> Configure Texstudio -> Commands -> Makeindex", and enter the following command: `makeindex.exe build%.idx`
+- Install [TeXstudio](https://www.texstudio.org/). 
+- Go to TeXstudio menu "Options -> Configure TeXstudio -> Commands -> XeLaTex", and enter the following command: `xelatex.exe -synctex=1 -interaction=nonstopmode -shell-escape -aux-directory=build -output-directory=build %.tex`. This command sets both the aux and output directories to ".\build".
+- Go to TeXstudio menu "Options -> Configure TeXstudio -> Build -> Meta Commands -> Default Compiler", and enter `txs:///xelatex`. This switches the default compiler from `pdflatex` to `xelatex`. Then, enable the checkbox "Show Advanced Options".
+- For TeXstudio menu "Options -> Configure TeXstudio -> Build -> Build Options -> PDF File", enter `build`. This tells the pdf previewer to look for the generated pdf file in the ".\build" directory.
+- Finally, go to "TeXstudio menu Options -> Configure TeXstudio -> Commands -> Makeindex", and enter the following command: `makeindex.exe build%.idx`
   
-These steps will enable you to build from sources inside a virtual machine using TexStudio on Windows. Ask @wxinix if you have any questions.
+These steps will enable you to build from sources inside a virtual machine using TeXstudio. Keep in mind that the VSCode and Docker approach might not work in a virtual machine environment, because it requires extra set-up for [nested virtulization](https://stackoverflow.com/questions/39720254/can-i-run-docker-in-a-virtual-machine).  Ask @wxinix if you have any questions.
