@@ -31,3 +31,18 @@ The resulting PDF will be in the build folder.
 Most code files have wrapping main files that exercise both the build and also contain `assert` expressions that verify correctness of the code.
 
 The `verify.sh` shell script will build all (except for a few that don't compile with GCC 11) examples, and then run each of them to validate all asserts.
+
+## Alternative approach of building from sources
+
+This section was provided by [@wxinix](https://github.com/wxinix). Please direct any questions to him.
+
+[Texstudio](https://www.texstudio.org/) offers an alternative solution for Windows users who are building from sources within a virtual machine and are unable to use the VSCode and Docker approach. Follow the steps below:
+
+- Install [Anaconda](https://www.anaconda.com/) and add `C:\Users\YourUserName\anaconda3\Scripts` to system path. Replace `YourUserName` with your actual user name.
+- Install [Texstudio](https://www.texstudio.org/). 
+- Go to Texstudio menu "Options -> Configure Texstudio -> Commands -> XeLaTex", and enter the following command: `xelatex.exe -synctex=1 -interaction=nonstopmode -shell-escape -aux-directory=build -output-directory=build %.tex`. This command sets both the aux and output directories to ".\build".
+- Go to Texstudio menu "Options -> Configure Texstudio -> Build -> Meta Commands -> Default Compiler", and enter `txs:///xelatex`. This switches the default compiler from `pdflatex` to `xelatex`. Then, enable the checkbox "Show Advanced Options".
+- For Texstudio menu "Options -> Configure Texstudio -> Build -> Build Options -> PDF File", enter `build`. This tells the pdf previewer to look for the generated pdf file in the ".\build" directory.
+- Finally, go to "Texstudio menu Options -> Configure Texstudio -> Commands -> Makeindex", and enter the following command: `makeindex.exe build%.idx`
+  
+These steps will enable you to build from sources inside a virtual machine using TexStudio on Windows. Ask @wxinix if you have any questions.
